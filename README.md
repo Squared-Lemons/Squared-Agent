@@ -2,9 +2,18 @@
 
 A sandbox for exploring and prototyping business ideas, agent-based concepts, and reusable patterns for business automation.
 
+## Quick Links
+
+| Section | Description |
+|---------|-------------|
+| [Clients](Clients/) | Client information, research, and documentation |
+| [Squared Lemons](Squared-Lemons/) | Company management and operations |
+| [Research](Research/) | General research library and knowledge base |
+| [Projects](Projects/) | Active and completed projects |
+
 ## Current State
 
-This project is in early exploration phase. It contains reusable patterns and Claude Code configurations that can be applied to future projects.
+This project is in early exploration phase. It contains reusable patterns, Claude Code configurations, and company knowledge management.
 
 ## Commands
 
@@ -28,12 +37,24 @@ See: `Commands/Canvas-Panel-Navigation-System.md`
 ## Project Structure
 
 ```
-Commands/           # Implementation guides and reusable patterns
+Clients/            # Client information and research
+  _TEMPLATE/        # Template for new clients
+Squared-Lemons/     # Company management
+  strategy/         # Business strategy and goals
+  operations/       # Processes and workflows
+  finance/          # Financial documents
+  legal/            # Contracts and policies
+Research/           # General research library
+  market/           # Market research
+  technology/       # Tech research
+  competitors/      # Competitor analysis
+  ideas/            # Business ideas
+Projects/           # Active projects
+  _TEMPLATE/        # Template for new projects
+Commands/           # Implementation guides and patterns
 .claude/            # Claude Code configuration
   commands/         # Custom slash commands
 .project/sessions/  # Local session logs (gitignored)
-CLAUDE.md           # Technical documentation for Claude Code
-LEARNINGS.md        # Captured insights from sessions
 ```
 
 ## Getting Started
