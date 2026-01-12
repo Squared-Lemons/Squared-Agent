@@ -6,6 +6,28 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-12: Auto-organize Docs & Improved Feedback Display
+
+**What Was Done**
+- Added auto-organize step to SETUP-INSTRUCTIONS.md - moves docs to `docs/` folder
+- Updated SESSION-END-COMMAND.md with creator feedback step and `docs/` paths
+- Enhanced feedback display with copy-paste friendly format
+
+**What Worked Well**
+- Clear visual delimiters (━━━) make feedback block easy to select and copy
+- Moving docs to `docs/` keeps project root clean from start
+- Only CLAUDE.md and README.md remain at root (as required)
+
+**Key Insight**
+- Subagent feedback should be displayed in a format optimized for transfer back to master agent
+- Visual delimiters and clear headers make copy-paste seamless
+
+**Process Improvement**
+- Feedback now displayed with "COPY THE FOLLOWING TO SQUARED-AGENT:" header
+- Box-style formatting makes selection easy in terminal
+
+---
+
 ### 2026-01-12: Skills Knowledge Base & Feedback Loop
 
 **What Was Done**

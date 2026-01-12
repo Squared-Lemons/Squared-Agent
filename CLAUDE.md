@@ -47,6 +47,7 @@ tasks/              # One-time setup tasks
 
 ## Recent Changes
 
+- **2026-01-12:** Auto-organize docs into `docs/` on setup completion; copy-paste friendly creator feedback display
 - **2026-01-12:** Enhanced `/prepare-setup` with commands and skills selection; added creator feedback loop to `/session-end`
 - **2026-01-12:** Added `skills/` knowledge base with Next.js App Build Guide
 - **2026-01-12:** Added `/prepare-setup` command for bootstrapping new projects with setup profiles, commands, and tasks

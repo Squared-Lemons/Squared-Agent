@@ -259,6 +259,21 @@ These are not setup instructions - they are knowledge docs for the agent to cons
 
 ---
 
+## Final Organization
+
+After setup completes, the setup instructions will organize documentation:
+
+**Moved to `docs/`:**
+- SETUP.md, SETUP-INSTRUCTIONS.md, LEARNINGS.md
+- commands/ → docs/commands/
+- skills/ → docs/skills/
+
+**Kept at root:**
+- CLAUDE.md (required by Claude Code)
+- README.md (user-facing)
+
+---
+
 ## Verification
 
 After completing all steps, verify:
@@ -268,6 +283,7 @@ After completing all steps, verify:
 - [ ] All commands have been created in `.claude/commands/`
 - [ ] All tasks have been completed
 - [ ] `CLAUDE.md` exists and documents available commands
+- [ ] Documentation organized into `docs/`
 - [ ] Initial commit made
 
 ---

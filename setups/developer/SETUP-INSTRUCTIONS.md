@@ -76,7 +76,46 @@ Create `LEARNINGS.md` in project root for capturing session insights.
 
 ---
 
-## Step 5: Commit
+## Step 5: Organize Documentation
+
+Move setup files into `docs/` folder to keep the project root clean. Only `CLAUDE.md` and `README.md` should remain at root.
+
+```bash
+mkdir -p docs/commands docs/skills
+```
+
+### Move these files to docs/
+
+| From | To |
+|------|-----|
+| `SETUP.md` | `docs/SETUP.md` |
+| `SETUP-INSTRUCTIONS.md` | `docs/SETUP-INSTRUCTIONS.md` |
+| `LEARNINGS.md` | `docs/LEARNINGS.md` |
+| `commands/*.md` | `docs/commands/` |
+| `skills/*.md` | `docs/skills/` |
+
+```bash
+# Move setup files (if they exist)
+mv SETUP.md docs/ 2>/dev/null || true
+mv SETUP-INSTRUCTIONS.md docs/ 2>/dev/null || true
+mv LEARNINGS.md docs/ 2>/dev/null || true
+
+# Move command guides (not .claude/commands/)
+mv commands/*.md docs/commands/ 2>/dev/null || true
+rmdir commands 2>/dev/null || true
+
+# Move skills
+mv skills/*.md docs/skills/ 2>/dev/null || true
+rmdir skills 2>/dev/null || true
+```
+
+### Keep at root
+- `CLAUDE.md` - Required by Claude Code
+- `README.md` - User-facing documentation
+
+---
+
+## Step 6: Commit
 
 ```bash
 git add .
@@ -84,7 +123,7 @@ git commit -m "Setup developer workflow with Claude Code
 
 - Configured plugins: ralph-loop, feature-dev, code-simplifier, playwright, context7
 - Created commands: session-end, commit, new-feature
-- Added project documentation
+- Organized documentation into docs/
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
@@ -101,16 +140,15 @@ After setup, these commands should be available:
 
 ---
 
-## Step 6: Project Exploration (Optional)
+## Step 7: Project Exploration (Optional)
 
 **Ask the user:** "Would you like me to explore the codebase and document its structure?"
 
-If yes:
-1. Copy `ExistingProject-Investigate.md` to the project root
+If yes, read and execute the task file in `docs/` if one was included.
 
 ---
 
 ## Setup Complete
 
 Tell the user:
-> "Setup is complete! Please restart Claude to load the new configuration. If you opted for project exploration, tell Claude to process the `ExistingProject-Investigate.md` file."
+> "Setup is complete! Please restart Claude to load the new configuration. Documentation has been organized into `docs/`."

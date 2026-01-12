@@ -248,16 +248,39 @@ Feedback to improve the master agent's setup system, skills, and workflows.
 ---
 ```
 
-### Tell the user
+### Display feedback for easy copy-paste
+
+After saving, display the feedback in a format ready to paste into the master agent:
 
 ```
 Feedback saved to: docs/creator-feedback.md
 
-To improve future projects, bring this file to the master agent:
-1. Open the Squared-Agent project
-2. Share the contents of docs/creator-feedback.md
-3. Ask to integrate the feedback into skills, setups, or tasks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COPY THE FOLLOWING TO SQUARED-AGENT:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## Creator Feedback from [Project Name]
+
+**Date:** YYYY-MM-DD
+
+### Skills Feedback
+[User's feedback about skills]
+
+### Setup Feedback
+[User's feedback about setup process]
+
+### New Patterns Discovered
+[Any reusable patterns worth adding]
+
+### General Suggestions
+[Other feedback]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To submit: Open Squared-Agent and paste the above feedback.
 ```
+
+This makes it easy for the user to select and copy the feedback block directly.
 
 ---
 
