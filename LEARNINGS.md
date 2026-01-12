@@ -6,6 +6,24 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-12: Prepare-Setup Command
+
+**What Was Done**
+- Created `/prepare-setup` command for bootstrapping new projects
+- Added `setups/` directory with developer profile
+- Added `tasks/` directory for one-time setup tasks
+- Created setup packaging workflow that copies selected files to temp folder
+
+**What Worked Well**
+- Separating profiles, commands, and tasks makes setup flexible
+- Generating customized SETUP-INSTRUCTIONS.md based on selections
+- Opening temp folder in Finder for easy access
+
+**Key Decision**
+- Setup packages are self-contained in temp folders, not integrated into target projects until user copies them
+
+---
+
 ### 2026-01-11: Initial Project Setup
 
 **What Was Done**

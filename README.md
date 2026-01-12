@@ -21,6 +21,7 @@ This project is in early exploration phase. It contains reusable patterns, Claud
 |---------|-------------|
 | `/session-end` | End coding session - updates docs, captures learnings, commits changes |
 | `/commit` | Draft a commit message, get approval, then commit changes |
+| `/prepare-setup` | Create a setup package for bootstrapping new projects |
 
 ## Available Patterns
 
@@ -28,6 +29,11 @@ This project is in early exploration phase. It contains reusable patterns, Claud
 A structured workflow for ending coding sessions. Updates documentation, captures lessons learned, and commits changes with user approval.
 
 See: `Commands/SESSION-END-COMMAND.md`
+
+### New Feature Workflow
+A structured workflow for building features with Feature-Dev and Ralph Loop integration.
+
+See: `Commands/New Feature Workflow.md`
 
 ### Canvas Panel Navigation System
 A React/TypeScript UI pattern for horizontal infinite-scrolling navigation.
@@ -52,6 +58,9 @@ Research/           # General research library
 Projects/           # Active projects
   _TEMPLATE/        # Template for new projects
 Commands/           # Implementation guides and patterns
+setups/             # Setup profiles for bootstrapping new projects
+  developer/        # Developer workflow profile
+tasks/              # One-time setup tasks
 .claude/            # Claude Code configuration
   commands/         # Custom slash commands
 .project/sessions/  # Local session logs (gitignored)
