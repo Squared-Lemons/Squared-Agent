@@ -16,7 +16,7 @@ Create a setup package for bootstrapping a new project.
 
 1. Select a profile type from `setups/`
 2. Select which setup files to include from that profile
-3. Select which commands to include from `Commands/`
+3. Select which commands to include from `commands/`
 4. Select which tasks to run at the end from `tasks/`
 5. Select which skills to include from `skills/`
 6. Generate a `SETUP.md` guide file
@@ -32,8 +32,8 @@ First, discover what's available:
 # List profile types (folders in setups/)
 ls -d setups/*/
 
-# List command docs (markdown files in Commands/, excluding README)
-ls Commands/*.md 2>/dev/null | grep -v README || echo "No commands found"
+# List command docs (markdown files in commands/, excluding README)
+ls commands/*.md 2>/dev/null | grep -v README || echo "No commands found"
 
 # List task docs (markdown files in tasks/, excluding README)
 ls tasks/*.md 2>/dev/null | grep -v README || echo "No tasks found"
@@ -81,13 +81,13 @@ If only one file exists, select it automatically.
 
 If `--commands` not in arguments:
 ```bash
-ls Commands/*.md 2>/dev/null | grep -v README
+ls commands/*.md 2>/dev/null | grep -v README
 ```
 
 If command files exist:
 - Use AskUserQuestion with header "Commands" and `multiSelect: true`
 - Question: "Which command guides should be included?"
-- Options: List each .md file in `Commands/` (excluding README.md)
+- Options: List each .md file in `commands/` (excluding README.md)
 - Include "All" and "None" as options
 
 ### 2d. Tasks Selection
@@ -142,7 +142,7 @@ cp "setups/<profile>/<filename>.md" "$OUTPUT_DIR/"
 
 For each selected command doc:
 ```bash
-cp "Commands/<filename>.md" "$OUTPUT_DIR/commands/"
+cp "commands/<filename>.md" "$OUTPUT_DIR/commands/"
 ```
 
 If no commands selected, remove the empty commands folder:

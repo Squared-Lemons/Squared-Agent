@@ -9,8 +9,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Purpose
 
 - **Bootstrap new projects** via `/prepare-setup` command
-- **Capture development patterns** in Commands/ as implementation guides
-- **Build knowledge base** in skills/ for reference during development
+- **Capture development patterns** in `commands/` as implementation guides
+- **Build knowledge base** in `skills/` for reference during development
 - **Improve continuously** through feedback from projects created with this system
 
 ## Commands
@@ -26,7 +26,7 @@ Draft a commit message, get approval, then commit changes.
 
 ## Available Content
 
-### Command Guides (`Commands/`)
+### Command Guides (`commands/`)
 - **SESSION-END-COMMAND.md** - Session-end workflow with creator feedback loop
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
@@ -43,18 +43,20 @@ Draft a commit message, get approval, then commit changes.
 ## Project Structure
 
 ```
-Commands/           # Implementation guides and reusable patterns
-skills/             # Knowledge base for agent development (tech stacks, patterns)
-setups/             # Setup profiles for bootstrapping new projects
+commands/           # Implementation guides for slash commands
+skills/             # Knowledge base (tech stacks, patterns)
+setups/             # Setup profiles for bootstrapping projects
   developer/        # Developer workflow profile
 tasks/              # One-time setup tasks
 .claude/            # Claude Code configuration
-  commands/         # Custom slash commands
-.project/sessions/  # Local session logs (gitignored, created by session-end)
+  commands/         # Active slash commands
+.project/sessions/  # Local session logs (gitignored)
+CONTRIBUTING.md     # How to extend this project
 ```
 
 ## Recent Changes
 
+- **2026-01-12:** Standardized project structure - lowercase folder names (commands/, tasks/), fixed typo in ExistingProject-Investigate.md, added CONTRIBUTING.md, enhanced all READMEs with "How to Extend" sections
 - **2026-01-12:** Integrated creator feedback - enhanced Next.js skill with Better Auth gotchas, handoff template, DX checklist; added SETUP.md auto-generation and auto-generated creator feedback to session-end; added Plugins section to README
 - **2026-01-12:** Updated README and CLAUDE.md to reflect new purpose as master agent for project bootstrapping
 - **2026-01-12:** Auto-organize docs into `docs/` on setup completion; copy-paste friendly creator feedback display

@@ -36,7 +36,7 @@ Projects created from these packages can send feedback back to improve future se
 ### Setup Profiles (`setups/`)
 - **developer** - Full developer workflow with plugins, commands, and session management
 
-### Command Guides (`Commands/`)
+### Command Guides (`commands/`)
 - **SESSION-END-COMMAND.md** - Session-end workflow with creator feedback loop
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
@@ -68,7 +68,7 @@ Projects created from these packages can send feedback back to improve future se
 ## Project Structure
 
 ```
-Commands/           # Implementation guides for slash commands
+commands/           # Implementation guides for slash commands
 skills/             # Knowledge base (tech stacks, patterns)
 setups/             # Setup profiles
   developer/        # Developer workflow profile
@@ -76,6 +76,7 @@ tasks/              # One-time setup tasks
 .claude/            # Claude Code configuration
   commands/         # Active slash commands
 .project/sessions/  # Local session logs (gitignored)
+CONTRIBUTING.md     # How to extend this project
 ```
 
 ## Getting Started
