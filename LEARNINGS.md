@@ -6,6 +6,33 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-12: Skills Knowledge Base & Feedback Loop
+
+**What Was Done**
+- Created `skills/` folder as knowledge base for agent development
+- Added Next.js App Build Guide (Better Auth, Drizzle, Turborepo patterns)
+- Enhanced `/prepare-setup` to include commands and skills selection
+- Added creator feedback loop to `/session-end` command
+
+**What Worked Well**
+- Separating skills (knowledge docs) from commands (implementation guides) creates clear mental model
+- Skills go in `skills/` subfolder in output, keeping root clean
+- Creator feedback loop creates continuous improvement cycle between projects and master agent
+
+**Key Insight**
+- Four-layer architecture for agent setup:
+  1. **Profiles** (`setups/`) - Bootstrap instructions
+  2. **Commands** (`Commands/`) - Slash command implementation guides
+  3. **Tasks** (`tasks/`) - One-time setup activities
+  4. **Skills** (`skills/`) - Reference knowledge for building
+
+**Process Improvement**
+- `/session-end` now asks for feedback to send back to master agent
+- Feedback saved to `docs/creator-feedback.md` in project
+- User can bring feedback back to improve future setups
+
+---
+
 ### 2026-01-12: Prepare-Setup Command
 
 **What Was Done**

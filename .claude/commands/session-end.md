@@ -18,8 +18,9 @@ Wrap up this coding session by updating documentation and capturing lessons lear
 4. **Updates agents/skills** - Reflects any workflow changes or new patterns
 5. **Captures lessons** - Documents what worked, what didn't, and insights gained
 6. **Saves session log** - Archives summary to `.project/sessions/YYYY-MM-DD.md` (local, not in git)
-7. **Shows summary** - Lists all changes ready to commit
-8. **Commits with approval** - User signs off on commit message (does NOT push)
+7. **Captures creator feedback** - Optional feedback to improve future project setups
+8. **Shows summary** - Lists all changes ready to commit
+9. **Commits with approval** - User signs off on commit message (does NOT push)
 
 ---
 
@@ -183,7 +184,84 @@ This creates a local archive of all session work that won't clutter the git repo
 
 ---
 
-## Step 8: Summary Output
+## Step 8: Creator Feedback (Optional)
+
+Ask if the user has feedback to send back to the master agent that created this project setup.
+
+### Ask the user
+
+Use AskUserQuestion with header "Feedback":
+- Question: "Do you have feedback for the project creator to improve future setups?"
+- Options:
+  - **Yes** - I have suggestions or issues to report
+  - **No** - Skip this step
+
+### If user selects "Yes"
+
+Prompt for feedback in these categories:
+
+**Skills Feedback**
+- Were any skills missing information you needed?
+- Did you discover patterns worth adding to a skill?
+- Were there errors or outdated info in skills?
+
+**Setup Feedback**
+- Were setup instructions unclear or incomplete?
+- Did you hit issues during initial setup?
+- What would have made setup smoother?
+
+**New Patterns**
+- Did you create reusable patterns worth sharing?
+- Any new commands or workflows that should be standardized?
+
+**General**
+- Any other suggestions for improving the creator system?
+
+### Save feedback to docs/
+
+Create or append to `docs/creator-feedback.md`:
+
+```markdown
+# Creator Feedback
+
+Feedback to improve the master agent's setup system, skills, and workflows.
+
+---
+
+## Feedback: YYYY-MM-DD
+
+### Project
+[Project name/description]
+
+### Skills Feedback
+[User's feedback about skills]
+
+### Setup Feedback
+[User's feedback about setup process]
+
+### New Patterns Discovered
+[Any reusable patterns worth adding]
+
+### General Suggestions
+[Other feedback]
+
+---
+```
+
+### Tell the user
+
+```
+Feedback saved to: docs/creator-feedback.md
+
+To improve future projects, bring this file to the master agent:
+1. Open the Squared-Agent project
+2. Share the contents of docs/creator-feedback.md
+3. Ask to integrate the feedback into skills, setups, or tasks
+```
+
+---
+
+## Step 9: Summary Output
 
 Show the user what was done and what will be committed:
 
@@ -208,7 +286,7 @@ Show the user what was done and what will be committed:
 
 ---
 
-## Step 9: Commit with Approval
+## Step 10: Commit with Approval
 
 This is the final step. The user signs off on the commit message.
 
@@ -287,8 +365,9 @@ To push: git push
 6. **Check agents/skills** for any that need updates based on session work
 7. **Create/update LEARNINGS.md** with session insights
 8. **Save session log** to `.project/sessions/YYYY-MM-DD.md` (local archive)
-9. **Output summary** of what was done and what will be committed
-10. **Get user approval** and commit (do NOT push)
+9. **Ask about creator feedback** - if yes, save to `docs/creator-feedback.md`
+10. **Output summary** of what was done and what will be committed
+11. **Get user approval** and commit (do NOT push)
 
 Be thorough but concise. Focus on changes that will help future sessions understand the current state of the project.
 

@@ -13,10 +13,10 @@ This project is in early exploration phase. The `Commands/` directory contains i
 ## Commands
 
 ### `/prepare-setup`
-Prepare a setup package for a new project. Asks for profile, commands, and tasks to include, then creates a temp folder with all files and a SETUP.md guide.
+Prepare a setup package for a new project. Asks for profile, commands, tasks, and skills to include, then creates a temp folder with all files and a SETUP.md guide.
 
 ### `/session-end`
-End coding session - updates docs, captures learnings, commits changes with approval.
+End coding session - updates docs, captures learnings, optionally captures creator feedback, and commits changes with approval.
 
 ### `/commit`
 Draft a commit message, get approval, then commit changes.
@@ -36,6 +36,7 @@ A React/TypeScript UI pattern for horizontal infinite-scrolling navigation (guid
 
 ```
 Commands/           # Implementation guides and reusable patterns
+skills/             # Knowledge base for agent development (tech stacks, patterns)
 setups/             # Setup profiles for bootstrapping new projects
   developer/        # Developer workflow profile
 tasks/              # One-time setup tasks
@@ -46,6 +47,8 @@ tasks/              # One-time setup tasks
 
 ## Recent Changes
 
+- **2026-01-12:** Enhanced `/prepare-setup` with commands and skills selection; added creator feedback loop to `/session-end`
+- **2026-01-12:** Added `skills/` knowledge base with Next.js App Build Guide
 - **2026-01-12:** Added `/prepare-setup` command for bootstrapping new projects with setup profiles, commands, and tasks
 - **2026-01-12:** Added New Feature Workflow pattern and setups/tasks structure
 - **2026-01-11:** Initial project setup - created README.md, configured commands, established documentation structure

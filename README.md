@@ -58,6 +58,7 @@ Research/           # General research library
 Projects/           # Active projects
   _TEMPLATE/        # Template for new projects
 Commands/           # Implementation guides and patterns
+skills/             # Knowledge base for building (tech stacks, patterns)
 setups/             # Setup profiles for bootstrapping new projects
   developer/        # Developer workflow profile
 tasks/              # One-time setup tasks
