@@ -18,9 +18,10 @@ Wrap up this coding session by updating documentation and capturing lessons lear
 4. **Updates agents/skills** - Reflects any workflow changes or new patterns
 5. **Captures lessons** - Documents what worked, what didn't, and insights gained
 6. **Saves session log** - Archives summary to `.project/sessions/YYYY-MM-DD.md` (local, not in git)
-7. **Captures creator feedback** - Optional feedback to improve future project setups
-8. **Shows summary** - Lists all changes ready to commit
-9. **Commits with approval** - User signs off on commit message (does NOT push)
+7. **Generates SETUP.md** - Auto-creates/updates handoff document with env vars, OAuth setup, feature status
+8. **Generates creator feedback** - Auto-generates feedback from session for user to copy to master agent
+9. **Shows summary** - Lists all changes ready to commit
+10. **Commits with approval** - User signs off on commit message (does NOT push)
 
 ---
 
@@ -184,107 +185,138 @@ This creates a local archive of all session work that won't clutter the git repo
 
 ---
 
-## Step 8: Creator Feedback (Optional)
+## Step 8: Generate/Update SETUP.md
 
-Ask if the user has feedback to send back to the master agent that created this project setup.
+Create or update a `SETUP.md` file that serves as the handoff document for this project.
 
-### Ask the user
+### Check if SETUP.md exists
 
-Use AskUserQuestion with header "Feedback":
-- Question: "Do you have feedback for the project creator to improve future setups?"
-- Options:
-  - **Yes** - I have suggestions or issues to report
-  - **No** - Skip this step
+If it doesn't exist, create it. If it does, update it with current information.
 
-### If user selects "Yes"
-
-Prompt for feedback in these categories:
-
-**Skills Feedback**
-- Were any skills missing information you needed?
-- Did you discover patterns worth adding to a skill?
-- Were there errors or outdated info in skills?
-
-**Setup Feedback**
-- Were setup instructions unclear or incomplete?
-- Did you hit issues during initial setup?
-- What would have made setup smoother?
-
-**New Patterns**
-- Did you create reusable patterns worth sharing?
-- Any new commands or workflows that should be standardized?
-
-**General**
-- Any other suggestions for improving the creator system?
-
-### Save feedback to docs/
-
-Create or append to `docs/creator-feedback.md`:
+### Required sections
 
 ```markdown
-# Creator Feedback
+# Project Setup
 
-Feedback to improve the master agent's setup system, skills, and workflows.
+## Environment Variables
+
+Copy `.env.example` to `.env` and configure:
+
+| Variable | Description | How to Get |
+|----------|-------------|------------|
+| [var] | [description] | [instructions] |
+
+## OAuth Setup (if applicable)
+
+### [Provider] OAuth
+1. [Step-by-step instructions]
+2. Add authorized redirect URI: `{APP_URL}/api/auth/callback/[provider]`
+3. Copy credentials to `.env`
+
+## Installation
+
+\```bash
+pnpm install
+pnpm db:generate
+pnpm db:migrate
+pnpm dev
+\```
+
+## Feature Status
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| [Feature] | ✅ Working | - |
+| [Feature] | 🚧 In Progress | [Notes] |
+| [Feature] | ⏳ Planned | [Notes] |
+
+## Known Issues
+
+- [Any known issues or limitations]
+```
+
+### Gather information automatically
+
+1. **Environment variables**: Read `.env.example` or `.env` to list required variables
+2. **OAuth providers**: Check auth config for configured social providers
+3. **Feature status**: Review recent commits and implementation status
+4. **Known issues**: Pull from CLAUDE.md known issues section
+
+### Update strategy
+
+- If SETUP.md already exists, update only sections that changed
+- Keep user-edited content intact (add warnings for auto-generated sections)
+- Feature status should reflect actual implementation state
 
 ---
 
-## Feedback: YYYY-MM-DD
+## Step 9: Creator Feedback
 
-### Project
-[Project name/description]
+Automatically generate useful feedback for the master agent based on this session's work.
 
-### Skills Feedback
-[User's feedback about skills]
+### Analyze the session for feedback
 
-### Setup Feedback
-[User's feedback about setup process]
+Review the session and identify:
 
-### New Patterns Discovered
-[Any reusable patterns worth adding]
+**Skills Gaps**
+- What information was missing from skills docs that you had to figure out?
+- What errors or outdated info did you encounter?
+- What patterns did you implement that should be documented?
 
-### General Suggestions
-[Other feedback]
+**Setup Issues**
+- What configuration was missing or unclear?
+- What gotchas did you hit during development?
+- What should be pre-configured in future setups?
+
+**New Patterns**
+- What reusable code patterns were created?
+- What commands or workflows should be standardized?
+- What UI components or utilities could be shared?
+
+**Technical Gotchas**
+- What library issues were discovered?
+- What config settings were required but not documented?
+- What error messages led to non-obvious solutions?
+
+### Generate and display feedback
+
+Create structured feedback and display it for easy copy-paste:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CREATOR FEEDBACK - Copy to Squared-Agent
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## Feedback from [Project Name] - YYYY-MM-DD
+
+### Skills Gaps
+- [Specific missing info that would have helped]
+- [Patterns worth adding to skills docs]
+
+### Setup Issues
+- [Config that should be pre-configured]
+- [Gotchas to document for future projects]
+
+### New Patterns
+- [Reusable patterns created this session]
+- [Code worth extracting to templates]
+
+### Technical Gotchas
+- [Library issues and solutions]
+- [Config requirements discovered]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Save feedback locally
+
+Also save to `docs/creator-feedback.md` for reference.
+
+**Important:** Only include feedback if there's something meaningful to report. If the session was routine with no issues or discoveries, skip this step.
 
 ---
-```
 
-### Display feedback for easy copy-paste
-
-After saving, display the feedback in a format ready to paste into the master agent:
-
-```
-Feedback saved to: docs/creator-feedback.md
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-COPY THE FOLLOWING TO SQUARED-AGENT:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-## Creator Feedback from [Project Name]
-
-**Date:** YYYY-MM-DD
-
-### Skills Feedback
-[User's feedback about skills]
-
-### Setup Feedback
-[User's feedback about setup process]
-
-### New Patterns Discovered
-[Any reusable patterns worth adding]
-
-### General Suggestions
-[Other feedback]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-To submit: Open Squared-Agent and paste the above feedback.
-```
-
-This makes it easy for the user to select and copy the feedback block directly.
-
----
-
-## Step 9: Summary Output
+## Step 10: Summary Output
 
 Show the user what was done and what will be committed:
 
@@ -309,7 +341,7 @@ Show the user what was done and what will be committed:
 
 ---
 
-## Step 10: Commit with Approval
+## Step 11: Commit with Approval
 
 This is the final step. The user signs off on the commit message.
 
@@ -388,9 +420,10 @@ To push: git push
 6. **Check agents/skills** for any that need updates based on session work
 7. **Create/update LEARNINGS.md** with session insights
 8. **Save session log** to `.project/sessions/YYYY-MM-DD.md` (local archive)
-9. **Ask about creator feedback** - if yes, save to `docs/creator-feedback.md`
-10. **Output summary** of what was done and what will be committed
-11. **Get user approval** and commit (do NOT push)
+9. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
+10. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
+11. **Output summary** of what was done and what will be committed
+12. **Get user approval** and commit (do NOT push)
 
 Be thorough but concise. Focus on changes that will help future sessions understand the current state of the project.
 

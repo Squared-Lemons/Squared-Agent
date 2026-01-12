@@ -16,6 +16,8 @@ A comprehensive guide for building Next.js applications with Better Auth, Drizzl
 8. [Common Pitfalls](#8-common-pitfalls)
 9. [Database Reset Workflow](#9-database-reset-workflow)
 10. [Project Checklist](#10-project-checklist)
+11. [Handoff Document Template](#11-handoff-document-template)
+12. [Developer Experience Checklist](#12-developer-experience-checklist)
 
 ---
 
@@ -697,6 +699,101 @@ export default function DashboardLayout({
 | "model not found" error | Plural table names | Use singular: `user`, `session`, `account`, `verification` |
 | "model not found" for org | Wrong table names | Use `organization` and `member` (singular) |
 | Schema not recognized | Schema not passed | Add `schema` to drizzleAdapter options |
+| Runtime errors in Next.js | Native modules bundled | Add `serverExternalPackages` to next.config.js (see below) |
+| "Cannot find module better-sqlite3" | Webpack tries to bundle | Add webpack externals config (see below) |
+| Multiple db connections | No singleton pattern | Use global singleton for db/auth in dev (see below) |
+| Social login configured but no buttons | UI doesn't auto-generate | Manually add social provider buttons to login/signup forms |
+
+#### Required next.config.js Settings
+
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // REQUIRED: Prevent native modules from being bundled
+  serverExternalPackages: [
+    "better-sqlite3",
+    "better-auth",
+    "@app/auth",      // Your auth package
+    "@app/database",  // Your database package
+  ],
+
+  // REQUIRED: Webpack externals for better-sqlite3
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push({
+        "better-sqlite3": "commonjs better-sqlite3",
+      });
+    }
+    return config;
+  },
+};
+
+export default nextConfig;
+```
+
+#### Singleton Pattern for Development
+
+Database and auth instances should use singleton pattern to prevent multiple connections during hot reload:
+
+```typescript
+// packages/database/src/index.ts
+import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import * as schema from "./schema";
+
+const globalForDb = globalThis as unknown as {
+  sqlite: Database.Database | undefined;
+};
+
+const sqlite =
+  globalForDb.sqlite ??
+  new Database(
+    process.env.DATABASE_URL?.replace("file:", "") || "./data/app.db"
+  );
+
+if (process.env.NODE_ENV !== "production") {
+  globalForDb.sqlite = sqlite;
+}
+
+export const db = drizzle(sqlite, { schema });
+```
+
+#### Social Provider Buttons
+
+When social providers are configured in Better Auth, you must manually add buttons:
+
+```tsx
+// Login form component
+import { signIn } from "@app/auth/client";
+
+function LoginForm() {
+  return (
+    <div className="space-y-4">
+      {/* Email/password form fields */}
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
+
+      <Button
+        variant="outline"
+        className="w-full"
+        onClick={() => signIn.social({ provider: "google" })}
+      >
+        <GoogleIcon className="mr-2 h-4 w-4" />
+        Continue with Google
+      </Button>
+    </div>
+  );
+}
+```
 
 ### Drizzle ORM
 
@@ -816,6 +913,160 @@ packages/auth/src/client.ts               # Better Auth client
 apps/web/app/api/auth/[...all]/route.ts   # Auth API route
 apps/web/lib/actions/*.ts                 # Server actions
 apps/web/components/onboarding-check.tsx  # Route protection
+```
+
+---
+
+## 11. Handoff Document Template
+
+When handing off or onboarding to a project, create a `SETUP.md` with this information:
+
+### Required Sections
+
+```markdown
+# Project Setup
+
+## Environment Variables
+
+Copy `.env.example` to `.env` and configure:
+
+| Variable | Description | How to Get |
+|----------|-------------|------------|
+| DATABASE_URL | SQLite database path | Default: `file:../../packages/database/data/app.db` |
+| BETTER_AUTH_SECRET | Auth encryption key | Generate: `openssl rand -base64 32` |
+| GOOGLE_CLIENT_ID | Google OAuth client ID | [Google Cloud Console](https://console.cloud.google.com/) |
+| GOOGLE_CLIENT_SECRET | Google OAuth secret | Same as above |
+| NEXT_PUBLIC_APP_URL | App URL | `http://localhost:3000` for dev |
+
+## OAuth Setup
+
+### Google OAuth
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create/select project
+3. Navigate to "APIs & Services" > "Credentials"
+4. Create OAuth 2.0 Client ID (Web application)
+5. Add authorized redirect URI: `{NEXT_PUBLIC_APP_URL}/api/auth/callback/google`
+6. Copy Client ID and Secret to `.env`
+
+## Installation
+
+\```bash
+pnpm install
+pnpm db:generate
+pnpm db:migrate
+pnpm dev
+\```
+
+## Feature Status
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Email/Password Auth | ✅ Working | - |
+| Google OAuth | ✅ Working | Requires OAuth setup |
+| Organization Management | ✅ Working | - |
+| [Feature] | 🚧 In Progress | [Notes] |
+| [Feature] | ⏳ Planned | [Notes] |
+
+## Known Issues
+
+- [Any known issues or gotchas]
+```
+
+---
+
+## 12. Developer Experience Checklist
+
+### Pre-Development Setup
+
+- [ ] `.env.example` file with all required variables documented
+- [ ] Database seed script for initial data (`pnpm db:seed`)
+- [ ] Clear README with quick start instructions
+
+### During Development
+
+- [ ] Loading states for async operations
+- [ ] Error boundaries and fallback UI
+- [ ] Form validation with Zod schemas
+- [ ] Toast notifications for user feedback
+
+### Before Handoff
+
+- [ ] All environment variables documented
+- [ ] OAuth setup instructions with redirect URIs
+- [ ] Feature status table (working / in-progress / planned)
+- [ ] Database migration scripts tested
+- [ ] Seed data script for fresh environments
+
+### Code Quality
+
+```typescript
+// Zod validation pattern for forms
+import { z } from "zod";
+
+export const createGymSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email().optional().or(z.literal("")),
+  phone: z.string().optional(),
+});
+
+export type CreateGymInput = z.infer<typeof createGymSchema>;
+
+// Usage in server action
+export async function createGym(input: CreateGymInput) {
+  const validated = createGymSchema.parse(input);
+  // ... create gym
+}
+```
+
+### Database Seed Script
+
+```typescript
+// packages/database/src/seed.ts
+import { db } from "./index";
+import { user, organization, member } from "./schema";
+import { nanoid } from "nanoid";
+
+async function seed() {
+  console.log("Seeding database...");
+
+  // Create test user
+  const testUserId = nanoid();
+  await db.insert(user).values({
+    id: testUserId,
+    name: "Test User",
+    email: "test@example.com",
+    emailVerified: true,
+  });
+
+  // Create test organization
+  const testOrgId = nanoid();
+  await db.insert(organization).values({
+    id: testOrgId,
+    name: "Test Organization",
+    slug: "test-org",
+  });
+
+  // Add user as owner
+  await db.insert(member).values({
+    id: nanoid(),
+    organizationId: testOrgId,
+    userId: testUserId,
+    role: "owner",
+  });
+
+  console.log("Seeding complete!");
+}
+
+seed().catch(console.error);
+```
+
+Add to package.json:
+```json
+{
+  "scripts": {
+    "db:seed": "tsx src/seed.ts"
+  }
+}
 ```
 
 ---

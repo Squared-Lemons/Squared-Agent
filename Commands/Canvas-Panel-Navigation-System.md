@@ -290,6 +290,28 @@ interface BasePanelProps {
 - Active state styling (shadow, border highlight)
 - Focus management
 
+**Default Styling (REQUIRED):**
+Panels must include these base styles out of the box:
+```tsx
+// Panel container defaults
+className="p-4 gap-4 rounded-lg shadow border bg-background"
+
+// Active panel indicator (ring on focus)
+className={cn(
+  "rounded-lg shadow border bg-background",
+  isActive && "ring-2 ring-primary ring-offset-2"
+)}
+```
+
+| Style | Value | Purpose |
+|-------|-------|---------|
+| Padding | `p-4` | Internal spacing |
+| Gap | `gap-4` | Spacing between children |
+| Border radius | `rounded-lg` | Consistent rounded corners |
+| Shadow | `shadow` | Depth/elevation |
+| Border | `border` | Visual boundary |
+| Active ring | `ring-2 ring-primary` | Focus indicator |
+
 **Entity Type Configuration:**
 Each entity type needs configuration in `entityTypeConfig`:
 ```typescript

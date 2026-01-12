@@ -1,77 +1,104 @@
-# Squared Lemons - Business Agent
+# Squared Agent
 
-A sandbox for exploring and prototyping business ideas, agent-based concepts, and reusable patterns for business automation.
+A master agent for bootstrapping new projects with Claude Code. Contains reusable setup profiles, development patterns, and a knowledge base that improves through feedback from spawned projects.
 
-## Quick Links
+## What This Does
 
-| Section | Description |
-|---------|-------------|
-| [Clients](Clients/) | Client information, research, and documentation |
-| [Squared Lemons](Squared-Lemons/) | Company management and operations |
-| [Research](Research/) | General research library and knowledge base |
-| [Projects](Projects/) | Active and completed projects |
+Use `/prepare-setup` to create setup packages for new projects. Each package includes:
+- **Setup instructions** - Step-by-step bootstrap guide
+- **Command guides** - Implementation guides for slash commands
+- **Skills** - Knowledge base docs for building (tech stacks, patterns)
+- **Tasks** - Optional one-time setup activities
 
-## Current State
-
-This project is in early exploration phase. It contains reusable patterns, Claude Code configurations, and company knowledge management.
+Projects created from these packages can send feedback back to improve future setups.
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/session-end` | End coding session - updates docs, captures learnings, commits changes |
-| `/commit` | Draft a commit message, get approval, then commit changes |
-| `/prepare-setup` | Create a setup package for bootstrapping new projects |
+| `/prepare-setup` | Create a setup package for a new project |
+| `/session-end` | End session - update docs, capture learnings, commit |
+| `/commit` | Quick commit with approval |
 
-## Available Patterns
+## Plugins
 
-### Session-End Command
-A structured workflow for ending coding sessions. Updates documentation, captures lessons learned, and commits changes with user approval.
+| Plugin | Purpose |
+|--------|---------|
+| **feature-dev** | Guided feature development with codebase understanding |
+| **ralph-loop** | Autonomous development loop for complex tasks |
+| **frontend-design** | Production-grade UI components with high design quality |
+| **context7** | Up-to-date documentation lookup for libraries |
+| **playwright** | Browser automation and testing |
+| **code-simplifier** | Code refinement for clarity and maintainability |
 
-See: `Commands/SESSION-END-COMMAND.md`
+## Available Content
 
-### New Feature Workflow
-A structured workflow for building features with Feature-Dev and Ralph Loop integration.
+### Setup Profiles (`setups/`)
+- **developer** - Full developer workflow with plugins, commands, and session management
 
-See: `Commands/New Feature Workflow.md`
+### Command Guides (`Commands/`)
+- **SESSION-END-COMMAND.md** - Session-end workflow with creator feedback loop
+- **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
+- **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
 
-### Canvas Panel Navigation System
-A React/TypeScript UI pattern for horizontal infinite-scrolling navigation.
+### Skills (`skills/`)
+- **Next.js-App-Build-Guide.md** - Next.js + Better Auth + Drizzle + Turborepo patterns
 
-See: `Commands/Canvas-Panel-Navigation-System.md`
+### Tasks (`tasks/`)
+- **ExistingProject-Investigate.md** - Analyze existing codebase and generate documentation
+
+## How It Works
+
+```
+┌─────────────────┐     /prepare-setup      ┌──────────────────┐
+│  Squared Agent  │ ──────────────────────► │   New Project    │
+│  (this repo)    │                         │                  │
+└─────────────────┘                         └──────────────────┘
+        ▲                                            │
+        │         creator feedback                   │
+        └────────────────────────────────────────────┘
+                    (continuous improvement)
+```
+
+1. Run `/prepare-setup` to select profile, commands, tasks, and skills
+2. Copy the generated package to your new project
+3. Tell Claude Code to execute the setup
+4. At session end, optionally send feedback back to improve the master agent
 
 ## Project Structure
 
 ```
-Clients/            # Client information and research
-  _TEMPLATE/        # Template for new clients
-Squared-Lemons/     # Company management
-  strategy/         # Business strategy and goals
-  operations/       # Processes and workflows
-  finance/          # Financial documents
-  legal/            # Contracts and policies
-Research/           # General research library
-  market/           # Market research
-  technology/       # Tech research
-  competitors/      # Competitor analysis
-  ideas/            # Business ideas
-Projects/           # Active projects
-  _TEMPLATE/        # Template for new projects
-Commands/           # Implementation guides and patterns
-skills/             # Knowledge base for building (tech stacks, patterns)
-setups/             # Setup profiles for bootstrapping new projects
+Commands/           # Implementation guides for slash commands
+skills/             # Knowledge base (tech stacks, patterns)
+setups/             # Setup profiles
   developer/        # Developer workflow profile
 tasks/              # One-time setup tasks
 .claude/            # Claude Code configuration
-  commands/         # Custom slash commands
+  commands/         # Active slash commands
 .project/sessions/  # Local session logs (gitignored)
 ```
 
 ## Getting Started
 
-1. Clone this repository
-2. Open with Claude Code
-3. Start exploring or prototyping
+1. Open this project with Claude Code
+2. Run `/prepare-setup`
+3. Select what to include in your setup package
+4. Copy the package to your new project
+5. Execute the setup
+
+## Receiving Feedback
+
+When projects send feedback via `/session-end`, they'll display it in a copy-paste format:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COPY THE FOLLOWING TO SQUARED-AGENT:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+...feedback content...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Paste feedback here to integrate improvements into skills, setups, or tasks.
 
 ## License
 

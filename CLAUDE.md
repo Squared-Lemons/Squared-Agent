@@ -4,11 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Squared Lemons - Business Agent** is a sandbox for exploring and prototyping business ideas, agent-based concepts, and reusable patterns for business automation.
+**Squared Agent** is a master agent for bootstrapping new projects with Claude Code. It contains reusable setup profiles, development patterns, and a knowledge base that improves through feedback from spawned projects.
 
-## Current State
+## Purpose
 
-This project is in early exploration phase. The `Commands/` directory contains implementation guides and patterns that can be applied to future projects.
+- **Bootstrap new projects** via `/prepare-setup` command
+- **Capture development patterns** in Commands/ as implementation guides
+- **Build knowledge base** in skills/ for reference during development
+- **Improve continuously** through feedback from projects created with this system
 
 ## Commands
 
@@ -16,21 +19,26 @@ This project is in early exploration phase. The `Commands/` directory contains i
 Prepare a setup package for a new project. Asks for profile, commands, tasks, and skills to include, then creates a temp folder with all files and a SETUP.md guide.
 
 ### `/session-end`
-End coding session - updates docs, captures learnings, optionally captures creator feedback, and commits changes with approval.
+End coding session - updates docs, captures learnings, generates SETUP.md handoff document, auto-generates creator feedback for user to copy back to master agent, and commits changes with approval.
 
 ### `/commit`
 Draft a commit message, get approval, then commit changes.
 
-## Available Patterns
+## Available Content
 
-### Session-End Command (`Commands/SESSION-END-COMMAND.md`)
-Implementation guide for the session-end workflow pattern. **Implemented** in this repo.
+### Command Guides (`Commands/`)
+- **SESSION-END-COMMAND.md** - Session-end workflow with creator feedback loop
+- **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
+- **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
 
-### New Feature Workflow (`Commands/New Feature Workflow.md`)
-Structured workflow for building features with Feature-Dev plugin and Ralph Loop. **Implemented** in this repo.
+### Skills (`skills/`)
+- **Next.js-App-Build-Guide.md** - Next.js + Better Auth + Drizzle + Turborepo patterns
 
-### Canvas Panel Navigation System (`Commands/Canvas-Panel-Navigation-System.md`)
-A React/TypeScript UI pattern for horizontal infinite-scrolling navigation (guide only, not implemented).
+### Setup Profiles (`setups/`)
+- **developer/** - Full developer workflow with plugins, commands, and session management
+
+### Tasks (`tasks/`)
+- **ExistingProject-Investigate.md** - Analyze existing codebase and generate documentation
 
 ## Project Structure
 
@@ -47,6 +55,8 @@ tasks/              # One-time setup tasks
 
 ## Recent Changes
 
+- **2026-01-12:** Integrated creator feedback - enhanced Next.js skill with Better Auth gotchas, handoff template, DX checklist; added SETUP.md auto-generation and auto-generated creator feedback to session-end; added Plugins section to README
+- **2026-01-12:** Updated README and CLAUDE.md to reflect new purpose as master agent for project bootstrapping
 - **2026-01-12:** Auto-organize docs into `docs/` on setup completion; copy-paste friendly creator feedback display
 - **2026-01-12:** Enhanced `/prepare-setup` with commands and skills selection; added creator feedback loop to `/session-end`
 - **2026-01-12:** Added `skills/` knowledge base with Next.js App Build Guide
