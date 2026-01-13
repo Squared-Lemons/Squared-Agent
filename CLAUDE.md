@@ -24,6 +24,9 @@ End coding session - updates docs, captures learnings, generates SETUP.md handof
 ### `/commit`
 Draft a commit message, get approval, then commit changes.
 
+### `/summary`
+Generate an accomplishments summary for a time period. Analyzes git commits and session logs, categorizes by type (features, fixes, refactors, etc.), and produces a copy-paste ready report.
+
 ### `/new-idea`
 Consultative discovery conversation to design a new project. Discuss requirements, platform, and technical decisions together, then generate a comprehensive package (PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, SETUP.md) for the target agent to build v1.
 
@@ -31,6 +34,7 @@ Consultative discovery conversation to design a new project. Discuss requirement
 
 ### Command Guides (`commands/`)
 - **SESSION-END-COMMAND.md** - Session-end workflow with creator feedback loop
+- **Summary-Command.md** - Accomplishments summary from git history and session logs
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **New-Idea-Workflow.md** - Consultative discovery process for new projects
 - **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
@@ -77,6 +81,7 @@ CONTRIBUTING.md     # How to extend this project
 
 ## Recent Changes
 
+- **2026-01-13:** Added `/summary` command - generates accomplishments summary from git commits and session logs; categorizes by type (features, fixes, refactors, etc.); copy-paste ready output
 - **2026-01-13:** Enhanced `/new-idea` to be a consultative discovery conversation - discuss requirements, platform, technical decisions together; generates PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md with full context; supports user-provided files
 - **2026-01-13:** Restructured README with minimal approach - Quick Start, workflow diagram, links to docs/; moved details to docs/commands.md, docs/plugins.md, docs/content.md, docs/feedback.md
 - **2026-01-13:** Added `/new-idea` command - creates setup package for new app ideas with platform selection, idea description baked into SETUP.md, and command guides; target agent enters plan mode when setup runs

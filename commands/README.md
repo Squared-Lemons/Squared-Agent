@@ -19,6 +19,7 @@ commands/                          .claude/commands/
 | Guide | Creates Command | Purpose |
 |-------|-----------------|---------|
 | [SESSION-END-COMMAND.md](./SESSION-END-COMMAND.md) | `/session-end` | End session, update docs, capture learnings, commit |
+| [Summary-Command.md](./Summary-Command.md) | `/summary` | Generate accomplishments summary for a time period |
 | [New Feature Workflow.md](./New%20Feature%20Workflow.md) | `/feature` | Multi-phase feature development with agents |
 | [Canvas-Panel-Navigation-System.md](./Canvas-Panel-Navigation-System.md) | (pattern) | React UI pattern reference |
 

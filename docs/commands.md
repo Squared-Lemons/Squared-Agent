@@ -155,6 +155,43 @@ After reviewing changes, you'll be asked:
 
 ---
 
+## /summary
+
+Generate an accomplishments summary for a specified time period.
+
+### What it does
+
+1. Asks which time period to summarize (Today, Yesterday, Past 7 days, Custom)
+2. Gathers git commits and stats for that period
+3. Checks for session logs in the date range
+4. Categorizes commits by type (features, fixes, refactors, docs, chores)
+5. Generates a structured report
+
+### Usage
+
+```
+/summary
+```
+
+### Output
+
+A structured report:
+- **Features Added** - New functionality
+- **Bug Fixes** - Issues resolved
+- **Refactoring & Improvements** - Code quality changes
+- **Documentation Updates** - Doc changes
+- **Session Highlights** - From session logs (if available)
+- **Statistics** - Commit counts by category
+
+### When to use
+
+- Personal review of work done
+- Sharing progress with team members
+- Converting to email updates (ask "adjust for email")
+- Tracking productivity over time
+
+---
+
 ## /commit
 
 Quick commit with approval.
@@ -193,6 +230,7 @@ The `commands/` folder contains implementation guides for setting up these comma
 | File | Purpose |
 |------|---------|
 | `SESSION-END-COMMAND.md` | Full session-end workflow with creator feedback |
+| `Summary-Command.md` | Accomplishments summary from git history |
 | `New Feature Workflow.md` | Feature development with Feature-Dev and Ralph Loop |
 | `New-Idea-Workflow.md` | How /new-idea works and how to extend it |
 | `Canvas-Panel-Navigation-System.md` | React UI pattern for horizontal navigation |

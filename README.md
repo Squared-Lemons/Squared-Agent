@@ -101,6 +101,7 @@ Tell Claude: "Read SETUP.md and help me set up this project"
 | `/new-idea` | Discovery conversation → project package | [docs/commands.md](docs/commands.md#new-idea) |
 | `/prepare-setup` | Create generic setup package | [docs/commands.md](docs/commands.md#prepare-setup) |
 | `/session-end` | End session, update docs, commit | [docs/commands.md](docs/commands.md#session-end) |
+| `/summary` | Generate accomplishments report | [docs/commands.md](docs/commands.md#summary) |
 | `/commit` | Quick commit with approval | [docs/commands.md](docs/commands.md#commit) |
 
 ---
