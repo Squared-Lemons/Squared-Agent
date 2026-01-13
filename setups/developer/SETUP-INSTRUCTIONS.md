@@ -15,14 +15,30 @@ Ensure `.claude/` will be committed to git.
 
 ---
 
-## Step 2: Install Plugins
+## Step 2: Configure Claude Code
 
-Create `.claude/settings.json` with these plugins enabled:
+Create `.claude/settings.json` with plugins, permissions, and hooks:
 
 ```json
 {
   "permissions": {
-    "allow": [],
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(npm run test:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run format:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm format:*)",
+      "Bash(pnpm typecheck:*)",
+      "Bash(bun run build:*)",
+      "Bash(bun run test:*)",
+      "Bash(bun run lint:*)",
+      "Bash(bun run format:*)",
+      "Bash(bun run typecheck:*)"
+    ],
     "deny": []
   },
   "enabledPlugins": {
@@ -31,9 +47,32 @@ Create `.claude/settings.json` with these plugins enabled:
     "code-simplifier@claude-plugins-official": true,
     "playwright@claude-plugins-official": true,
     "context7@claude-plugins-official": true
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run format --silent 2>/dev/null || pnpm format --silent 2>/dev/null || bun run format 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
   }
 }
 ```
+
+### What this configures:
+
+**Permissions** - Pre-allow common safe commands so Claude won't ask for permission every time:
+- Build, test, lint, format, typecheck commands
+- Supports npm, pnpm, and bun
+
+**Hooks** - Auto-format code after Claude writes/edits files:
+- Runs your project's formatter after every file change
+- Falls back gracefully if no formatter configured
 
 ---
 
@@ -53,11 +92,54 @@ Read the following documentation files and create commands/skills/agents as spec
 
 ---
 
-## Step 4: Create Supporting Files
+## Step 4: Create Custom Agents (Optional)
+
+Custom agents automate common workflows. Create `.claude/agents/` folder with agent definitions:
+
+```bash
+mkdir -p .claude/agents
+```
+
+### Recommended Agents
+
+**build-validator.md** - Validates code compiles and passes checks:
+```markdown
+Validate the build after changes:
+1. Run typecheck
+2. Run linter
+3. Run tests
+4. Report any failures with file:line references
+```
+
+**code-reviewer.md** - Reviews code for issues:
+```markdown
+Review the recent changes for:
+- Logic errors or bugs
+- Security vulnerabilities
+- Performance issues
+- Code style violations
+Report issues with confidence levels (high/medium/low).
+```
+
+**verify-app.md** - End-to-end verification:
+```markdown
+Verify the application works:
+1. Start the dev server
+2. Check key pages load without errors
+3. Test core user flows
+4. Report any issues found
+```
+
+Agents are invoked via the Task tool and provide specialized workflows that can run in the background.
+
+---
+
+## Step 5: Create Supporting Files
 
 ### Directory Structure
 ```bash
 mkdir -p .claude/commands
+mkdir -p .claude/agents
 mkdir -p .project/sessions
 ```
 
@@ -76,7 +158,7 @@ Create `LEARNINGS.md` in project root for capturing session insights.
 
 ---
 
-## Step 5: Organize Documentation
+## Step 6: Organize Documentation
 
 Move setup files into `docs/` folder to keep the project root clean. Only `CLAUDE.md` and `README.md` should remain at root.
 
@@ -115,14 +197,15 @@ rmdir skills 2>/dev/null || true
 
 ---
 
-## Step 6: Commit
+## Step 7: Commit
 
 ```bash
 git add .
 git commit -m "Setup developer workflow with Claude Code
 
-- Configured plugins: ralph-loop, feature-dev, code-simplifier, playwright, context7
+- Configured plugins, permissions, and hooks
 - Created commands: session-end, commit, new-feature
+- Created custom agents (optional)
 - Organized documentation into docs/
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
@@ -140,7 +223,7 @@ After setup, these commands should be available:
 
 ---
 
-## Step 7: Project Exploration (Optional)
+## Step 8: Project Exploration (Optional)
 
 **Ask the user:** "Would you like me to explore the codebase and document its structure?"
 
@@ -152,3 +235,43 @@ If yes, read and execute the task file in `docs/` if one was included.
 
 Tell the user:
 > "Setup is complete! Please restart Claude to load the new configuration. Documentation has been organized into `docs/`."
+
+---
+
+## Working with Claude Code - Best Practices
+
+### Start in Plan Mode
+
+**Most sessions should start in Plan Mode** (press `shift+tab` twice to cycle modes).
+
+When tackling a new feature or complex task:
+1. Enter Plan Mode first
+2. Describe what you want to build
+3. Iterate on the plan until you're happy with it
+4. Switch to auto-accept edits mode
+5. Claude can often 1-shot the implementation after a good plan
+
+A good plan dramatically increases the quality of the final result.
+
+### Give Claude Verification
+
+**The most important tip:** Give Claude a way to verify its work.
+
+When Claude can run tests, check types, or validate the build after making changes, the quality of the output improves 2-3x. Always:
+
+- Have a test command Claude can run
+- Have a typecheck command
+- Have a lint command
+- Let Claude verify its own work before declaring "done"
+
+The pre-configured permissions in `.claude/settings.json` allow Claude to run these verification commands without asking permission each time.
+
+### CLAUDE.md as Living Document
+
+Treat `CLAUDE.md` as a living document that grows with your project:
+
+- When Claude does something incorrectly, add a rule to prevent it
+- When you discover a pattern that works well, document it
+- When you hit a gotcha, add it so Claude remembers next time
+
+The more specific guidance in CLAUDE.md, the better Claude performs on your project.

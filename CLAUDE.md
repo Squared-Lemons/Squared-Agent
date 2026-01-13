@@ -40,6 +40,22 @@ Draft a commit message, get approval, then commit changes.
 ### Tasks (`tasks/`)
 - **ExistingProject-Investigate.md** - Analyze existing codebase and generate documentation
 
+## Development Workflow
+
+When making changes to this project:
+
+1. **Make changes** - Edit files as needed
+2. **Verify** - Run any relevant checks (this is a docs-heavy project, so mainly review for consistency)
+3. **Test generated output** - If changing setup templates, test with `/prepare-setup`
+4. **Update docs** - Keep CLAUDE.md and README.md in sync with changes
+5. **Commit** - Use `/commit` or `/session-end` to commit with proper message
+
+### Key Principles
+
+- **Give Claude verification** - Always provide a way to verify work (tests, typecheck, lint)
+- **Start in Plan Mode** - For complex tasks, use Plan Mode first (shift+tab twice)
+- **Update CLAUDE.md** - When Claude does something wrong, add a rule to prevent it
+
 ## Project Structure
 
 ```
@@ -50,12 +66,14 @@ setups/             # Setup profiles for bootstrapping projects
 tasks/              # One-time setup tasks
 .claude/            # Claude Code configuration
   commands/         # Active slash commands
+  agents/           # Custom agent definitions (optional)
 .project/sessions/  # Local session logs (gitignored)
 CONTRIBUTING.md     # How to extend this project
 ```
 
 ## Recent Changes
 
+- **2026-01-13:** Added Boris Cherny's Claude Code best practices - PostToolUse hooks for auto-formatting, pre-configured permissions for safe commands, .claude/agents/ pattern, Development Workflow section, Plan Mode and verification emphasis
 - **2026-01-12:** Standardized project structure - lowercase folder names (commands/, tasks/), fixed typo in ExistingProject-Investigate.md, added CONTRIBUTING.md, enhanced all READMEs with "How to Extend" sections
 - **2026-01-12:** Integrated creator feedback - enhanced Next.js skill with Better Auth gotchas, handoff template, DX checklist; added SETUP.md auto-generation and auto-generated creator feedback to session-end; added Plugins section to README
 - **2026-01-12:** Updated README and CLAUDE.md to reflect new purpose as master agent for project bootstrapping

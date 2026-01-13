@@ -9,8 +9,23 @@ Use `/prepare-setup` to create setup packages for new projects. Each package inc
 - **Command guides** - Implementation guides for slash commands
 - **Skills** - Knowledge base docs for building (tech stacks, patterns)
 - **Tasks** - Optional one-time setup activities
+- **Best practices** - Plan mode, verification loops, living CLAUDE.md
 
 Projects created from these packages can send feedback back to improve future setups.
+
+## What Gets Configured
+
+The developer profile sets up:
+
+| Feature | What It Does |
+|---------|--------------|
+| **Plugins** | feature-dev, ralph-loop, code-simplifier, playwright, context7 |
+| **Permissions** | Pre-allow safe commands (build, test, lint, format, typecheck) |
+| **Hooks** | Auto-format code after Write/Edit operations |
+| **Commands** | /session-end, /commit, /new-feature |
+| **Agents** | Optional custom agents (build-validator, code-reviewer, verify-app) |
+
+Based on [how the Claude Code creator uses it](https://x.com/bcherny/status/2007179832300581177).
 
 ## Commands
 
@@ -75,6 +90,7 @@ setups/             # Setup profiles
 tasks/              # One-time setup tasks
 .claude/            # Claude Code configuration
   commands/         # Active slash commands
+  agents/           # Custom agent definitions (optional)
 .project/sessions/  # Local session logs (gitignored)
 CONTRIBUTING.md     # How to extend this project
 ```

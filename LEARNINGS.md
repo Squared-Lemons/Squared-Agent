@@ -6,6 +6,35 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-13: Boris Cherny's Claude Code Best Practices
+
+**What Was Done**
+- Analyzed Boris Cherny's Twitter thread about how he uses Claude Code
+- Identified gaps between his recommendations and our setup templates
+- Added PostToolUse hooks for auto-formatting after Write/Edit
+- Added pre-configured permissions for safe commands (build, test, lint, format, typecheck)
+- Added `.claude/agents/` pattern with template agents (build-validator, code-reviewer, verify-app)
+- Added Development Workflow section to CLAUDE.md template
+- Added "Working with Claude Code - Best Practices" section to setup instructions
+- Emphasized Plan Mode, verification loops, and living CLAUDE.md
+
+**What Worked Well**
+- Browser automation tools to read Twitter thread (WebFetch couldn't handle JS-heavy page)
+- Reading the full thread gave comprehensive understanding of best practices
+- Mapping insights to our existing structure showed clear gaps
+
+**Key Insights**
+- **Plan Mode first**: Most sessions should start in Plan Mode (shift+tab twice), iterate on plan, then auto-accept
+- **Verification = 2-3x quality**: When Claude can verify its work (tests, typecheck, lint), quality improves dramatically
+- **CLAUDE.md as living doc**: Team contributes to it, add rules when Claude does something wrong
+- **Pre-allow safe commands**: Avoid permission fatigue with pre-configured permissions
+- **Auto-format hooks**: Format code after every Write/Edit to avoid CI issues
+
+**Source**
+- https://x.com/bcherny/status/2007179832300581177
+
+---
+
 ### 2026-01-12: Creator Feedback Integration
 
 **What Was Done**
