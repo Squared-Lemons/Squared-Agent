@@ -32,6 +32,7 @@ Based on [how the Claude Code creator uses it](https://x.com/bcherny/status/2007
 | Command | Description |
 |---------|-------------|
 | `/prepare-setup` | Create a setup package for a new project |
+| `/new-idea` | Create a setup package for a specific app idea (platform + idea baked in) |
 | `/session-end` | End session - update docs, capture learnings, commit |
 | `/commit` | Quick commit with approval |
 
@@ -54,6 +55,7 @@ Based on [how the Claude Code creator uses it](https://x.com/bcherny/status/2007
 ### Command Guides (`commands/`)
 - **SESSION-END-COMMAND.md** - Session-end workflow with creator feedback loop
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
+- **New-Idea-Workflow.md** - Create setup packages for specific app ideas
 - **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
 
 ### Skills (`skills/`)

@@ -6,6 +6,36 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-13: New Idea Command
+
+**What Was Done**
+- Created `/new-idea` command for idea-focused project bootstrapping
+- Initially misunderstood requirement - built it to enter plan mode directly in Squared-Agent
+- Corrected after user clarification - now creates setup packages like `/prepare-setup`
+- Setup package includes: SETUP.md with idea baked in, platform skill, selected commands
+- Target agent reads SETUP.md and enters plan mode with full context
+
+**What Worked Well**
+- Plan mode helped catch the misunderstanding early before too much implementation
+- User's clarification "this creates agent instructions files" made the intent clear
+- Reusing `/prepare-setup` patterns made the fix quick
+
+**Key Insight**
+- **Squared-Agent doesn't execute setups directly** - it creates packages for other projects
+- The pattern is: gather context → create package → user copies to new project → target agent executes
+- This was the same pattern as `/prepare-setup` but applied to a more specific use case (app ideas)
+
+**Misunderstanding to Avoid**
+- Don't enter plan mode or make changes in Squared-Agent when the user wants a setup package
+- `/prepare-setup` and `/new-idea` both create packages that get copied elsewhere
+
+**Command Difference**
+- `/prepare-setup` - Generic setup package (profile + commands + tasks + skills)
+- `/new-idea` - Idea-specific package (platform + idea description + commands)
+- Both create temp folders with SETUP.md that target agents execute
+
+---
+
 ### 2026-01-13: Boris Cherny's Claude Code Best Practices
 
 **What Was Done**

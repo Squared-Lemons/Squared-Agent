@@ -24,11 +24,15 @@ End coding session - updates docs, captures learnings, generates SETUP.md handof
 ### `/commit`
 Draft a commit message, get approval, then commit changes.
 
+### `/new-idea`
+Create a setup package for a new app idea. Select platform, describe your idea, choose commands, then get a folder to copy to your new project with SETUP.md that instructs the target agent to enter plan mode.
+
 ## Available Content
 
 ### Command Guides (`commands/`)
 - **SESSION-END-COMMAND.md** - Session-end workflow with creator feedback loop
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
+- **New-Idea-Workflow.md** - Start new app ideas with platform selection and plan mode
 - **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
 
 ### Skills (`skills/`)
@@ -73,6 +77,7 @@ CONTRIBUTING.md     # How to extend this project
 
 ## Recent Changes
 
+- **2026-01-13:** Added `/new-idea` command - creates setup package for new app ideas with platform selection, idea description baked into SETUP.md, and command guides; target agent enters plan mode when setup runs
 - **2026-01-13:** Added Boris Cherny's Claude Code best practices - PostToolUse hooks for auto-formatting, pre-configured permissions for safe commands, .claude/agents/ pattern, Development Workflow section, Plan Mode and verification emphasis
 - **2026-01-12:** Standardized project structure - lowercase folder names (commands/, tasks/), fixed typo in ExistingProject-Investigate.md, added CONTRIBUTING.md, enhanced all READMEs with "How to Extend" sections
 - **2026-01-12:** Integrated creator feedback - enhanced Next.js skill with Better Auth gotchas, handoff template, DX checklist; added SETUP.md auto-generation and auto-generated creator feedback to session-end; added Plugins section to README
