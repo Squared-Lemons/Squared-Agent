@@ -1,287 +1,340 @@
 ---
 name: new-idea
-description: Create a setup package for a new app idea with platform guidance
-allowed-tools: Read, Glob, Bash, AskUserQuestion, Write
+description: Discovery conversation to design and package a new project
+allowed-tools: Read, Glob, Bash, Write, Task
 ---
 
-# New Idea
+# New Idea - Discovery Process
 
-Create a setup package for a new app project. Asks for platform, idea description, and commands to include, then creates a folder with all files and instructions for the target project.
+A consultative conversation to understand what the user wants to build, help them make technical decisions, and generate a complete project package for another agent to implement.
 
 **Arguments:** $ARGUMENTS
 
 ---
 
-## Step 1: Discover Available Options
-
-First, scan for available platforms and commands:
-
-```bash
-# List platform skills
-ls skills/*.md 2>/dev/null | grep -v README || echo "No platforms found"
-
-# List command docs
-ls commands/*.md 2>/dev/null | grep -v README || echo "No commands found"
-```
-
-Parse platform filenames to extract names:
-- `Next.js-App-Build-Guide.md` → "Next.js"
-- `Flutter-App-Build-Guide.md` → "Flutter"
-
----
-
-## Step 2: Platform Selection
-
-Use AskUserQuestion to ask which platform to use:
-
-- Header: "Platform"
-- Question: "Which platform/stack do you want to build with?"
-- Options:
-  - List each platform found in skills/ (extracted from filename)
-  - Add "Create new platform guidance" as final option
-- multiSelect: false
-
----
-
-## Step 3: Handle Platform Selection
-
-### 3a. If existing platform selected
-
-Note the skill file path to copy to the setup package.
-
-### 3b. If "Create new platform guidance" selected
-
-Ask for the platform name:
-- Use AskUserQuestion with header "New Platform"
-- Question: "What platform or tech stack? (e.g., 'Flutter', 'SvelteKit', 'Rails')"
-- User will select "Other" and type their platform name
-
-Create a skeleton skill file in Squared-Agent's `skills/` folder (persistent):
-
-```bash
-# Create skills/<Platform>-App-Build-Guide.md
-```
-
-Use the Write tool with this template:
-
-```markdown
-# <Platform> App Build Guide
-
 ## Overview
 
-Brief description of the platform and when to use it.
+This is NOT a form. It's a natural conversation where you:
+1. Understand what they want to build
+2. Help them think through requirements
+3. Guide platform and technology decisions
+4. Generate a comprehensive project package
 
-## Project Structure
+The output is a folder with everything a target agent needs to build version 1.
 
-\`\`\`
-project-root/
-├── src/
-│   └── ...
-├── package.json (or equivalent)
-└── ...
-\`\`\`
+---
 
-## Getting Started
+## Step 1: Initial Context
 
-\`\`\`bash
-# Commands to create a new project
-\`\`\`
+### Check for provided files
 
-## Key Patterns
+If `$ARGUMENTS` contains a path:
+1. Read the files at that path using Read or Glob
+2. Understand what they contain (designs, specs, existing code, etc.)
+3. Summarize what you found to the user
 
-### Pattern 1: [Name]
+### Start the conversation
 
-Description and code example.
+Begin by asking about their idea. Don't use AskUserQuestion - just talk naturally:
 
-### Pattern 2: [Name]
+"Tell me about what you want to build. What's the idea?"
 
-Description and code example.
+Then follow up based on their response. Good follow-up questions:
+- "Who is this for?"
+- "What problem does it solve?"
+- "What's the most important thing it needs to do?"
 
-## Common Gotchas
+---
 
-- Gotcha 1: Description and solution
-- Gotcha 2: Description and solution
+## Step 2: Discovery Conversation
 
-## Resources
+Have a natural back-and-forth to understand:
 
-- [Official Docs](url)
-- [Tutorials](url)
+### The Idea
+- What does it do?
+- Who uses it?
+- What makes it valuable?
+
+### Core vs Nice-to-have
+- What MUST version 1 do?
+- What can wait for later?
+
+### Scale & Context
+- Personal project, startup, or enterprise?
+- How many users expected?
+- Any timeline pressures?
+
+### Platform Discussion
+
+Based on what you learn, discuss platform options:
+- "Given you need X, Y, Z... Next.js would work well because..."
+- "If mobile is important, we could consider React Native..."
+- "For real-time features, we'd want to think about..."
+
+Let the user make decisions - you guide with options and tradeoffs.
+
+---
+
+## Step 3: Requirements Deep-Dive
+
+Explore specifics naturally as the conversation flows:
+
+### Authentication
+- Do users need accounts?
+- Social login? Email/password? Magic links?
+- Roles and permissions?
+
+### Data
+- What needs to be stored?
+- Real-time requirements?
+- Offline support?
+
+### UI/UX
+- Web, mobile, or both?
+- Design preferences?
+- Existing brand guidelines?
+
+### Integrations
+- External APIs?
+- Payments?
+- Email/notifications?
+
+Don't ask these as a checklist - weave them into natural conversation.
+
+---
+
+## Step 4: Recommend Setup
+
+Once you understand the project, recommend what to include:
+
+### Available Skills
+Check what platform skills exist:
+```bash
+ls skills/*.md 2>/dev/null | grep -v README
 ```
 
-Tell the user: "Created skeleton guide at skills/<Platform>-App-Build-Guide.md (persistent in Squared-Agent). Fill in details as you learn."
+Recommend relevant ones with reasoning.
+
+### Available Commands
+Check what command guides exist:
+```bash
+ls commands/*.md 2>/dev/null | grep -v README
+```
+
+Recommend relevant ones:
+- SESSION-END-COMMAND - usually yes, for tracking progress
+- New Feature Workflow - for structured development
+- Others based on project needs
+
+### Custom Needs
+Note anything not covered by existing docs that should be in the project brief.
+
+Ask user to confirm or adjust your recommendations.
 
 ---
 
-## Step 4: Gather Idea Description
+## Step 5: Generate Package
 
-Ask the user to describe their app idea:
+When the user is ready (they'll say something like "looks good" or "let's do it"):
 
-- Use AskUserQuestion with header "Idea"
-- Question: "Describe your app idea (what it does, key features, target users)"
-- The user will select "Other" and type their idea description
-
----
-
-## Step 5: Commands Selection
-
-Use AskUserQuestion to ask which commands to include:
-
-- Header: "Commands"
-- Question: "Which command guides should be included?"
-- Options: List each .md file in `commands/` (excluding README.md) + "All" + "None"
-- multiSelect: true
-
----
-
-## Step 6: Create Output Folder
-
-Create a timestamped temp folder:
+### Create output folder
 
 ```bash
 OUTPUT_DIR="/tmp/new-idea-$(date +%Y%m%d-%H%M%S)"
-mkdir -p "$OUTPUT_DIR/skills" "$OUTPUT_DIR/commands"
+mkdir -p "$OUTPUT_DIR/skills" "$OUTPUT_DIR/commands" "$OUTPUT_DIR/provided-files"
+echo "$OUTPUT_DIR"
 ```
 
----
+### Generate PROJECT-BRIEF.md
 
-## Step 7: Copy Files
-
-### 7a. Copy Platform Skill
-
-```bash
-cp "skills/<Platform>-App-Build-Guide.md" "$OUTPUT_DIR/skills/"
-```
-
-### 7b. Copy Selected Commands
-
-For each selected command:
-```bash
-cp "commands/<filename>.md" "$OUTPUT_DIR/commands/"
-```
-
-If no commands selected, remove empty folder:
-```bash
-rmdir "$OUTPUT_DIR/commands" 2>/dev/null || true
-```
-
----
-
-## Step 8: Generate SETUP.md
-
-Create `SETUP.md` in the output folder using the Write tool.
-
-Use this template (replace placeholders with actual values):
+Write a comprehensive project brief summarizing everything discussed:
 
 ```markdown
-# New Project Setup: [Short idea summary - first 5-10 words]
+# Project Brief: [Project Name]
 
-## Your Idea
+## The Idea
 
-[Full idea description from user]
+[Detailed description of what we're building]
 
-## Platform
+## Target Users
 
-**[Platform name]** - see `skills/[Platform]-App-Build-Guide.md`
+[Who is this for and what problem does it solve for them]
 
-## Included Resources
+## Core Features (Version 1)
 
-- **skills/**: Platform guidance and patterns
-- **commands/**: Implementation guides for slash commands [or "None included" if empty]
+1. [Feature] - [Why it's essential]
+2. [Feature] - [Why it's essential]
+3. ...
 
----
+## Future Features (Later Versions)
 
-## Setup Instructions
+- [Feature] - [Why it can wait]
+- ...
 
-Follow these steps in order:
+## Technical Decisions
 
-### Step 1: Initialize Project
+### Platform: [Choice]
+**Rationale:** [Why this platform was chosen]
 
-```bash
-git init
+### Authentication: [Approach]
+**Rationale:** [Why this approach]
+
+### Database: [Type/Service]
+**Rationale:** [Why this choice]
+
+### Hosting: [Suggestion]
+**Rationale:** [Why this fits]
+
+### Key Libraries
+- [Library] - for [purpose]
+- ...
+
+## Data Requirements
+
+[What data needs to be stored, relationships, etc.]
+
+## UI/UX Notes
+
+[Design preferences, brand guidelines, etc.]
+
+## Integrations
+
+[External services needed]
+
+## Out of Scope
+
+[Explicitly what we're NOT building in v1]
+
+## Open Questions
+
+[Anything that still needs to be decided during implementation]
 ```
 
-### Step 2: Read Platform Guide
+### Generate TECHNICAL-DECISIONS.md
 
-Read `skills/[Platform]-App-Build-Guide.md` to understand:
-- Project structure conventions
-- Key patterns for this platform
-- Common gotchas to avoid
+```markdown
+# Technical Decisions
 
-### Step 3: Enter Plan Mode
+Quick reference for implementation decisions.
 
-Enter plan mode (shift+tab twice or type "let's plan") to design your implementation.
+## Stack
 
-**Consider:**
-- Project folder structure
-- Key features to build first
-- Data models needed
-- UI/UX approach
-- Authentication requirements (if any)
+| Component | Choice | Rationale |
+|-----------|--------|-----------|
+| Platform | [X] | [Why] |
+| Auth | [X] | [Why] |
+| Database | [X] | [Why] |
+| Hosting | [X] | [Why] |
+| Styling | [X] | [Why] |
 
-The plan should break down your idea into implementable features.
+## Key Libraries
 
-### Step 4: Set Up Commands
+| Library | Purpose |
+|---------|---------|
+| [X] | [What it's for] |
+| ... | ... |
 
-[If commands included:]
-For each file in `commands/`:
-1. Read the guide
-2. Create the corresponding command in `.claude/commands/`
-3. Follow any setup instructions in the guide
+## Architecture Notes
 
-[Or if no commands: "No additional commands included. You can add them later."]
+[Any important architectural decisions]
 
-### Step 5: Create CLAUDE.md
+## Security Considerations
 
-Create a `CLAUDE.md` file documenting:
-- Project overview
-- Available commands
-- Development workflow
-- Key patterns used
+[Auth approach, data protection, etc.]
+```
 
-### Step 6: Begin Implementation
+### Generate SETUP.md
 
-After planning, start building features. Use `/new-feature` if you set up that command.
+```markdown
+# Project Setup
 
----
+This folder contains everything needed to build [Project Name].
 
-## Verification
+## What's Included
+
+- **PROJECT-BRIEF.md** - Full project context and requirements
+- **TECHNICAL-DECISIONS.md** - Technology choices with rationale
+- **skills/** - Platform-specific guidance and patterns
+- **commands/** - Development workflow guides
+- **provided-files/** - Original files from the user
+
+## For the Target Agent
+
+Read these files in order:
+
+1. **PROJECT-BRIEF.md** - Understand what we're building and why
+2. **TECHNICAL-DECISIONS.md** - Understand the technical approach
+3. **skills/*.md** - Learn platform patterns and gotchas
+
+Then:
+
+1. Enter plan mode to design the implementation
+2. Create the project structure based on platform guide
+3. Implement core features from the brief
+4. Set up development commands from commands/ guides
+5. Create CLAUDE.md documenting the project
+
+## Verification Checklist
 
 After setup, verify:
+- [ ] Project structure matches platform conventions
+- [ ] Core features from brief are planned
+- [ ] Authentication approach implemented (if needed)
+- [ ] Database schema designed
+- [ ] CLAUDE.md created
 - [ ] Git repository initialized
-- [ ] Read platform skill guide
-- [ ] Created implementation plan
-- [ ] Set up slash commands (if any)
-- [ ] CLAUDE.md exists and documents the project
-- [ ] Ready to start building
+- [ ] Ready to start building features
+```
 
----
+### Copy Files
 
-## How to Use This Package
+Copy relevant skills:
+```bash
+cp "skills/[Platform]-App-Build-Guide.md" "$OUTPUT_DIR/skills/"
+```
 
-1. Copy this folder's contents to your new project
-2. Tell Claude Code: "Read SETUP.md and help me set up this project"
-3. Follow the setup instructions together
+Copy recommended commands:
+```bash
+cp "commands/[Selected].md" "$OUTPUT_DIR/commands/"
+```
+
+Copy user's provided files (if any):
+```bash
+# If user provided files at start
+cp -r "[provided-path]"/* "$OUTPUT_DIR/provided-files/"
+```
+
+Remove empty folders:
+```bash
+rmdir "$OUTPUT_DIR/provided-files" 2>/dev/null || true
+rmdir "$OUTPUT_DIR/commands" 2>/dev/null || true
+rmdir "$OUTPUT_DIR/skills" 2>/dev/null || true
 ```
 
 ---
 
-## Step 9: Report Output
+## Step 6: Handoff
 
-Tell the user:
+Report what was created:
 
 ```
-Setup package created at: [OUTPUT_DIR]
-
-Idea: [short summary]
-Platform: [platform name]
+Project package created at: [OUTPUT_DIR]
 
 Contents:
-- SETUP.md (start here)
-- skills/[Platform]-App-Build-Guide.md
-- commands/ [list files, or "empty" if none]
+├── PROJECT-BRIEF.md       # Full project context
+├── TECHNICAL-DECISIONS.md # Technical choices
+├── SETUP.md               # Instructions for target agent
+├── skills/                # Platform guidance
+├── commands/              # Workflow guides
+└── provided-files/        # Your original files (if any)
 
-To use: Copy this folder to your new project and tell Claude Code:
-"Read SETUP.md and help me set up this project"
+To build this project:
+1. Copy this folder to a new project directory
+2. Open with Claude Code: claude .
+3. Tell Claude: "Read SETUP.md and build this project"
+
+The target agent will read all context, enter plan mode,
+and build version 1 following our practices.
 ```
 
 Open the folder:
@@ -291,15 +344,50 @@ open "$OUTPUT_DIR"
 
 ---
 
-## Example Usage
+## Example Conversation Flow
 
 ```
-/new-idea
+User: /new-idea
+
+Claude: Tell me about what you want to build. What's the idea?
+
+User: I want to build a habit tracker app
+
+Claude: Nice! Who is this for - yourself, or are you thinking of making
+        it available to others?
+
+User: For others - I want to launch it as a product
+
+Claude: Got it. What's the core thing that makes your habit tracker
+        different or valuable? There are a lot of them out there.
+
+User: I want it to focus on streaks and social accountability -
+      you can share streaks with friends
+
+Claude: Interesting - the social angle could really help with retention.
+        Let me ask a few more questions...
+
+        [conversation continues naturally]
+
+Claude: Based on everything we discussed, I'd recommend:
+        - Next.js for the web app (good for SEO, easy deployment)
+        - Better Auth for social login
+        - PostgreSQL for storing habits and streaks
+
+        I'll include our Next.js guide and the session-end command
+        for tracking your progress. Sound good?
+
+User: Yes, let's do it
+
+Claude: [generates package]
 ```
 
-Interactive flow:
-1. "Which platform?" → User selects "Next.js"
-2. "Describe your idea" → User types "A habit tracker with streaks and reminders"
-3. "Which commands?" → User selects "SESSION-END-COMMAND, New Feature Workflow"
-4. Creates setup package in /tmp with idea baked into SETUP.md
-5. Opens folder for user to copy to new project
+---
+
+## Key Points
+
+- **Conversational, not transactional** - This is a discovery process
+- **Guide, don't dictate** - Help user make informed decisions
+- **Capture rationale** - WHY decisions were made matters
+- **Comprehensive output** - Target agent should have full context
+- **User files included** - Any provided files go in the package

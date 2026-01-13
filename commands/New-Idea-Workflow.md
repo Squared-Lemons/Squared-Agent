@@ -1,292 +1,218 @@
 # New Idea Workflow
 
-Create a setup package for a new app project. This command gathers your platform choice, idea description, and preferred commands, then generates a folder you can copy to a new project.
+A consultative discovery process that helps users design their project and generates a comprehensive package for implementation.
 
 ## Overview
 
-The `/new-idea` command creates a **setup package** (similar to `/prepare-setup`) that contains:
+`/new-idea` is a conversation, not a form. You discuss the user's idea, help them think through requirements, guide technical decisions, and produce a complete project package.
 
-1. **Your idea** baked into SETUP.md
-2. **Platform guidance** from the selected skill file
-3. **Command guides** you choose to include
-4. **Setup instructions** that tell the target agent to enter plan mode
-
-This ensures every new project starts with:
-- Clear context about what you're building
-- Relevant platform patterns loaded
-- A structured path to planning and implementation
+The output is everything a target agent needs to build version 1.
 
 ---
 
-## How It Works
-
-### In Squared-Agent (this project)
+## The Process
 
 ```
-/new-idea
-    ↓
-Ask: Which platform?
-    ↓
-Ask: Describe your idea
-    ↓
-Ask: Which commands to include?
-    ↓
-Create setup package in /tmp
-    ↓
-Open folder for you to copy
-```
-
-### In Your New Project
-
-```
-Copy folder contents to new project
-    ↓
-Tell Claude: "Read SETUP.md and set up this project"
-    ↓
-Agent reads your idea + platform guide
-    ↓
-Agent enters plan mode to design implementation
-    ↓
-Agent sets up commands
-    ↓
-Ready to build!
-```
-
----
-
-## Step-by-Step Flow
-
-### Step 1: Platform Discovery
-
-The command scans `skills/` for available platform guides:
-
-```bash
-ls skills/*.md 2>/dev/null | grep -v README
-```
-
-Each skill file represents a platform:
-- `Next.js-App-Build-Guide.md` → Next.js
-- `Flutter-App-Build-Guide.md` → Flutter
-
-### Step 2: Platform Selection
-
-Choose from:
-- **Existing platforms** - Use proven guidance
-- **Create new platform guidance** - Start fresh
-
-### Step 3: New Platform Creation (if selected)
-
-If creating new guidance:
-
-1. You provide the platform/stack name
-2. A skeleton skill file is created in Squared-Agent's `skills/` folder (persistent)
-3. The skeleton is also copied to your setup package
-
-Fill in the guide as you learn during development.
-
-### Step 4: Idea Description
-
-Describe your app idea:
-- What does it do?
-- Key features
-- Target users
-
-This gets baked into SETUP.md so the target agent has full context.
-
-### Step 5: Commands Selection
-
-Choose which command guides to include:
-- SESSION-END-COMMAND
-- New Feature Workflow
-- Canvas-Panel-Navigation-System
-- All / None
-
-### Step 6: Package Creation
-
-A folder is created in `/tmp/new-idea-<timestamp>/` containing:
-
-```
-new-idea-20260113-123456/
-├── SETUP.md                          # Your idea + setup instructions
-├── skills/
-│   └── <Platform>-App-Build-Guide.md
-└── commands/                         # If any selected
-    └── *.md
+/new-idea [optional: path to files]
+         │
+         ▼
+┌─────────────────────────────────────┐
+│  DISCOVERY CONVERSATION             │
+│                                     │
+│  • Understand the idea              │
+│  • Who is it for?                   │
+│  • What must v1 do?                 │
+│  • Platform discussion              │
+│  • Technical decisions              │
+└─────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│  RECOMMENDATIONS                    │
+│                                     │
+│  • Suggest platform                 │
+│  • Recommend skills/commands        │
+│  • Note custom requirements         │
+│  • User confirms                    │
+└─────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│  GENERATE PACKAGE                   │
+│                                     │
+│  ├── PROJECT-BRIEF.md              │
+│  ├── TECHNICAL-DECISIONS.md        │
+│  ├── SETUP.md                      │
+│  ├── skills/                       │
+│  ├── commands/                     │
+│  └── provided-files/               │
+└─────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│  TARGET AGENT                       │
+│                                     │
+│  Copy to new folder → claude .      │
+│  "Read SETUP.md and build this"    │
+│                                     │
+│  Agent enters plan mode and builds  │
+└─────────────────────────────────────┘
 ```
 
 ---
 
-## The Generated SETUP.md
+## Conversation Topics
 
-The key file in the package. It contains:
+The conversation should naturally explore:
 
-1. **Your idea** - Full description
-2. **Platform reference** - Points to skill file
-3. **Setup instructions** that tell the agent to:
-   - Initialize git
-   - Read the platform guide
-   - **Enter plan mode** to design implementation
-   - Set up commands
-   - Create CLAUDE.md
-4. **Verification checklist**
+### The Idea
+- What are you building?
+- Who is it for?
+- What problem does it solve?
+- What makes it valuable/different?
 
-This means the target agent has everything needed to understand and plan your project.
+### Scope
+- What MUST version 1 do?
+- What can wait for later?
+- What's explicitly out of scope?
 
----
+### Context
+- Personal project, startup, enterprise?
+- Expected scale?
+- Timeline pressures?
 
-## Adding New Platform Skills
+### Technical
+- Web, mobile, or both?
+- User accounts needed?
+- Real-time requirements?
+- External integrations?
 
-To add guidance for a new platform manually in Squared-Agent:
-
-### 1. Create the Skill File
-
-Create `skills/<Platform>-App-Build-Guide.md`:
-
-```markdown
-# <Platform> App Build Guide
-
-## Overview
-
-Brief description of the platform and when to use it.
-
-## Project Structure
-
-\`\`\`
-project-root/
-├── src/
-│   └── ...
-├── package.json
-└── ...
-\`\`\`
-
-## Getting Started
-
-\`\`\`bash
-# Commands to create a new project
-npx create-<platform>-app my-app
-\`\`\`
-
-## Key Patterns
-
-### Authentication
-How to implement auth on this platform.
-
-### Data Fetching
-Patterns for loading and caching data.
-
-### State Management
-Recommended approaches for managing state.
-
-## Common Gotchas
-
-- **Gotcha 1**: Description and solution
-- **Gotcha 2**: Description and solution
-
-## Resources
-
-- [Official Docs](url)
-```
-
-### 2. Key Sections
-
-| Section | Purpose |
-|---------|---------|
-| Overview | When to choose this platform |
-| Project Structure | Standard folder layout |
-| Getting Started | Initial setup commands |
-| Key Patterns | Common implementation patterns |
-| Common Gotchas | Pitfalls and solutions |
-| Resources | Links to docs and tutorials |
-
-### 3. Best Practices
-
-- **Be specific** - Include actual code examples
-- **Document gotchas** - Things that trip people up
-- **Keep it current** - Update when you learn new patterns
-- **Link resources** - Point to official docs
+### Platform Decision
+Based on requirements, discuss options:
+- "Given you need X, Y, Z... I'd suggest..."
+- Present tradeoffs
+- Let user decide with guidance
 
 ---
 
-## Example Session
+## Output Files
+
+### PROJECT-BRIEF.md
+
+Comprehensive summary of everything discussed:
+- The idea in detail
+- Target users and their problems
+- Core features for v1 (with rationale)
+- Future features (why they can wait)
+- Technical decisions (with rationale)
+- Data requirements
+- UI/UX notes
+- Integrations needed
+- Out of scope items
+- Open questions
+
+### TECHNICAL-DECISIONS.md
+
+Quick reference for implementation:
+- Stack choices table
+- Key libraries
+- Architecture notes
+- Security considerations
+
+### SETUP.md
+
+Instructions for the target agent:
+- What's included in the package
+- Order to read files
+- Steps to take
+- Verification checklist
+
+### skills/
+
+Platform-specific guidance copied from Squared Agent.
+
+### commands/
+
+Workflow guides copied from Squared Agent.
+
+### provided-files/
+
+Any files the user provided at the start (designs, specs, etc.).
+
+---
+
+## Example Conversation
 
 ```
 User: /new-idea
 
-Claude: Which platform/stack do you want to build with?
-  ○ Next.js
-  ○ Create new platform guidance
+Claude: Tell me about what you want to build. What's the idea?
 
-User: [Selects Next.js]
+User: A habit tracker app
 
-Claude: Describe your app idea (what it does, key features, target users)
+Claude: Nice! Who is this for - yourself, or thinking of launching it?
 
-User: A habit tracker app where users can create habits, track daily
-      completion, see streaks, and get reminder notifications.
+User: I want to launch it as a product
 
-Claude: Which command guides should be included?
-  ☑ SESSION-END-COMMAND
-  ☑ New Feature Workflow
-  ☐ Canvas-Panel-Navigation-System
+Claude: What's the core thing that makes your habit tracker different?
 
-User: [Confirms selection]
+User: Streaks and social accountability - share progress with friends
 
-Claude: Setup package created at: /tmp/new-idea-20260113-143052
+Claude: The social angle could help retention. A few more questions:
+        - Web app, mobile, or both?
+        - How will people sign up?
 
-Idea: Habit tracker with streaks and reminders
-Platform: Next.js
+User: Web first, maybe mobile later. Google/email sign up.
 
-Contents:
-- SETUP.md (start here)
-- skills/Next.js-App-Build-Guide.md
-- commands/SESSION-END-COMMAND.md
-- commands/New Feature Workflow.md
+Claude: Makes sense. For data, you'll need habits, completions,
+        streaks, and friend connections. Any premium features?
 
-To use: Copy this folder to your new project and tell Claude Code:
-"Read SETUP.md and help me set up this project"
+User: Maybe later - keep v1 free
 
-[Finder opens with the folder]
+Claude: Good scope control. Based on this, I'd recommend:
+        - Next.js (web, good SEO, easy deploy)
+        - Better Auth (Google + email)
+        - PostgreSQL (habits, streaks, social graph)
+
+        I'll include our Next.js guide and session-end command.
+        Sound good?
+
+User: Let's do it
+
+Claude: [generates package with full context]
 ```
 
 ---
 
-## Integration with Other Workflows
+## Key Principles
 
-### After Setup: Plan Mode
+### Conversational
+This is a discussion, not a questionnaire. Ask follow-ups based on responses. Let the conversation flow naturally.
 
-When the target agent reads SETUP.md, it will enter plan mode to:
-- Design project structure
-- Break down features
-- Identify data models
-- Plan UI/UX approach
+### Guide, Don't Dictate
+Present options and tradeoffs. Help users make informed decisions. Don't force a particular approach.
 
-### During Development: `/new-feature`
+### Capture Rationale
+Document WHY decisions were made, not just what was decided. This helps the target agent make good implementation choices.
 
-After planning, use `/new-feature` (if included) to implement each feature:
+### Comprehensive Output
+The target agent should have everything needed to build v1 without coming back to ask questions.
 
-```
-/new-feature Add habit creation form with name, frequency, and reminder time
-```
-
-### End of Session: `/session-end`
-
-When wrapping up:
-
-```
-/session-end
-```
-
-This captures learnings that can improve the platform skill file back in Squared-Agent.
+### Include User Context
+If the user provides files (designs, specs, existing code), include them in the package.
 
 ---
 
-## Tips
+## Extending This Workflow
 
-1. **Start with existing guidance** - If a skill file exists, use it. The patterns are proven.
+### Adding Platform Skills
 
-2. **Create guidance early** - If starting with a new platform, create the skeleton now. Fill it in as you learn.
+When a new platform skill is added to `skills/`, it becomes available for recommendation during the conversation.
 
-3. **Be descriptive with ideas** - The more context you provide, the better the plan will be.
+### Custom Requirements
 
-4. **Include useful commands** - SESSION-END-COMMAND and New Feature Workflow are recommended for most projects.
+If a project needs something not covered by existing skills/commands, note it in PROJECT-BRIEF.md under "Open Questions" or "Custom Needs".
 
-5. **Update skills after projects** - When you learn new patterns or gotchas, copy feedback back to Squared-Agent to improve the skill file for future projects.
+### Post-Conversation Improvements
+
+After a project is built, send feedback via `/session-end` to improve the skills and workflows for future projects.

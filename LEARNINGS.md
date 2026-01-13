@@ -6,7 +6,36 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
-### 2026-01-13: New Idea Command
+### 2026-01-13: Enhanced /new-idea as Consultative Process
+
+**What Was Done**
+- Transformed `/new-idea` from form-based to conversational discovery process
+- Added support for user-provided files (designs, specs)
+- Output now includes PROJECT-BRIEF.md with full context
+- Output includes TECHNICAL-DECISIONS.md with rationale for choices
+- Created docs/ folder with detailed documentation (commands, plugins, content, feedback)
+- Restructured README to be minimal with Quick Start focus
+
+**What Worked Well**
+- Separating "what" from "why" in output (PROJECT-BRIEF vs TECHNICAL-DECISIONS)
+- Moving details to docs/ keeps README scannable
+- Conversational flow allows natural exploration of requirements
+
+**Key Insight**
+- **Consultative > Transactional** - A conversation that explores requirements produces better context than a form that collects answers
+- Target agent benefits from understanding WHY decisions were made, not just WHAT was decided
+- User-provided files (designs, specs) are valuable context that should travel with the package
+
+**Pattern Established**
+- `/new-idea` now generates:
+  - `PROJECT-BRIEF.md` - Full project context
+  - `TECHNICAL-DECISIONS.md` - Choices with rationale
+  - `SETUP.md` - Instructions for target agent
+  - `skills/`, `commands/`, `provided-files/`
+
+---
+
+### 2026-01-13: New Idea Command (Initial)
 
 **What Was Done**
 - Created `/new-idea` command for idea-focused project bootstrapping

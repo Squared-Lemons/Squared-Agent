@@ -1,86 +1,120 @@
 # Squared Agent
 
-A master agent for bootstrapping new projects with Claude Code. Contains reusable setup profiles, development patterns, and a knowledge base that improves through feedback from spawned projects.
+A Claude Code agent that bootstraps new projects. It packages up setup instructions, platform-specific guidance, and development workflows into folders you copy to new projects.
 
-## What This Does
+**The idea:** You describe what you want to build → Squared Agent creates a setup package → You copy it to a new folder → Claude Code reads the instructions and helps you build it.
 
-Use `/prepare-setup` to create setup packages for new projects. Each package includes:
-- **Setup instructions** - Step-by-step bootstrap guide
-- **Command guides** - Implementation guides for slash commands
-- **Skills** - Knowledge base docs for building (tech stacks, patterns)
-- **Tasks** - Optional one-time setup activities
-- **Best practices** - Plan mode, verification loops, living CLAUDE.md
+---
 
-Projects created from these packages can send feedback back to improve future setups.
+## Quick Start
 
-## What Gets Configured
+### 1. Get the Agent
 
-The developer profile sets up:
+```bash
+git clone https://github.com/squared-lemons/squared-agent.git
+cd squared-agent
+```
 
-| Feature | What It Does |
-|---------|--------------|
-| **Plugins** | feature-dev, ralph-loop, code-simplifier, playwright, context7 |
-| **Permissions** | Pre-allow safe commands (build, test, lint, format, typecheck) |
-| **Hooks** | Auto-format code after Write/Edit operations |
-| **Commands** | /session-end, /commit, /new-feature |
-| **Agents** | Optional custom agents (build-validator, code-reviewer, verify-app) |
+Or download and extract the ZIP.
 
-Based on [how the Claude Code creator uses it](https://x.com/bcherny/status/2007179832300581177).
+### 2. Open with Claude Code
 
-## Commands
+```bash
+claude .
+```
 
-| Command | Description |
-|---------|-------------|
-| `/prepare-setup` | Create a setup package for a new project |
-| `/new-idea` | Create a setup package for a specific app idea (platform + idea baked in) |
-| `/session-end` | End session - update docs, capture learnings, commit |
-| `/commit` | Quick commit with approval |
+### 3. Start a New Idea
 
-## Plugins
+```
+/new-idea
+```
 
-| Plugin | Purpose |
-|--------|---------|
-| **feature-dev** | Guided feature development with codebase understanding |
-| **ralph-loop** | Autonomous development loop for complex tasks |
-| **frontend-design** | Production-grade UI components with high design quality |
-| **context7** | Up-to-date documentation lookup for libraries |
-| **playwright** | Browser automation and testing |
-| **code-simplifier** | Code refinement for clarity and maintainability |
+Have a conversation:
+- Describe what you want to build
+- Discuss requirements and platform options
+- Make technical decisions together
+- Claude generates a complete project package
 
-## Available Content
+### 4. Copy to Your Project
 
-### Setup Profiles (`setups/`)
-- **developer** - Full developer workflow with plugins, commands, and session management
+A folder opens with your setup package. Copy its contents to your new project folder.
 
-### Command Guides (`commands/`)
-- **SESSION-END-COMMAND.md** - Session-end workflow with creator feedback loop
-- **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
-- **New-Idea-Workflow.md** - Create setup packages for specific app ideas
-- **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
+### 5. Run the Setup
 
-### Skills (`skills/`)
-- **Next.js-App-Build-Guide.md** - Next.js + Better Auth + Drizzle + Turborepo patterns
+In your new project folder:
 
-### Tasks (`tasks/`)
-- **ExistingProject-Investigate.md** - Analyze existing codebase and generate documentation
+```bash
+claude .
+```
+
+Tell Claude: "Read SETUP.md and help me set up this project"
+
+---
 
 ## How It Works
 
 ```
-┌─────────────────┐     /prepare-setup      ┌──────────────────┐
-│  Squared Agent  │ ──────────────────────► │   New Project    │
-│  (this repo)    │                         │                  │
-└─────────────────┘                         └──────────────────┘
-        ▲                                            │
-        │         creator feedback                   │
-        └────────────────────────────────────────────┘
-                    (continuous improvement)
+┌─────────────────────────────────────────────────────────────────┐
+│                      SQUARED AGENT                               │
+│                                                                  │
+│  /new-idea                                                       │
+│     │                                                            │
+│     ├─► Discovery conversation                                  │
+│     ├─► Discuss requirements & platform                         │
+│     ├─► Make technical decisions                                │
+│     └─► Generate project package                                │
+│              │                                                   │
+│              ▼                                                   │
+│     ┌──────────────────────┐                                    │
+│     │  Project Package     │                                    │
+│     │  - PROJECT-BRIEF.md  │  ◄── Full context                  │
+│     │  - TECHNICAL-DECISIONS│                                   │
+│     │  - SETUP.md          │                                    │
+│     │  - skills/           │                                    │
+│     │  - commands/         │                                    │
+│     └────────┬─────────────┘                                    │
+└──────────────┼──────────────────────────────────────────────────┘
+               │
+               │  Copy to new folder
+               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      YOUR NEW PROJECT                            │
+│                                                                  │
+│  "Read SETUP.md and build this project"                         │
+│     │                                                            │
+│     ├─► Claude reads project brief                              │
+│     ├─► Claude understands WHY decisions were made              │
+│     ├─► Claude enters plan mode                                 │
+│     └─► Claude builds version 1                                 │
+│              │                                                   │
+│              ▼                                                   │
+│     Working app!                                                 │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-1. Run `/prepare-setup` to select profile, commands, tasks, and skills
-2. Copy the generated package to your new project
-3. Tell Claude Code to execute the setup
-4. At session end, optionally send feedback back to improve the master agent
+---
+
+## Commands
+
+| Command | What it does | Details |
+|---------|--------------|---------|
+| `/new-idea` | Discovery conversation → project package | [docs/commands.md](docs/commands.md#new-idea) |
+| `/prepare-setup` | Create generic setup package | [docs/commands.md](docs/commands.md#prepare-setup) |
+| `/session-end` | End session, update docs, commit | [docs/commands.md](docs/commands.md#session-end) |
+| `/commit` | Quick commit with approval | [docs/commands.md](docs/commands.md#commit) |
+
+---
+
+## Documentation
+
+| Doc | What's in it |
+|-----|--------------|
+| [docs/commands.md](docs/commands.md) | Full command documentation |
+| [docs/plugins.md](docs/plugins.md) | Plugins and configuration details |
+| [docs/content.md](docs/content.md) | Available profiles, skills, and tasks |
+| [docs/feedback.md](docs/feedback.md) | Creator feedback loop |
+
+---
 
 ## Project Structure
 
@@ -90,34 +124,12 @@ skills/             # Knowledge base (tech stacks, patterns)
 setups/             # Setup profiles
   developer/        # Developer workflow profile
 tasks/              # One-time setup tasks
+docs/               # Documentation
 .claude/            # Claude Code configuration
   commands/         # Active slash commands
-  agents/           # Custom agent definitions (optional)
-.project/sessions/  # Local session logs (gitignored)
-CONTRIBUTING.md     # How to extend this project
 ```
 
-## Getting Started
-
-1. Open this project with Claude Code
-2. Run `/prepare-setup`
-3. Select what to include in your setup package
-4. Copy the package to your new project
-5. Execute the setup
-
-## Receiving Feedback
-
-When projects send feedback via `/session-end`, they'll display it in a copy-paste format:
-
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-COPY THE FOLLOWING TO SQUARED-AGENT:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-...feedback content...
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-Paste feedback here to integrate improvements into skills, setups, or tasks.
+---
 
 ## License
 
