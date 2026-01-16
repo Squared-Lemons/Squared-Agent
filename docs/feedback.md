@@ -10,7 +10,7 @@ How projects created from Squared Agent can send feedback back to improve future
 ┌─────────────────┐                         ┌──────────────────┐
 │  Squared Agent  │ ──── setup package ───► │   Your Project   │
 │                 │                         │                  │
-│  inbox/         │ ◄─── feedback file ──── │   /session-end   │
+│  inbox/         │ ◄─── feedback file ──── │   /end-session   │
 │  from-projects/ │                         │                  │
 └─────────────────┘                         └──────────────────┘
 ```
@@ -25,7 +25,7 @@ How projects created from Squared Agent can send feedback back to improve future
 
 ## How Feedback is Generated
 
-When you run `/session-end` in a project created from Squared Agent, it analyzes your session for:
+When you run `/end-session` in a project created from Squared Agent, it analyzes your session for:
 
 ### Skills Gaps
 - Missing information in skill docs
@@ -83,10 +83,10 @@ COPY THE FOLLOWING TO SQUARED-AGENT:
 
 ## Sending Feedback
 
-### Step 1: Run /session-end in your project
+### Step 1: Run /end-session in your project
 
 ```
-/session-end
+/end-session
 ```
 
 ### Step 2: Copy the feedback block

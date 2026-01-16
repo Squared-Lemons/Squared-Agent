@@ -174,7 +174,7 @@ Claude: Good scope control. Based on this, I'd recommend:
         - Better Auth (Google + email)
         - PostgreSQL (habits, streaks, social graph)
 
-        I'll include our Next.js guide and session-end command.
+        I'll include our Next.js guide and end-session command.
         Sound good?
 
 User: Let's do it
@@ -215,4 +215,4 @@ If a project needs something not covered by existing skills/commands, note it in
 
 ### Post-Conversation Improvements
 
-After a project is built, send feedback via `/session-end` to improve the skills and workflows for future projects.
+After a project is built, send feedback via `/end-session` to improve the skills and workflows for future projects.

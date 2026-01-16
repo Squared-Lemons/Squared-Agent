@@ -343,5 +343,5 @@ open "$OUTPUT_DIR"
 
 ### Include specific items
 ```
-/prepare-setup --profile developer --commands SESSION-END-COMMAND --skills Next.js-App-Build-Guide
+/prepare-setup --profile developer --commands END-SESSION-COMMAND --skills Next.js-App-Build-Guide
 ```

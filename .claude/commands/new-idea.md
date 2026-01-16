@@ -122,7 +122,7 @@ ls templates/commands/*.md 2>/dev/null | grep -v README
 ```
 
 Recommend relevant ones:
-- SESSION-END-COMMAND - usually yes, for tracking progress
+- END-SESSION-COMMAND - usually yes, for tracking progress
 - New Feature Workflow - for structured development
 - Others based on project needs
 
@@ -374,7 +374,7 @@ Claude: Based on everything we discussed, I'd recommend:
         - Better Auth for social login
         - PostgreSQL for storing habits and streaks
 
-        I'll include our Next.js guide and the session-end command
+        I'll include our Next.js guide and the end-session command
         for tracking your progress. Sound good?
 
 User: Yes, let's do it

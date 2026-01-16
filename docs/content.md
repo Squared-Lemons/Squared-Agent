@@ -49,13 +49,13 @@ Complete guide for building Next.js applications.
 
 Guides in `templates/commands/` explain how to implement slash commands.
 
-### SESSION-END-COMMAND
+### END-SESSION-COMMAND
 
-Full session-end workflow with creator feedback loop.
+Full end-session workflow with creator feedback loop.
 
-**Location:** `templates/commands/SESSION-END-COMMAND.md`
+**Location:** `templates/commands/END-SESSION-COMMAND.md`
 
-**Sets up:** `/session-end` command for ending sessions, updating docs, and committing.
+**Sets up:** `/end-session` command for ending sessions, updating docs, and committing.
 
 ---
 

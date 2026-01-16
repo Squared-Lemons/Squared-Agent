@@ -6,6 +6,35 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-16: Session Git Workflow Implementation
+
+**What Was Done**
+- Implemented branch discipline workflow from `inbox/ideas/Session-Git-Work-Flow.md`
+- Created `/start-session` command (replaces `/catch-up`) with branch awareness
+- Created `/new-feature` command for safe branch/worktree creation
+- Created `/complete-feature` command with merge or PR options
+- Renamed `/session-end` to `/end-session` for naming consistency
+- Added Branch Protection Rule to CLAUDE.md
+- Updated 20+ files with renamed command references
+
+**What Worked Well**
+- Plan mode ensured full design was agreed before implementation
+- `{action}-{thing}` naming convention makes commands intuitive:
+  - `/start-session`, `/end-session`
+  - `/new-feature`, `/complete-feature`
+- Offering both merge and PR options in `/complete-feature` supports solo and team workflows
+
+**Key Insight**
+- **Teaching through enforcement** - Hard stops on protected branches with clear guidance teaches good habits without being annoying
+- **Worktree support from day one** - Including worktree option means users can do parallel work when needed
+- **Naming conventions matter** - Consistent `{action}-{thing}` pattern makes commands predictable
+
+**Pattern Established**
+- Session workflow: `/start-session` → work → `/new-feature` → work → `/complete-feature` → `/end-session`
+- Branch protection is enforced via CLAUDE.md rule, not hooks
+
+---
+
 ### 2026-01-16: Folder Structure Reorganization
 
 **What Was Done**
@@ -154,7 +183,7 @@ Insights and lessons captured from coding sessions to improve future development
 
 **What Was Done**
 - Added auto-organize step to SETUP-INSTRUCTIONS.md - moves docs to `docs/` folder
-- Updated SESSION-END-COMMAND.md with creator feedback step and `docs/` paths
+- Updated END-SESSION-COMMAND.md with creator feedback step and `docs/` paths
 - Enhanced feedback display with copy-paste friendly format
 
 **What Worked Well**
@@ -178,7 +207,7 @@ Insights and lessons captured from coding sessions to improve future development
 - Created `skills/` folder as knowledge base for agent development
 - Added Next.js App Build Guide (Better Auth, Drizzle, Turborepo patterns)
 - Enhanced `/prepare-setup` to include commands and skills selection
-- Added creator feedback loop to `/session-end` command
+- Added creator feedback loop to `/end-session` command
 
 **What Worked Well**
 - Separating skills (knowledge docs) from commands (implementation guides) creates clear mental model
@@ -193,7 +222,7 @@ Insights and lessons captured from coding sessions to improve future development
   4. **Skills** (`skills/`) - Reference knowledge for building
 
 **Process Improvement**
-- `/session-end` now asks for feedback to send back to master agent
+- `/end-session` now asks for feedback to send back to master agent
 - Feedback saved to `docs/creator-feedback.md` in project
 - User can bring feedback back to improve future setups
 
@@ -221,7 +250,7 @@ Insights and lessons captured from coding sessions to improve future development
 
 **What Was Done**
 - Created project structure with Claude Code commands
-- Added `/session-end` command for ending sessions
+- Added `/end-session` command for ending sessions
 - Added `/commit` command for quick commits
 - Documented reusable patterns in `Commands/`
 - Created README.md with user-facing documentation

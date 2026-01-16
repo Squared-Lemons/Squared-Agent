@@ -80,9 +80,9 @@ Create `.claude/settings.json` with plugins, permissions, and hooks:
 
 Read the following documentation files and create commands/skills/agents as specified:
 
-### Session-End Command
-- **Documentation:** `SESSION-END-COMMAND.md`
-- **Create:** `.claude/commands/session-end.md` and `.claude/commands/commit.md`
+### End-Session Command
+- **Documentation:** `END-SESSION-COMMAND.md`
+- **Create:** `.claude/commands/end-session.md` and `.claude/commands/commit.md`
 - Follow the implementation guide in the documentation
 
 ### New Feature Command
@@ -204,7 +204,7 @@ git add .
 git commit -m "Setup developer workflow with Claude Code
 
 - Configured plugins, permissions, and hooks
-- Created commands: session-end, commit, new-feature
+- Created commands: end-session, commit, new-feature
 - Created custom agents (optional)
 - Organized documentation into docs/
 
@@ -216,7 +216,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ## Verification
 
 After setup, these commands should be available:
-- `/session-end` - End session, update docs, commit
+- `/end-session` - End session, update docs, commit
 - `/commit` - Quick commit with approval
 - `/new-feature` - Build features with Feature-Dev workflow and Ralph Loop
 - `/cancel-ralph` - Stop a running Ralph Loop

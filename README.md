@@ -96,13 +96,21 @@ Tell Claude: "Read SETUP.md and help me set up this project"
 
 ## Commands
 
-| Command | What it does | Details |
-|---------|--------------|---------|
-| `/new-idea` | Discovery conversation → project package | [docs/commands.md](docs/commands.md#new-idea) |
-| `/prepare-setup` | Create generic setup package | [docs/commands.md](docs/commands.md#prepare-setup) |
-| `/session-end` | End session, update docs, commit | [docs/commands.md](docs/commands.md#session-end) |
-| `/summary` | Generate accomplishments report | [docs/commands.md](docs/commands.md#summary) |
-| `/commit` | Quick commit with approval | [docs/commands.md](docs/commands.md#commit) |
+### Session & Git
+| Command | What it does |
+|---------|--------------|
+| `/start-session` | Begin session with branch awareness |
+| `/new-feature` | Create feature branch (or worktree) |
+| `/complete-feature` | Wrap up feature - merge or create PR |
+| `/end-session` | End session, update docs, commit |
+| `/commit` | Quick commit with approval |
+
+### Project
+| Command | What it does |
+|---------|--------------|
+| `/new-idea` | Discovery conversation → project package |
+| `/prepare-setup` | Create generic setup package |
+| `/summary` | Generate accomplishments report |
 
 ---
 
@@ -153,7 +161,7 @@ docs/               # Documentation
 └─────────────────────────────────────────┘
 ```
 
-When you run `/session-end` in a spawned project, it generates feedback. Save that feedback to `inbox/from-projects/` in this repo to help improve templates.
+When you run `/end-session` in a spawned project, it generates feedback. Save that feedback to `inbox/from-projects/` in this repo to help improve templates.
 
 ---
 

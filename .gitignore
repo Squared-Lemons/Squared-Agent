@@ -1,5 +1,5 @@
-# Session logs (local archive)
-.project/sessions/
+# Local data (personal to each user)
+.project/
 
 # macOS
 .DS_Store

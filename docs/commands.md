@@ -118,7 +118,7 @@ A folder containing:
 
 ---
 
-## /session-end
+## /end-session
 
 End a coding session by updating documentation, capturing learnings, and committing changes.
 
@@ -137,7 +137,7 @@ End a coding session by updating documentation, capturing learnings, and committ
 ### Usage
 
 ```
-/session-end
+/end-session
 ```
 
 ### Commit approval
@@ -219,7 +219,7 @@ You'll be asked:
 ### When to use
 
 - Quick commits during development
-- When you don't need the full session-end workflow
+- When you don't need the full end-session workflow
 
 ---
 
@@ -229,7 +229,7 @@ The `commands/` folder contains implementation guides for setting up these comma
 
 | File | Purpose |
 |------|---------|
-| `SESSION-END-COMMAND.md` | Full session-end workflow with creator feedback |
+| `END-SESSION-COMMAND.md` | Full end-session workflow with creator feedback |
 | `Summary-Command.md` | Accomplishments summary from git history |
 | `New Feature Workflow.md` | Feature development with Feature-Dev and Ralph Loop |
 | `New-Idea-Workflow.md` | How /new-idea works and how to extend it |

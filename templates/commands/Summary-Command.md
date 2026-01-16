@@ -201,7 +201,7 @@ Add to `.gitignore`:
 .project/sessions/
 ```
 
-Session logs are created by `/session-end` and follow the format:
+Session logs are created by `/end-session` and follow the format:
 ```
 .project/sessions/YYYY-MM-DD.md
 ```

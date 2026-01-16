@@ -1,5 +1,38 @@
+# End-Session Command - Implementation Guide
+
+A Claude Code command for wrapping up coding sessions by updating documentation, capturing lessons learned, and committing changes with user approval.
+
 ---
-name: session-end
+
+## Overview
+
+The `/end-session` command provides a structured workflow for ending coding sessions. It ensures documentation stays current, insights are captured, and changes are committed cleanly.
+
+### What It Does
+
+| Step | Action |
+|------|--------|
+| 1 | Reviews git diff and commits from the session |
+| 2 | Updates README.md (user-facing documentation) |
+| 3 | Updates CLAUDE.md (technical docs, status tables) |
+| 4 | Updates workflow docs (agents, skills, commands) |
+| 5 | Captures lessons → docs/LEARNINGS.md |
+| 6 | Syncs supporting files for consistency |
+| 7 | Saves session log (local, gitignored archive) |
+| 8 | Generates/updates SETUP.md (handoff document) |
+| 9 | Generates creator feedback (auto-analyzed from session) |
+| 10 | Shows summary to user |
+| 11 | Commits with approval (user signs off last) |
+
+---
+
+## Files to Create
+
+### 1. Main Command: `.claude/commands/end-session.md`
+
+```markdown
+---
+name: end-session
 description: End coding session - update docs, capture learnings, commit changes
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task
 ---
@@ -16,7 +49,7 @@ Wrap up this coding session by updating documentation and capturing lessons lear
 2. **Updates README.md** - Keeps user-facing documentation accurate (commands, workflows, setup)
 3. **Updates CLAUDE.md** - Syncs implementation status, recent changes, known issues
 4. **Updates agents/skills** - Reflects any workflow changes or new patterns
-5. **Captures lessons** - Documents what worked, what didn't, and insights gained
+5. **Captures lessons** - Documents insights in docs/LEARNINGS.md
 6. **Saves session log** - Archives summary to `.project/sessions/YYYY-MM-DD.md` (local, not in git)
 7. **Generates SETUP.md** - Auto-creates/updates handoff document with env vars, OAuth setup, feature status
 8. **Generates creator feedback** - Auto-generates feedback from session for user to copy to master agent
@@ -107,7 +140,7 @@ Check if any commands were added or modified:
 
 ## Step 5: Capture Lessons Learned
 
-Create or update `LEARNINGS.md` in the project root with insights from this session.
+Create or update `docs/LEARNINGS.md` with insights from this session.
 
 ### Categories to capture:
 
@@ -242,12 +275,6 @@ pnpm dev
 3. **Feature status**: Review recent commits and implementation status
 4. **Known issues**: Pull from CLAUDE.md known issues section
 
-### Update strategy
-
-- If SETUP.md already exists, update only sections that changed
-- Keep user-edited content intact (add warnings for auto-generated sections)
-- Feature status should reflect actual implementation state
-
 ---
 
 ## Step 9: Creator Feedback
@@ -306,15 +333,11 @@ CREATOR FEEDBACK - Copy to Squared-Agent
 - [Config requirements discovered]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-To send this feedback to the master agent:
-1. Save as: inbox/from-projects/YYYY-MM-DD-[project-name].md
-2. Copy to the Squared-Agent repository
 ```
 
 ### Save feedback locally
 
-Also save to `docs/creator-feedback.md` for local reference.
+Also save to `docs/creator-feedback.md` for reference.
 
 **Important:** Only include feedback if there's something meaningful to report. If the session was routine with no issues or discoveries, skip this step.
 
@@ -379,7 +402,7 @@ Commit message:
 
 ### Commit message format
 ```
-Session-end: [brief summary of session work]
+End-session: [brief summary of session work]
 
 [Detailed bullet points of what was done]
 
@@ -422,7 +445,7 @@ To push: git push
 4. **Read CLAUDE.md** and identify needed updates
 5. **Make updates** to CLAUDE.md (implementation status, recent changes, known issues)
 6. **Check agents/skills** for any that need updates based on session work
-7. **Create/update LEARNINGS.md** with session insights
+7. **Create/update docs/LEARNINGS.md** with session insights
 8. **Save session log** to `.project/sessions/YYYY-MM-DD.md` (local archive)
 9. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
 10. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
@@ -438,3 +461,315 @@ Be thorough but concise. Focus on changes that will help future sessions underst
 ## Starting Now
 
 Begin the session-end process by gathering context about what was done this session.
+```
+
+---
+
+### 2. Helper Command: `.claude/commands/commit.md`
+
+A standalone commit command for when you just want to commit without the full session-end workflow:
+
+```markdown
+---
+description: Draft a commit message, get approval, then commit changes
+---
+
+# Commit - Draft and Commit Changes
+
+---
+
+## Step 1: Gather Information
+
+Run these commands in parallel:
+
+```bash
+git status
+```
+
+```bash
+git diff
+```
+
+```bash
+git diff --staged
+```
+
+```bash
+git log --oneline -5
+```
+
+If there are no changes (nothing staged or unstaged), inform the user:
+```
+No changes to commit.
+```
+
+---
+
+## Step 2: Draft Commit Message
+
+Analyze all changes (staged + unstaged) and draft a commit message:
+
+1. **First line**: Concise summary (50 chars or less ideally)
+   - Use imperative mood ("Add feature" not "Added feature")
+   - Capitalize first letter
+   - No period at end
+
+2. **Body** (if needed): Explain the "why" not the "what"
+
+3. **Match the repo's style** based on recent commits
+
+---
+
+## Step 3: Show Message and Get Approval
+
+**IMPORTANT:** Show the commit message FIRST as a code block, THEN ask for approval.
+
+### 3a. Display the commit message clearly
+
+```
+Commit message:
+───────────────────────────────────────────────────────────────
+
+[full commit message here, including body and co-author line]
+
+───────────────────────────────────────────────────────────────
+
+Files to commit:
+- [file1] - [brief description]
+- [file2] - [brief description]
+```
+
+### 3b. Ask for approval
+
+AFTER showing the message, use AskUserQuestion with options:
+- **Commit** - Stage all and commit with this message
+- **Edit message** - Change the commit message
+- **Cancel** - Don't commit
+
+If user chooses to edit, ask what changes they want, revise, and show the new message again before asking.
+
+---
+
+## Step 4: Commit
+
+Once approved:
+
+1. Stage all changes:
+```bash
+git add -A
+```
+
+2. Commit with the approved message:
+```bash
+git commit -m "$(cat <<'EOF'
+[approved commit message]
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+EOF
+)"
+```
+
+3. Verify:
+```bash
+git log --oneline -1
+```
+
+---
+
+## Step 5: Report Success
+
+```
+Committed: [hash] [message]
+
+To push: git push
+```
+
+---
+
+## Notes
+
+- Never commit files that look like secrets (.env, credentials, API keys)
+- If pre-commit hooks fail, show the error and offer to fix
+- Never use --no-verify unless explicitly requested
+```
+
+---
+
+### 3. Learnings File: `docs/LEARNINGS.md`
+
+Create this in your project's docs folder:
+
+```markdown
+# Project Name - Learnings
+
+Insights and lessons captured from coding sessions to improve future development.
+
+---
+
+## Session Log
+
+### YYYY-MM-DD: Session Title
+
+**What Was Done**
+- [List of changes made]
+
+**What Worked Well**
+- [Patterns that proved effective]
+- [Tools/approaches that saved time]
+
+**What Didn't Work**
+- [Approaches that failed or were abandoned]
+- [Antipatterns discovered]
+
+**Technical Insights**
+- [Library quirks or gotchas]
+- [Performance observations]
+
+---
+
+## Patterns That Work
+
+### Documentation Structure
+- `CLAUDE.md` as single source of truth for project state
+- Command files (`.claude/commands/*.md`) are self-documenting
+- Recent Changes section at top of CLAUDE.md for quick context
+
+### Workflow Design
+- [Your effective patterns]
+
+### Testing Strategy
+- [Your testing patterns]
+
+---
+
+## Antipatterns to Avoid
+
+### Documentation
+- Don't let CLAUDE.md get stale - update it as you work
+- Don't document features before they're working
+
+### Code Generation
+- [Your antipatterns]
+
+---
+
+## Technical Gotchas
+
+- [Library-specific issues]
+- [Platform-specific issues]
+
+---
+
+## Ideas for Future Sessions
+
+- [ ] [Future work item 1]
+- [ ] [Future work item 2]
+```
+
+---
+
+## Setup Requirements
+
+### 1. Gitignore the session logs
+
+Add to `.gitignore`:
+
+```
+# Session logs (local archive)
+.project/sessions/
+```
+
+### 2. Create required directories
+
+```bash
+mkdir -p .project/sessions
+mkdir -p docs
+```
+
+### 3. Ensure CLAUDE.md exists
+
+Your project should have a `CLAUDE.md` file with at minimum:
+- Implementation Status table
+- Recent Changes section
+- Known Issues section
+
+---
+
+## Key Design Patterns
+
+### Commit as Final Step
+
+The user signs off on the commit AFTER all documentation is updated:
+
+1. Do all documentation updates
+2. Save session log locally
+3. Show summary of what will be committed
+4. Ask for approval using AskUserQuestion
+5. Only then run `git add -A && git commit`
+
+This ensures the user reviews everything before the final commit.
+
+### Session Log Archive
+
+Session logs are saved locally but not committed to git:
+- Location: `.project/sessions/YYYY-MM-DD.md`
+- Multiple sessions same day: append with timestamp separator
+- Purpose: local archive for reference without cluttering git history
+
+### Commit Message Format
+
+```
+End-session: [brief summary]
+
+- [bullet point 1]
+- [bullet point 2]
+- [bullet point 3]
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+Using HEREDOC ensures proper multi-line formatting:
+
+```bash
+git commit -m "$(cat <<'EOF'
+End-session: Add user authentication
+
+- Implemented JWT token generation
+- Added login/logout endpoints
+- Created user session middleware
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+EOF
+)"
+```
+
+---
+
+## Customization Points
+
+When adapting for your project, modify these:
+
+| Element | Default | Your Project |
+|---------|---------|--------------|
+| Session log path | `.project/sessions/` | Your preferred location |
+| Co-author email | `noreply@anthropic.com` | Your preference |
+| Privacy rules | None | Add project-specific rules |
+| Status table format | Basic | Match your CLAUDE.md structure |
+
+---
+
+## Usage
+
+```bash
+/end-session
+```
+
+The command will:
+1. Analyze what you did this session
+2. Update documentation as needed
+3. Capture lessons learned
+4. Show you a summary
+5. Ask for commit approval
+6. Commit (but not push)
+
+You push when ready: `git push`

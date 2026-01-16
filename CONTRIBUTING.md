@@ -53,7 +53,7 @@ Your ideas for improving this agent. Create a markdown file describing what you 
 
 #### Project Feedback (`inbox/from-projects/`)
 
-Feedback from projects created with this agent. When running `/session-end` in a spawned project, copy the generated feedback here.
+Feedback from projects created with this agent. When running `/end-session` in a spawned project, copy the generated feedback here.
 
 ### Suggestions
 
@@ -88,7 +88,7 @@ I create proposals here based on inbox items and learnings. Each suggestion is a
 
 ### Feedback from Projects
 
-When projects send feedback via `/session-end`:
+When projects send feedback via `/end-session`:
 
 1. Save the feedback file to `inbox/from-projects/`
 2. I'll review and create proposals in `suggestions/`

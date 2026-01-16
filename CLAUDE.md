@@ -15,10 +15,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
+### `/start-session`
+Begin session with branch awareness and context loading. Checks for protected branches (main/master/develop/release/*) and warns if on one. Shows git status, loads tool intelligence, and displays session note or getting started guide.
+
+### `/new-feature`
+Create feature branch (or worktree) for safe development. Accepts a description, generates a branch name, and offers regular branch or worktree mode for parallel work.
+
+### `/complete-feature`
+Wrap up feature branch - merge or create PR. Reviews changes, suggests squashing if many commits, then offers two options: merge directly to main (solo workflow) or create a pull request (team workflow).
+
 ### `/prepare-setup`
 Prepare a setup package for a new project. Asks for profile, commands, tasks, and skills to include, then creates a temp folder with all files and a SETUP.md guide.
 
-### `/session-end`
+### `/end-session`
 End coding session - updates docs, captures learnings, generates SETUP.md handoff document, auto-generates creator feedback for user to copy back to master agent, and commits changes with approval.
 
 ### `/commit`
@@ -37,7 +46,7 @@ Consultative discovery conversation to design a new project. Discuss requirement
 Content that gets copied to new projects:
 
 #### Command Guides (`templates/commands/`)
-- **SESSION-END-COMMAND.md** - Session-end workflow with creator feedback loop
+- **END-SESSION-COMMAND.md** - End-session workflow with creator feedback loop
 - **Summary-Command.md** - Accomplishments summary from git history and session logs
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **New-Idea-Workflow.md** - Consultative discovery process for new projects
@@ -74,13 +83,49 @@ When making changes to this project:
 2. **Verify** - Run any relevant checks (this is a docs-heavy project, so mainly review for consistency)
 3. **Test generated output** - If changing setup templates, test with `/prepare-setup`
 4. **Update docs** - Keep CLAUDE.md and README.md in sync with changes
-5. **Commit** - Use `/commit` or `/session-end` to commit with proper message
+5. **Commit** - Use `/commit` or `/end-session` to commit with proper message
+
+### Branch Protection Rule
+
+**IMPORTANT**: Before making any file edits, code generation, or git commits:
+
+1. Check current branch: `git branch --show-current`
+2. If on main, master, develop, or release/*:
+   - **STOP immediately** - do not make changes
+   - Tell the user:
+     ```
+     STOPPED: You're on [branch] (protected).
+     Direct changes here are not allowed to keep the codebase safe.
+
+     To start safe work:
+     → /new-feature "short-description"
+     → Or: git checkout -b feature/your-name
+     ```
+3. On feature branches: proceed normally
+
+This teaches good git habits and prevents accidental commits to protected branches.
 
 ### Key Principles
 
 - **Give Claude verification** - Always provide a way to verify work (tests, typecheck, lint)
 - **Start in Plan Mode** - For complex tasks, use Plan Mode first (shift+tab twice)
 - **Update CLAUDE.md** - When Claude does something wrong, add a rule to prevent it
+
+## Tool Intelligence
+
+The agent learns which tools work best for which tasks, evolving with each session.
+
+**Location**: `.project/tool-intelligence.md` (gitignored - personal to each user)
+**Updated by**: `/end-session` captures tools used and patterns learned
+**Loaded by**: `/start-session` reads preferences at session start
+
+**What it tracks**:
+- Toolhive MCP shortcuts (GitHub, Perplexity, FireCrawl, ShadCN, etc.)
+- Plugin usage patterns (/feature-dev, /ralph-loop, /frontend-design)
+- Browser automation tips (claude-in-chrome patterns)
+- Core tool efficiency (Task agents vs direct tools)
+
+This enables the agent to select appropriate tools automatically without explicit instruction.
 
 ## Project Structure
 
@@ -101,13 +146,17 @@ suggestions/        # My proposals (categorized)
 docs/               # Internal documentation
 .claude/            # Claude Code configuration
   commands/         # Active slash commands
-.project/sessions/  # Local session logs (gitignored)
+.project/           # Local data (gitignored)
+  sessions/         # Session logs by date
+  tool-intelligence.md  # Learned tool preferences
 CLAUDE.md           # My instructions
 LEARNINGS.md        # Session insights → feeds suggestions/
 ```
 
 ## Recent Changes
 
+- **2026-01-16:** Implemented Session Git Workflow - `/start-session` replaces `/catch-up` with branch awareness; `/new-feature` creates feature branch or worktree; `/complete-feature` wraps up and creates PR; added Branch Protection Rule to enforce good git habits
+- **2026-01-16:** Added Tool Intelligence system - tracks tool usage patterns across sessions; `/end-session` updates `.project/tool-intelligence.md` with learned shortcuts; `/start-session` loads preferences at session start; enables proactive tool selection
 - **2026-01-16:** Reorganized folder structure - `templates/` for exportable content, `inbox/` for ideas and feedback, `suggestions/` for agent proposals; renamed `setups/` to `templates/profiles/`
 - **2026-01-13:** Added `/summary` command - generates accomplishments summary from git commits and session logs; categorizes by type (features, fixes, refactors, etc.); copy-paste ready output
 - **2026-01-13:** Enhanced `/new-idea` to be a consultative discovery conversation - discuss requirements, platform, technical decisions together; generates PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md with full context; supports user-provided files
@@ -118,7 +167,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 - **2026-01-12:** Integrated creator feedback - enhanced Next.js skill with Better Auth gotchas, handoff template, DX checklist; added SETUP.md auto-generation and auto-generated creator feedback to session-end; added Plugins section to README
 - **2026-01-12:** Updated README and CLAUDE.md to reflect new purpose as master agent for project bootstrapping
 - **2026-01-12:** Auto-organize docs into `docs/` on setup completion; copy-paste friendly creator feedback display
-- **2026-01-12:** Enhanced `/prepare-setup` with commands and skills selection; added creator feedback loop to `/session-end`
+- **2026-01-12:** Enhanced `/prepare-setup` with commands and skills selection; added creator feedback loop to `/end-session`
 - **2026-01-12:** Added `skills/` knowledge base with Next.js App Build Guide
 - **2026-01-12:** Added `/prepare-setup` command for bootstrapping new projects with setup profiles, commands, and tasks
 - **2026-01-12:** Added New Feature Workflow pattern and setups/tasks structure

@@ -11,7 +11,7 @@ Your ideas for improving this agent. Create a markdown file with:
 - Any initial thoughts
 
 ### from-projects/
-Feedback from projects created with this agent. When running `/session-end` in a spawned project, copy the generated feedback here.
+Feedback from projects created with this agent. When running `/end-session` in a spawned project, copy the generated feedback here.
 
 File naming: `YYYY-MM-DD-[project-name].md`
 

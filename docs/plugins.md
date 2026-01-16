@@ -13,7 +13,7 @@ The developer profile sets up:
 | **Plugins** | feature-dev, ralph-loop, code-simplifier, playwright, context7, frontend-design |
 | **Permissions** | Pre-allow safe commands (build, test, lint, format, typecheck) |
 | **Hooks** | Auto-format code after Write/Edit operations |
-| **Commands** | /session-end, /commit, /new-feature |
+| **Commands** | /end-session, /commit, /new-feature |
 | **Agents** | Optional custom agents (build-validator, code-reviewer, verify-app) |
 
 Based on [how the Claude Code creator uses it](https://x.com/bcherny/status/2007179832300581177).

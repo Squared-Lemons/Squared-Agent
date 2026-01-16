@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:code.claude.com)",
       "Bash(find:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(open:*)"
     ],
     "deny": [],
     "ask": []

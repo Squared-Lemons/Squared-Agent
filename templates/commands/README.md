@@ -7,7 +7,7 @@ Implementation guides that describe how to create Claude Code slash commands. Th
 ```
 commands/                          .claude/commands/
 ┌─────────────────────────┐       ┌─────────────────────────┐
-│ SESSION-END-COMMAND.md  │ ───►  │ session-end.md          │
+│ END-SESSION-COMMAND.md  │ ───►  │ end-session.md          │
 │ (documentation)         │       │ (executable command)    │
 └─────────────────────────┘       └─────────────────────────┘
 ```
@@ -18,7 +18,7 @@ commands/                          .claude/commands/
 
 | Guide | Creates Command | Purpose |
 |-------|-----------------|---------|
-| [SESSION-END-COMMAND.md](./SESSION-END-COMMAND.md) | `/session-end` | End session, update docs, capture learnings, commit |
+| [END-SESSION-COMMAND.md](./END-SESSION-COMMAND.md) | `/end-session` | End session, update docs, capture learnings, commit |
 | [Summary-Command.md](./Summary-Command.md) | `/summary` | Generate accomplishments summary for a time period |
 | [New Feature Workflow.md](./New%20Feature%20Workflow.md) | `/feature` | Multi-phase feature development with agents |
 | [Canvas-Panel-Navigation-System.md](./Canvas-Panel-Navigation-System.md) | (pattern) | React UI pattern reference |
