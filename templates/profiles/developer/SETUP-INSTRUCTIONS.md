@@ -146,9 +146,33 @@ mkdir -p .project/sessions
 ### Gitignore
 Add to `.gitignore`:
 ```
-.project/sessions/
+# Local data (personal to each user)
+.project/
 .claude/settings.local.json
 ```
+
+### Token Usage File
+Create `.project/token-usage.md` for tracking session costs:
+
+```markdown
+# Token Usage History
+
+Raw token data. Costs calculated at report time.
+
+## Subscription Limits
+
+| Limit | Value | Notes |
+|-------|-------|-------|
+| Daily limit | | Your plan's daily token limit |
+| Hourly limit | | Your plan's hourly token limit |
+
+## Session Log
+
+| Date | Type | Input | Output | Cache Read | Cache Create | Turns |
+|------|------|-------|--------|------------|--------------|-------|
+```
+
+This file is populated automatically by `/end-session` and aggregated by `/summary`.
 
 ### CLAUDE.md
 Create or update `CLAUDE.md` in project root to document the available commands.
@@ -216,10 +240,14 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ## Verification
 
 After setup, these commands should be available:
-- `/end-session` - End session, update docs, commit
+- `/start-session` - Begin session with branch awareness and context loading
+- `/new-feature` - Create feature branch for safe development
+- `/complete-feature` - Wrap up feature branch with merge or PR
+- `/end-session` - End session, update docs, capture token usage, commit
 - `/commit` - Quick commit with approval
-- `/new-feature` - Build features with Feature-Dev workflow and Ralph Loop
 - `/cancel-ralph` - Stop a running Ralph Loop
+
+Token tracking is automatic — `/end-session` captures usage data, `/summary` calculates costs
 
 ---
 

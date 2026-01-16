@@ -1,109 +1,64 @@
 # Knowledge
 
-Knowledge base that informs how agents build things. These are reference guides and documentation that agents consult when implementing specific technologies or patterns.
+[← Back to Templates](../README.md) · [← Back to README](../../README.md)
 
-## Purpose
+---
 
-Knowledge are **not** step-by-step setup instructions (those live in `setups/`). Instead, they are comprehensive guides that document:
+Framework and platform guides that help Claude build correctly with specific technologies. These capture patterns, gotchas, and best practices learned from real projects.
 
-- Architecture patterns and best practices
-- Common pitfalls and solutions
-- Code examples and templates
-- Configuration requirements
-
-Agents reference these knowledge when building features that use the documented technologies.
+> **Note:** For development workflows like Session Git Workflow, see [workflows/](../workflows/README.md).
 
 ## Available Knowledge
 
-| Knowledge Guide | Description |
+| Guide | Description |
 |-------|-------------|
-| [Next.js-App-Build-Guide](./Next.js-App-Build-Guide.md) | Building Next.js apps with Better Auth, Drizzle ORM, and Turborepo monorepo |
+| [Next.js-App-Build-Guide.md](Next.js-App-Build-Guide.md) | Next.js with Better Auth, Drizzle ORM, Turborepo |
 
-## How Knowledge Are Used
+---
 
-1. **During feature development** - Agents consult relevant knowledge for implementation guidance
-2. **In setup profiles** - Setup instructions may reference knowledge for detailed context
-3. **For troubleshooting** - Knowledge document common pitfalls and solutions
+## Next.js-App-Build-Guide
 
-## How to Extend
+**Location:** `templates/knowledge/Next.js-App-Build-Guide.md`
 
-### Adding a New Knowledge Guide
+Comprehensive guide for building Next.js applications with authentication and database.
 
-1. **Create the skill file**
-   ```
-   knowledge/[Technology]-[Pattern]-Guide.md
-   ```
-   Examples: `React-Testing-Guide.md`, `PostgreSQL-Optimization-Guide.md`
+| Section | What It Covers |
+|---------|---------------|
+| Monorepo Setup | Turborepo with apps/ and packages/ |
+| Database | Drizzle ORM patterns, schema, migrations |
+| Authentication | Better Auth setup, providers, gotchas |
+| Environment | Variable management across packages |
+| UI Components | shadcn/ui in monorepo |
+| Server Actions | Data mutation patterns |
+| Route Protection | Middleware and onboarding |
+| Common Pitfalls | Real issues and solutions |
 
-2. **Structure your skill with these sections:**
-   - Overview - What technology/pattern this covers
-   - Architecture - How components fit together
-   - Setup - Configuration requirements
-   - Code Examples - Working implementation samples
-   - Common Pitfalls - Known issues and solutions
-   - Checklist - Quick reference for implementation
+**Best for:** Next.js projects needing auth, database, or monorepo structure.
 
-3. **Update this README** - Add entry to the Available Knowledge table
+---
 
-4. **Update CLAUDE.md** - Add to Available Content section
+## Adding Knowledge
 
-5. **Include in relevant setups** - Reference in setup profiles that use this technology
+1. Create file: `templates/knowledge/[Technology]-Guide.md`
 
-### Naming Convention
+2. Structure with these sections:
+   - Overview — What and why
+   - Architecture — How components fit together
+   - Setup — Configuration requirements
+   - Key Patterns — Implementation examples
+   - Common Pitfalls — Issues and solutions
+   - Checklist — Quick reference
 
-- Use `[Technology]-[Pattern]-Guide.md` format
-- Technology: Main tech (Next.js, React, Django, etc.)
-- Pattern: What aspect (Build, Testing, Deployment, etc.)
-- Always end with `-Guide.md`
+3. Update this README with the new guide
 
-### Template Structure
+**Naming:** `[Technology]-Guide.md` or `[Technology]-[Pattern]-Guide.md`
 
-```markdown
-# [Technology] [Pattern] Guide
+**Examples:** `React-Testing-Guide.md`, `PostgreSQL-Optimization-Guide.md`
 
-Brief description of what this skill covers.
+---
 
-## Overview
+## How Knowledge Gets Used
 
-When and why to use this technology/pattern.
-
-## Architecture
-
-How components fit together, diagrams if helpful.
-
-## Setup
-
-### Prerequisites
-- Required dependencies
-- Environment requirements
-
-### Configuration
-[Config examples]
-
-## Implementation
-
-### [Component 1]
-[Code examples and explanation]
-
-### [Component 2]
-[Code examples and explanation]
-
-## Common Pitfalls
-
-| Pitfall | Solution |
-|---------|----------|
-| ... | ... |
-
-## Checklist
-
-- [ ] Step 1
-- [ ] Step 2
-- [ ] ...
-```
-
-### Best Practices
-
-- Include real, working code examples
-- Document gotchas learned from actual projects
-- Keep examples focused and minimal
-- Update when receiving feedback from projects
+1. **During `/new-idea`** — Recommended based on platform choice
+2. **During development** — Agents consult for implementation guidance
+3. **For troubleshooting** — Reference for common pitfalls

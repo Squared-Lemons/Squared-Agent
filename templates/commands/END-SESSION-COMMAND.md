@@ -19,10 +19,12 @@ The `/end-session` command provides a structured workflow for ending coding sess
 | 5 | Captures lessons → docs/LEARNINGS.md |
 | 6 | Syncs supporting files for consistency |
 | 7 | Saves session log (local, gitignored archive) |
-| 8 | Generates/updates SETUP.md (handoff document) |
-| 9 | Generates creator feedback (auto-analyzed from session) |
-| 10 | Shows summary to user |
-| 11 | Commits with approval (user signs off last) |
+| 7b | Extracts token usage for cost tracking |
+| 8 | Creates session note for next session |
+| 9 | Generates/updates SETUP.md (handoff document) |
+| 10 | Generates creator feedback (auto-analyzed from session) |
+| 11 | Shows summary to user |
+| 12 | Commits with approval (user signs off last) |
 
 ---
 
@@ -215,6 +217,141 @@ mkdir -p .project/sessions
 Then write/append the session summary to `.project/sessions/YYYY-MM-DD.md`.
 
 This creates a local archive of all session work that won't clutter the git repo.
+
+---
+
+## Step 7b: Extract Token Usage
+
+Extract token usage from the current Claude Code session for cost tracking.
+
+### Find the session JSONL file
+
+Claude Code stores session data in `~/.claude/projects/<project-path>/<session-id>.jsonl`
+
+```bash
+# Get project path (replace / with -)
+PROJECT_PATH=$(pwd | sed 's|^/||' | sed 's|/|-|g')
+SESSION_DIR=~/.claude/projects/$PROJECT_PATH
+
+# Get most recent session file (likely current session)
+LATEST_SESSION=$(ls -t "$SESSION_DIR"/*.jsonl 2>/dev/null | head -1)
+echo "Session file: $LATEST_SESSION"
+```
+
+### Parse token usage
+
+Extract token metrics from assistant messages:
+
+```bash
+cat "$LATEST_SESSION" | jq -s '
+  [.[] | select(.type == "assistant") | .message.usage // empty] |
+  {
+    input_tokens: (map(.input_tokens // 0) | add),
+    output_tokens: (map(.output_tokens // 0) | add),
+    cache_read_input_tokens: (map(.cache_read_input_tokens // 0) | add),
+    cache_creation_input_tokens: (map(.cache_creation_input_tokens // 0) | add),
+    turns: length
+  }
+'
+```
+
+### Determine billing type
+
+- **subscription**: Interactive Claude Code sessions (default for manual work)
+- **api**: Background agents, automated tasks, programmatic API calls
+
+For normal sessions, use `subscription`. When running as a background agent or via API, use `api`.
+
+### Add Token Usage section to session log
+
+Include this section in the session log (raw tokens only, no cost):
+
+```markdown
+### Token Usage
+| Metric | Value |
+|--------|-------|
+| Billing type | subscription |
+| Input tokens | [input_tokens] |
+| Output tokens | [output_tokens] |
+| Cache read | [cache_read_input_tokens] |
+| Cache creation | [cache_creation_input_tokens] |
+| Turns | [turns] |
+```
+
+### Update cumulative token stats
+
+Also update `.project/token-usage.md` with raw token data (costs calculated at report time):
+
+```markdown
+# Token Usage History
+
+Raw token data. Costs are calculated at report time using current pricing.
+
+## Subscription Limits
+
+Configure your subscription tier limits here for usage tracking:
+
+| Limit | Value | Notes |
+|-------|-------|-------|
+| Daily limit | [tokens] | Your plan's daily token limit |
+| Hourly limit | [tokens] | Your plan's hourly token limit |
+
+## Session Log
+| Date | Type | Input | Output | Cache Read | Cache Create | Turns |
+|------|------|-------|--------|------------|--------------|-------|
+| YYYY-MM-DD HH:MM | subscription | [n] | [n] | [n] | [n] | [n] |
+| YYYY-MM-DD HH:MM | api | [n] | [n] | [n] | [n] | [n] |
+```
+
+If the file doesn't exist, create it with the first session's data and prompt user to configure their subscription limits.
+
+**Important**: Store raw tokens only. `/summary` calculates costs and limit usage at report time.
+
+---
+
+## Step 7c: Create Session Note for Next Session
+
+Create or update `.project/session-note.md` as a handoff for the next session.
+
+### Ask the user
+
+```
+Any tasks or notes for the next session?
+(Leave blank if none)
+```
+
+### If user provides content
+
+Write to `.project/session-note.md`:
+
+```markdown
+# Next Session: [Task Title]
+
+## Task
+[User's description]
+
+## Context
+[Any relevant context from this session]
+
+## Files to start with
+[Relevant files if known]
+```
+
+### If user leaves blank
+
+Check if there are obvious follow-up tasks from this session:
+- Incomplete features
+- TODO comments added
+- Tests to write
+- Documentation to finish
+
+If so, suggest creating a note. Otherwise, delete any existing session note:
+
+```bash
+rm -f .project/session-note.md
+```
+
+This ensures `/start-session` in the next session either shows the note or the getting started guide.
 
 ---
 
@@ -447,10 +584,11 @@ To push: git push
 6. **Check agents/knowledge** for any that need updates based on session work
 7. **Create/update docs/LEARNINGS.md** with session insights
 8. **Save session log** to `.project/sessions/YYYY-MM-DD.md` (local archive)
-9. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
-10. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
-11. **Output summary** of what was done and what will be committed
-12. **Get user approval** and commit (do NOT push)
+9. **Create session note** - ask user for next session tasks, write to `.project/session-note.md`
+10. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
+11. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
+12. **Output summary** of what was done and what will be committed
+13. **Get user approval** and commit (do NOT push)
 
 Be thorough but concise. Focus on changes that will help future sessions understand the current state of the project.
 

@@ -57,6 +57,53 @@ If session logs exist for dates in the range, read them:
 
 ---
 
+## Step 3b: Aggregate Token Usage
+
+If `.project/token-usage.md` exists, aggregate token data for the time period.
+
+### Read cumulative token file
+
+```bash
+cat .project/token-usage.md 2>/dev/null || echo "No token usage data"
+```
+
+### Filter session log entries by date
+
+Parse the Session Log table in `.project/token-usage.md` to filter sessions in the date range.
+
+### Calculate period totals by billing type
+
+Sum up separately for `subscription` and `api`:
+- Input tokens
+- Output tokens
+- Cache read tokens
+- Cache creation tokens
+
+### Calculate costs at report time
+
+Apply current pricing based on billing type:
+
+**Subscription pricing** (Claude Code subscription - included in plan):
+- Subscription sessions are covered by the monthly fee
+- Track usage against daily/hourly limits from `.project/token-usage.md`
+- Calculate % of limits used to assess subscription tier needs
+- Display token totals for optimization insights
+
+**API pricing** (per million tokens, Claude Opus 4.5):
+- Input: $15
+- Output: $75
+- Cache read: $1.50
+- Cache creation: $18.75
+
+Formula for API cost:
+```
+api_cost = (input × 15 + output × 75 + cache_read × 1.5 + cache_creation × 18.75) / 1,000,000
+```
+
+**Note**: Pricing may change. Update these values when Anthropic updates pricing.
+
+---
+
 ## Step 4: Categorize Commits
 
 Sort commits into categories based on their messages:
@@ -111,6 +158,43 @@ Output the report in this format:
 
 ---
 
+## Token Usage
+
+### Subscription Sessions (Claude Code)
+| Date | Sessions | Input | Output | Cache Read | Cache Create |
+|------|----------|-------|--------|------------|--------------|
+| [date] | [n] | [n]K | [n]K | [n]K | [n]K |
+| **Total** | **[n]** | **[n]K** | **[n]K** | **[n]K** | **[n]K** |
+
+#### Limit Analysis (if limits configured)
+| Metric | Usage | Limit | % Used |
+|--------|-------|-------|--------|
+| Peak daily usage | [n]K | [limit]K | [%]% |
+| Peak hourly usage | [n]K | [limit]K | [%]% |
+| Days hitting daily limit | [n] / [total days] | - | - |
+| Hours hitting hourly limit | [n] / [total hours] | - | - |
+
+**Subscription assessment:**
+- [If frequently hitting limits: "Consider upgrading subscription tier"]
+- [If rarely hitting limits: "Current tier appears sufficient"]
+- [If no limits configured: "Configure limits in .project/token-usage.md for usage tracking"]
+
+### API Sessions (Background Agents)
+| Date | Sessions | Input | Output | Cache Read | Cache Create | Est. Cost |
+|------|----------|-------|--------|------------|--------------|-----------|
+| [date] | [n] | [n]K | [n]K | [n]K | [n]K | $[cost] |
+| **Total** | **[n]** | **[n]K** | **[n]K** | **[n]K** | **[n]K** | **$[total]** |
+
+### Insights
+- Subscription sessions: [n] (covered by plan)
+- API sessions: [n] (estimated cost: $[total])
+- Cache efficiency: [%] (cache reads / total input)
+- Heaviest API session: [date] ($[cost])
+
+(Only include sections with data. Skip API section if no API sessions.)
+
+---
+
 ## Statistics
 
 | Category | Count |
@@ -129,7 +213,8 @@ Output the report in this format:
 
 - **No commits found**: Display "No activity found for the selected time period"
 - **No session logs**: Skip the Session Highlights section entirely
-- **Multiple sessions same day**: Combine highlights from all sessions
+- **No token usage data**: Skip the Cost Summary section entirely
+- **Multiple sessions same day**: Combine highlights and token data from all sessions
 - **Empty categories**: Omit sections with no items
 
 ---

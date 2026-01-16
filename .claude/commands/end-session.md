@@ -18,11 +18,12 @@ Wrap up this coding session by updating documentation and capturing lessons lear
 4. **Updates agents/knowledge** - Reflects any workflow changes or new patterns
 5. **Captures lessons** - Documents what worked, what didn't, and insights gained
 6. **Saves session log** - Archives summary to `.project/sessions/YYYY-MM-DD.md` (local, not in git)
-7. **Generates SETUP.md** - Auto-creates/updates handoff document with env vars, OAuth setup, feature status
-8. **Generates creator feedback** - Auto-generates feedback from session for user to copy to master agent
-9. **Shows summary** - Lists all changes ready to commit
-10. **Commits with approval** - User signs off on commit message (does NOT push)
-11. **Session note** - Optional note to yourself for next session (shown by /catch-up)
+7. **Extracts token usage** - Parses Claude Code session for cost tracking and estimation
+8. **Generates SETUP.md** - Auto-creates/updates handoff document with env vars, OAuth setup, feature status
+9. **Generates creator feedback** - Auto-generates feedback from session for user to copy to master agent
+10. **Shows summary** - Lists all changes ready to commit
+11. **Commits with approval** - User signs off on commit message (does NOT push)
+12. **Session note** - Optional note to yourself for next session (shown by /start-session)
 
 ---
 
@@ -186,11 +187,100 @@ This creates a local archive of all session work that won't clutter the git repo
 
 ---
 
-## Step 7b: Update Tool Intelligence
+## Step 7b: Extract Token Usage
+
+Extract token usage from the current Claude Code session for cost tracking.
+
+### Find the session JSONL file
+
+Claude Code stores session data in `~/.claude/projects/<project-path>/<session-id>.jsonl`
+
+```bash
+# Get project path (replace / with -)
+PROJECT_PATH=$(pwd | sed 's|^/||' | sed 's|/|-|g')
+SESSION_DIR=~/.claude/projects/$PROJECT_PATH
+
+# Get most recent session file (likely current session)
+LATEST_SESSION=$(ls -t "$SESSION_DIR"/*.jsonl 2>/dev/null | head -1)
+echo "Session file: $LATEST_SESSION"
+```
+
+### Parse token usage
+
+Extract token metrics from assistant messages:
+
+```bash
+cat "$LATEST_SESSION" | jq -s '
+  [.[] | select(.type == "assistant") | .message.usage // empty] |
+  {
+    input_tokens: (map(.input_tokens // 0) | add),
+    output_tokens: (map(.output_tokens // 0) | add),
+    cache_read_input_tokens: (map(.cache_read_input_tokens // 0) | add),
+    cache_creation_input_tokens: (map(.cache_creation_input_tokens // 0) | add),
+    turns: length
+  }
+'
+```
+
+### Determine billing type
+
+- **subscription**: Interactive Claude Code sessions (default for manual work)
+- **api**: Background agents, automated tasks, programmatic API calls
+
+For normal sessions, use `subscription`. When running as a background agent or via API, use `api`.
+
+### Add Token Usage section to session log
+
+Include this section in the session log (raw tokens only, no cost):
+
+```markdown
+### Token Usage
+| Metric | Value |
+|--------|-------|
+| Billing type | subscription |
+| Input tokens | [input_tokens] |
+| Output tokens | [output_tokens] |
+| Cache read | [cache_read_input_tokens] |
+| Cache creation | [cache_creation_input_tokens] |
+| Turns | [turns] |
+```
+
+### Update cumulative token stats
+
+Also update `.project/token-usage.md` with raw token data (costs calculated at report time):
+
+```markdown
+# Token Usage History
+
+Raw token data. Costs are calculated at report time using current pricing.
+
+## Subscription Limits
+
+Configure your subscription tier limits here for usage tracking:
+
+| Limit | Value | Notes |
+|-------|-------|-------|
+| Daily limit | [tokens] | Your plan's daily token limit |
+| Hourly limit | [tokens] | Your plan's hourly token limit |
+
+## Session Log
+| Date | Type | Input | Output | Cache Read | Cache Create | Turns |
+|------|------|-------|--------|------------|--------------|-------|
+| YYYY-MM-DD HH:MM | subscription | [n] | [n] | [n] | [n] | [n] |
+| YYYY-MM-DD HH:MM | api | [n] | [n] | [n] | [n] | [n] |
+```
+
+If the file doesn't exist, create it with the first session's data and prompt user to configure their subscription limits.
+
+**Important**: Store raw tokens only. `/summary` calculates costs and limit usage at report time.
+
+---
+
+## Step 7c: Update Tool Intelligence
 
 Update `.project/tool-intelligence.md` to track tools used and patterns learned.
 
-### If file doesn't exist, create it
+### If the file doesn't exist, create it
 
 ```bash
 mkdir -p .project
@@ -497,12 +587,13 @@ That's fine - the previous note (if any) will remain.
 6. **Check agents/knowledge** for any that need updates based on session work
 7. **Create/update LEARNINGS.md** with session insights
 8. **Save session log** to `.project/sessions/YYYY-MM-DD.md` (local archive)
-8b. **Update tool intelligence** in `.project/tool-intelligence.md` with tools used and patterns learned
+8b. **Extract token usage** from Claude Code session JSONL, add to session log and `.project/token-usage.md`
+8c. **Update tool intelligence** in `.project/tool-intelligence.md` with tools used and patterns learned
 9. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
 10. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
 11. **Output summary** of what was done and what will be committed
 12. **Get user approval** and commit (do NOT push)
-13. **Ask about session note** - offer to save a note for next session (shown by /catch-up)
+13. **Ask about session note** - offer to save a note for next session (shown by /start-session)
 
 Be thorough but concise. Focus on changes that will help future sessions understand the current state of the project.
 

@@ -1,90 +1,164 @@
 # Commands
 
-Implementation guides that describe how to create Claude Code slash commands. These are reference documentation that agents read to generate actual command implementations.
+[← Back to Templates](../README.md) · [← Back to README](../../README.md)
+
+---
+
+Implementation guides for Claude Code slash commands. These are documentation files that agents read to generate actual executable commands in `.claude/commands/`.
 
 ## How It Works
 
 ```
-commands/                          .claude/commands/
-┌─────────────────────────┐       ┌─────────────────────────┐
-│ END-SESSION-COMMAND.md  │ ───►  │ end-session.md          │
-│ (documentation)         │       │ (executable command)    │
-└─────────────────────────┘       └─────────────────────────┘
+templates/commands/               .claude/commands/
+┌─────────────────────────┐      ┌─────────────────────────┐
+│ END-SESSION-COMMAND.md  │  ──► │ end-session.md          │
+│ (documentation)         │      │ (executable command)    │
+└─────────────────────────┘      └─────────────────────────┘
 ```
-
-**Command guides** in this folder are comprehensive documentation. When a new project is set up, the agent reads these guides and generates actual executable commands in `.claude/commands/`.
 
 ## Available Commands
 
-| Guide | Creates Command | Purpose |
-|-------|-----------------|---------|
-| [END-SESSION-COMMAND.md](./END-SESSION-COMMAND.md) | `/end-session` | End session, update docs, capture learnings, commit |
-| [Summary-Command.md](./Summary-Command.md) | `/summary` | Generate accomplishments summary for a time period |
-| [New Feature Workflow.md](./New%20Feature%20Workflow.md) | `/feature` | Multi-phase feature development with agents |
+| Guide | Creates | Purpose |
+|-------|---------|---------|
+| [END-SESSION-COMMAND.md](END-SESSION-COMMAND.md) | `/end-session`, `/commit` | End session, update docs, commit |
+| [Start-Session-Command.md](Start-Session-Command.md) | `/start-session` | Begin session with branch awareness |
+| [New-Feature-Command.md](New-Feature-Command.md) | `/new-feature` | Create feature branch or worktree |
+| [Complete-Feature-Command.md](Complete-Feature-Command.md) | `/complete-feature` | Merge or create PR |
+| [Summary-Command.md](Summary-Command.md) | `/summary` | Generate accomplishments report |
+| [New Feature Workflow.md](New%20Feature%20Workflow.md) | `/feature` | Multi-phase feature development |
+| [New-Idea-Workflow.md](New-Idea-Workflow.md) | — | Documents the `/new-idea` process |
 
-> **Note:** UX patterns like Canvas-Panel-Navigation-System are now in `templates/ux-guides/`.
+---
 
-## How to Extend
+## END-SESSION-COMMAND
 
-### Adding a New Command Guide
+**Location:** `templates/commands/END-SESSION-COMMAND.md`
 
-1. **Create the documentation file**
-   ```
-   commands/[COMMAND-NAME]-COMMAND.md
-   ```
+The complete end-session workflow with documentation updates and creator feedback.
 
-2. **Structure your guide with these sections:**
-   - Overview - What the command does
-   - Prerequisites - What's needed before use
-   - Workflow - Step-by-step execution flow
-   - Implementation - Code patterns and examples
-   - Troubleshooting - Common issues and solutions
+| Step | What Happens |
+|------|--------------|
+| 1 | Reviews git diff and commits |
+| 2 | Updates README.md and CLAUDE.md |
+| 3 | Captures lessons in LEARNINGS.md |
+| 4 | Saves session log (gitignored) |
+| 5 | Creates session note for next time |
+| 6 | Generates SETUP.md handoff |
+| 7 | Generates creator feedback |
+| 8 | Commits with user approval |
 
-3. **Update this README** - Add entry to the Available Commands table
+**Creates:** `.claude/commands/end-session.md`, `.claude/commands/commit.md`
 
-4. **Update CLAUDE.md** - Add to Available Content section
+---
 
-5. **Update setups if needed** - Reference in relevant setup profiles
+## Start-Session-Command
 
-### Naming Convention
+**Location:** `templates/commands/Start-Session-Command.md`
 
-- Use `[COMMAND-NAME]-COMMAND.md` for command implementations
-- Use Title Case with hyphens
+Session entry point with branch awareness and context loading.
 
-### Template Structure
+| Feature | What It Does |
+|---------|--------------|
+| Branch Check | Warns if on protected branch |
+| Git Status | Shows modified files, ahead/behind |
+| Tool Intelligence | Loads learned preferences |
+| Session Note | Shows task from last session |
 
-```markdown
-# [Command Name]
+**Creates:** `.claude/commands/start-session.md`
 
-Brief description of what this command does.
+---
 
-## Overview
+## New-Feature-Command
 
-Detailed explanation of purpose and value.
+**Location:** `templates/commands/New-Feature-Command.md`
 
-## Prerequisites
+Safe feature branch creation with worktree support.
 
-- Required plugins
-- Required files/folders
-- Required configuration
+| Feature | What It Does |
+|---------|--------------|
+| Branch Naming | Converts description to slug |
+| Uncommitted Changes | Offers stash/commit/bring options |
+| Worktree Mode | Parallel development option |
 
-## Workflow
+**Creates:** `.claude/commands/new-feature.md`
 
-1. Step one
-2. Step two
-3. ...
+---
 
-## Implementation
+## Complete-Feature-Command
 
-### Component 1
-[Details and code examples]
+**Location:** `templates/commands/Complete-Feature-Command.md`
 
-### Component 2
-[Details and code examples]
+Feature branch completion with merge or PR options.
 
-## Troubleshooting
+| Path | What Happens |
+|------|--------------|
+| Merge | Checkout main, merge --no-ff, delete branch |
+| PR | Push with -u, create PR via gh |
 
-| Issue | Solution |
-|-------|----------|
-| ... | ... |
-```
+**Creates:** `.claude/commands/complete-feature.md`
+
+---
+
+## Summary-Command
+
+**Location:** `templates/commands/Summary-Command.md`
+
+Accomplishments report from git history and session logs.
+
+| Feature | What It Does |
+|---------|--------------|
+| Time Range | Today, week, month, or custom |
+| Categories | Features, fixes, refactors, docs, tests |
+| Format | Copy-paste ready output |
+
+**Creates:** `.claude/commands/summary.md`
+
+---
+
+## New Feature Workflow
+
+**Location:** `templates/commands/New Feature Workflow.md`
+
+Feature development using Feature-Dev and Ralph Loop plugins.
+
+| Phase | What Happens |
+|-------|--------------|
+| Explore | code-explorer analyzes codebase |
+| Architect | code-architect designs solution |
+| Implement | Ralph Loop iterates until done |
+| Review | code-reviewer checks quality |
+
+**Best for:** Complex features needing architecture planning.
+
+---
+
+## New-Idea-Workflow
+
+**Location:** `templates/commands/New-Idea-Workflow.md`
+
+Documents the consultative discovery process behind `/new-idea`.
+
+| Phase | What Happens |
+|-------|--------------|
+| Discovery | Understand idea, users, problems |
+| Scope | Define v1 vs future |
+| Technical | Platform and stack decisions |
+| Output | PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, SETUP.md |
+
+**Best for:** Understanding or extending `/new-idea`.
+
+---
+
+## Adding a Command
+
+1. Create file: `templates/commands/[Command-Name]-Command.md`
+
+2. Structure with these sections:
+   - Overview — What the command does
+   - What It Does — Step-by-step breakdown
+   - Files to Create — The actual `.claude/commands/*.md` content
+   - Troubleshooting — Common issues
+
+3. Update this README with the new command
+
+**Naming:** `[Command-Name]-Command.md` or `[Workflow-Name]-Workflow.md`
