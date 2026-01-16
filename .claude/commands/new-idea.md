@@ -110,7 +110,7 @@ Once you understand the project, recommend what to include:
 ### Available Skills
 Check what platform skills exist:
 ```bash
-ls skills/*.md 2>/dev/null | grep -v README
+ls templates/skills/*.md 2>/dev/null | grep -v README
 ```
 
 Recommend relevant ones with reasoning.
@@ -118,7 +118,7 @@ Recommend relevant ones with reasoning.
 ### Available Commands
 Check what command guides exist:
 ```bash
-ls commands/*.md 2>/dev/null | grep -v README
+ls templates/commands/*.md 2>/dev/null | grep -v README
 ```
 
 Recommend relevant ones:
@@ -290,12 +290,12 @@ After setup, verify:
 
 Copy relevant skills:
 ```bash
-cp "skills/[Platform]-App-Build-Guide.md" "$OUTPUT_DIR/skills/"
+cp "templates/skills/[Platform]-App-Build-Guide.md" "$OUTPUT_DIR/skills/"
 ```
 
 Copy recommended commands:
 ```bash
-cp "commands/[Selected].md" "$OUTPUT_DIR/commands/"
+cp "templates/commands/[Selected].md" "$OUTPUT_DIR/commands/"
 ```
 
 Copy user's provided files (if any):

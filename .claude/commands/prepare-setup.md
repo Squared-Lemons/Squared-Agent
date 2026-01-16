@@ -14,11 +14,11 @@ Create a setup package for bootstrapping a new project.
 
 ## How It Works
 
-1. Select a profile type from `setups/`
+1. Select a profile type from `templates/profiles/`
 2. Select which setup files to include from that profile
-3. Select which commands to include from `commands/`
-4. Select which tasks to run at the end from `tasks/`
-5. Select which skills to include from `skills/`
+3. Select which commands to include from `templates/commands/`
+4. Select which tasks to run at the end from `templates/tasks/`
+5. Select which skills to include from `templates/skills/`
 6. Generate a `SETUP.md` guide file
 7. Copy all selected files to a temp folder
 
@@ -29,17 +29,17 @@ Create a setup package for bootstrapping a new project.
 First, discover what's available:
 
 ```bash
-# List profile types (folders in setups/)
-ls -d setups/*/
+# List profile types (folders in templates/profiles/)
+ls -d templates/profiles/*/
 
-# List command docs (markdown files in commands/, excluding README)
-ls commands/*.md 2>/dev/null | grep -v README || echo "No commands found"
+# List command docs (markdown files in templates/commands/, excluding README)
+ls templates/commands/*.md 2>/dev/null | grep -v README || echo "No commands found"
 
-# List task docs (markdown files in tasks/, excluding README)
-ls tasks/*.md 2>/dev/null | grep -v README || echo "No tasks found"
+# List task docs (markdown files in templates/tasks/, excluding README)
+ls templates/tasks/*.md 2>/dev/null | grep -v README || echo "No tasks found"
 
-# List skill docs (markdown files in skills/, excluding README)
-ls skills/*.md 2>/dev/null | grep -v README || echo "No skills found"
+# List skill docs (markdown files in templates/skills/, excluding README)
+ls templates/skills/*.md 2>/dev/null | grep -v README || echo "No skills found"
 ```
 
 ---
@@ -60,19 +60,19 @@ If an argument is not provided, ask the user using AskUserQuestion.
 If `--profile` not in arguments:
 - Use AskUserQuestion with header "Profile"
 - Question: "Which setup profile type do you want to use?"
-- Options: List each folder in `setups/` as an option
+- Options: List each folder in `templates/profiles/` as an option
 
 ### 2b. Setup Files Selection
 
 After profile is selected, list files in that profile folder:
 ```bash
-ls setups/<profile>/*.md
+ls templates/profiles/<profile>/*.md
 ```
 
 If `--setup` not in arguments AND there are multiple files:
 - Use AskUserQuestion with header "Setup" and `multiSelect: true`
 - Question: "Which setup files do you want to include?"
-- Options: List each .md file in `setups/<profile>/`
+- Options: List each .md file in `templates/profiles/<profile>/`
 - Include "All" as an option
 
 If only one file exists, select it automatically.
@@ -81,39 +81,39 @@ If only one file exists, select it automatically.
 
 If `--commands` not in arguments:
 ```bash
-ls commands/*.md 2>/dev/null | grep -v README
+ls templates/commands/*.md 2>/dev/null | grep -v README
 ```
 
 If command files exist:
 - Use AskUserQuestion with header "Commands" and `multiSelect: true`
 - Question: "Which command guides should be included?"
-- Options: List each .md file in `commands/` (excluding README.md)
+- Options: List each .md file in `templates/commands/` (excluding README.md)
 - Include "All" and "None" as options
 
 ### 2d. Tasks Selection
 
 If `--tasks` not in arguments:
 ```bash
-ls tasks/*.md 2>/dev/null | grep -v README
+ls templates/tasks/*.md 2>/dev/null | grep -v README
 ```
 
 If task files exist:
 - Use AskUserQuestion with header "Tasks" and `multiSelect: true`
 - Question: "Which tasks should run after setup?"
-- Options: List each .md file in `tasks/` (excluding README.md)
+- Options: List each .md file in `templates/tasks/` (excluding README.md)
 - Include "All" and "None" as options
 
 ### 2e. Skills Selection
 
 If `--skills` not in arguments:
 ```bash
-ls skills/*.md 2>/dev/null | grep -v README
+ls templates/skills/*.md 2>/dev/null | grep -v README
 ```
 
 If skill files exist:
 - Use AskUserQuestion with header "Skills" and `multiSelect: true`
 - Question: "Which skills (knowledge docs) should be included?"
-- Options: List each .md file in `skills/` (excluding README.md)
+- Options: List each .md file in `templates/skills/` (excluding README.md)
 - Include "All" and "None" as options
 
 ---
@@ -135,14 +135,14 @@ mkdir -p "$OUTPUT_DIR/commands" "$OUTPUT_DIR/skills"
 
 For each selected setup file from the profile:
 ```bash
-cp "setups/<profile>/<filename>.md" "$OUTPUT_DIR/"
+cp "templates/profiles/<profile>/<filename>.md" "$OUTPUT_DIR/"
 ```
 
 ### 4b. Copy Selected Commands (to commands/ subfolder)
 
 For each selected command doc:
 ```bash
-cp "commands/<filename>.md" "$OUTPUT_DIR/commands/"
+cp "templates/commands/<filename>.md" "$OUTPUT_DIR/commands/"
 ```
 
 If no commands selected, remove the empty commands folder:
@@ -154,14 +154,14 @@ rmdir "$OUTPUT_DIR/commands" 2>/dev/null || true
 
 For each selected task doc:
 ```bash
-cp "tasks/<filename>.md" "$OUTPUT_DIR/"
+cp "templates/tasks/<filename>.md" "$OUTPUT_DIR/"
 ```
 
 ### 4d. Copy Selected Skills (to skills/ subfolder)
 
 For each selected skill doc:
 ```bash
-cp "skills/<filename>.md" "$OUTPUT_DIR/skills/"
+cp "templates/skills/<filename>.md" "$OUTPUT_DIR/skills/"
 ```
 
 If no skills selected, remove the empty skills folder:

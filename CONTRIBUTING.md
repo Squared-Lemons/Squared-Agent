@@ -6,49 +6,63 @@ This guide explains how to extend and improve the Squared Agent master agent.
 
 | Add This | Location | Naming Pattern |
 |----------|----------|----------------|
-| Command guide | `commands/` | `[COMMAND-NAME]-COMMAND.md` |
-| Skill | `skills/` | `[Technology]-[Pattern]-Guide.md` |
-| Setup profile | `setups/[name]/` | lowercase folder name |
-| Task | `tasks/` | `[Action]-[Target].md` |
+| Command guide | `templates/commands/` | `[COMMAND-NAME]-COMMAND.md` |
+| Skill | `templates/skills/` | `[Technology]-[Pattern]-Guide.md` |
+| Setup profile | `templates/profiles/[name]/` | lowercase folder name |
+| Task | `templates/tasks/` | `[Action]-[Target].md` |
+| Idea | `inbox/ideas/` | `[topic].md` |
+| Project feedback | `inbox/from-projects/` | `YYYY-MM-DD-[project-name].md` |
 
 ## Content Types
 
-### Commands (`commands/`)
+### Templates
+
+Everything in `templates/` gets copied to new projects.
+
+#### Commands (`templates/commands/`)
 
 Implementation guides that describe how to create slash commands. Agents read these to generate actual command implementations in `.claude/commands/`.
 
 **When to add:** You have a reusable workflow pattern that should become a slash command.
 
-See: [commands/README.md](commands/README.md) for detailed instructions.
-
-### Skills (`skills/`)
+#### Skills (`templates/skills/`)
 
 Knowledge base documentation that agents consult during feature development. These are reference guides, not setup instructions.
 
 **When to add:** You've learned patterns, gotchas, or best practices for a technology stack that future projects should know.
 
-See: [skills/README.md](skills/README.md) for detailed instructions.
-
-### Setups (`setups/`)
+#### Profiles (`templates/profiles/`)
 
 Bootstrap profiles that configure new projects with specific plugin sets, commands, and workflows.
 
 **When to add:** You need a different combination of tools/commands than existing profiles provide.
 
-See: [setups/README.md](setups/README.md) for detailed instructions.
-
-### Tasks (`tasks/`)
+#### Tasks (`templates/tasks/`)
 
 One-time activities that run after base setup. Used for project-specific initialization.
 
 **When to add:** You have a repeatable setup activity that applies to certain project types.
 
-See: [tasks/README.md](tasks/README.md) for detailed instructions.
+### Inbox
+
+Drop ideas and feedback here for discussion.
+
+#### Ideas (`inbox/ideas/`)
+
+Your ideas for improving this agent. Create a markdown file describing what you want to change and why.
+
+#### Project Feedback (`inbox/from-projects/`)
+
+Feedback from projects created with this agent. When running `/session-end` in a spawned project, copy the generated feedback here.
+
+### Suggestions
+
+I create proposals here based on inbox items and learnings. Each suggestion is a markdown file explaining what to change, why, and how.
 
 ## Naming Conventions
 
 ### Folders
-- All lowercase: `commands/`, `skills/`, `setups/`, `tasks/`
+- All lowercase: `templates/`, `inbox/`, `suggestions/`
 - Use hyphens for multi-word names: `open-source/`, `full-stack/`
 
 ### Files
@@ -61,31 +75,34 @@ See: [tasks/README.md](tasks/README.md) for detailed instructions.
 
 ### Adding New Content
 
-1. Create the content file in the appropriate folder
-2. Update the folder's README.md table
-3. Update CLAUDE.md's Available Content section
-4. Update README.md if user-facing
-5. Test by running `/prepare-setup` to verify it appears
+1. Create the content file in the appropriate `templates/` folder
+2. Update CLAUDE.md's Available Content section
+3. Update README.md if user-facing
+4. Test by running `/prepare-setup` to verify it appears
 
-### Updating from Feedback
+### Submitting Ideas
+
+1. Create a markdown file in `inbox/ideas/`
+2. Describe what you want to change and why
+3. I'll review and create proposals in `suggestions/`
+
+### Feedback from Projects
 
 When projects send feedback via `/session-end`:
 
-1. Review the feedback for actionable improvements
-2. Update relevant skills with new gotchas/patterns
-3. Update setup profiles if workflow changes needed
-4. Add new tasks if one-time activities identified
-5. Document changes in CLAUDE.md's Recent Changes
+1. Save the feedback file to `inbox/from-projects/`
+2. I'll review and create proposals in `suggestions/`
+3. We discuss and implement approved improvements
+4. Document changes in CLAUDE.md's Recent Changes
 
 ## File Updates Checklist
 
 When adding content, update these files:
 
-- [ ] Create content file in correct folder
-- [ ] Update folder README.md (add to table)
+- [ ] Create content file in correct `templates/` folder
 - [ ] Update CLAUDE.md Available Content section
 - [ ] Update README.md if it affects user-facing features
-- [ ] Update `/prepare-setup` command if needed (for new setups)
+- [ ] Update `/prepare-setup` command if needed (for new profiles)
 
 ## Quality Guidelines
 

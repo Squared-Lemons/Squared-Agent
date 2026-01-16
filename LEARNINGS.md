@@ -6,6 +6,36 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-16: Folder Structure Reorganization
+
+**What Was Done**
+- Reorganized entire project structure for clarity
+- Created `templates/` folder containing all exportable content
+- Moved `commands/`, `skills/`, `tasks/` into `templates/`
+- Renamed `setups/` to `templates/profiles/`
+- Created `inbox/` for ideas and project feedback
+- Created `suggestions/` for agent-generated improvement proposals
+- Updated all command files with new paths
+- Updated all documentation (CLAUDE.md, README.md, docs/*.md, CONTRIBUTING.md)
+
+**What Worked Well**
+- Plan mode was essential for this refactor - having the full plan approved before starting
+- Moving everything at once (vs incremental) avoided broken state
+- The new structure makes intent obvious:
+  - `templates/` = stuff that gets copied
+  - `inbox/` = raw input from users/projects
+  - `suggestions/` = agent's proposals for discussion
+
+**Key Insight**
+- **Clear separation enables autonomy** - With distinct folders for templates vs feedback vs proposals, the agent can proactively review inbox and create suggestions without needing to ask "where does this go?"
+- **File-based feedback > paste-and-tell** - Saving feedback as files in `inbox/from-projects/` creates a reviewable queue instead of ephemeral chat messages
+
+**Pattern Established**
+- Improvement workflow: `inbox/` → `LEARNINGS.md` → `suggestions/` → discuss → implement → `templates/`
+- Agent can autonomously create proposals in `suggestions/` for user review
+
+---
+
 ### 2026-01-13: Enhanced /new-idea as Consultative Process
 
 **What Was Done**
@@ -212,8 +242,15 @@ Insights and lessons captured from coding sessions to improve future development
 - Command files (`.claude/commands/*.md`) are self-documenting
 - Recent Changes section at top of CLAUDE.md for quick context
 
+### Project Structure
+- `templates/` for content that gets exported to new projects
+- `inbox/` for raw input (ideas, feedback from spawned projects)
+- `suggestions/` for agent-generated proposals (categorized by type)
+- Clear separation enables agent autonomy in improvement workflow
+
 ### Workflow Design
-- *To be captured as patterns emerge*
+- **Improvement loop**: inbox → learnings → suggestions → discuss → implement → templates
+- **File-based feedback**: Save feedback as files, not chat messages
 
 ---
 

@@ -120,15 +120,40 @@ Tell Claude: "Read SETUP.md and help me set up this project"
 ## Project Structure
 
 ```
-commands/           # Implementation guides for slash commands
-skills/             # Knowledge base (tech stacks, patterns)
-setups/             # Setup profiles
-  developer/        # Developer workflow profile
-tasks/              # One-time setup tasks
+templates/          # Content copied to new projects
+  commands/         # Command implementation guides
+  skills/           # Tech stack guides
+  profiles/         # Setup profiles
+  tasks/            # One-time setup tasks
+inbox/              # Ideas and feedback for improvements
+suggestions/        # Agent proposals for improvements
 docs/               # Documentation
 .claude/            # Claude Code configuration
   commands/         # Active slash commands
 ```
+
+---
+
+## Continuous Improvement
+
+```
+┌─────────────────────────────────────────┐
+│         CONTINUOUS IMPROVEMENT          │
+│                                         │
+│  inbox/ideas/       Your ideas          │
+│  inbox/from-projects/ Project feedback  │
+│         ↓                               │
+│  LEARNINGS.md       I capture patterns  │
+│         ↓                               │
+│  suggestions/       I propose changes   │
+│         ↓                               │
+│  We discuss → implement                 │
+│         ↓                               │
+│  templates/ gets better                 │
+└─────────────────────────────────────────┘
+```
+
+When you run `/session-end` in a spawned project, it generates feedback. Save that feedback to `inbox/from-projects/` in this repo to help improve templates.
 
 ---
 

@@ -306,11 +306,15 @@ CREATOR FEEDBACK - Copy to Squared-Agent
 - [Config requirements discovered]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To send this feedback to the master agent:
+1. Save as: inbox/from-projects/YYYY-MM-DD-[project-name].md
+2. Copy to the Squared-Agent repository
 ```
 
 ### Save feedback locally
 
-Also save to `docs/creator-feedback.md` for reference.
+Also save to `docs/creator-feedback.md` for local reference.
 
 **Important:** Only include feedback if there's something meaningful to report. If the session was routine with no issues or discoveries, skip this step.
 

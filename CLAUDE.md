@@ -8,10 +8,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Purpose
 
-- **Bootstrap new projects** via `/prepare-setup` command
-- **Capture development patterns** in `commands/` as implementation guides
-- **Build knowledge base** in `skills/` for reference during development
-- **Improve continuously** through feedback from projects created with this system
+- **Bootstrap new projects** via `/prepare-setup` and `/new-idea` commands
+- **Capture development patterns** in `templates/commands/` as implementation guides
+- **Build knowledge base** in `templates/skills/` for reference during development
+- **Improve continuously** through feedback in `inbox/` → proposals in `suggestions/`
 
 ## Commands
 
@@ -32,21 +32,39 @@ Consultative discovery conversation to design a new project. Discuss requirement
 
 ## Available Content
 
-### Command Guides (`commands/`)
+### Templates (`templates/`)
+
+Content that gets copied to new projects:
+
+#### Command Guides (`templates/commands/`)
 - **SESSION-END-COMMAND.md** - Session-end workflow with creator feedback loop
 - **Summary-Command.md** - Accomplishments summary from git history and session logs
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **New-Idea-Workflow.md** - Consultative discovery process for new projects
 - **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
 
-### Skills (`skills/`)
+#### Skills (`templates/skills/`)
 - **Next.js-App-Build-Guide.md** - Next.js + Better Auth + Drizzle + Turborepo patterns
 
-### Setup Profiles (`setups/`)
+#### Setup Profiles (`templates/profiles/`)
 - **developer/** - Full developer workflow with plugins, commands, and session management
 
-### Tasks (`tasks/`)
+#### Tasks (`templates/tasks/`)
 - **ExistingProject-Investigate.md** - Analyze existing codebase and generate documentation
+
+### Inbox (`inbox/`)
+
+Raw input for improvements:
+- **ideas/** - Your ideas to discuss
+- **from-projects/** - Feedback from spawned projects
+
+### Suggestions (`suggestions/`)
+
+My proposals for improvements, organized by category:
+- **skills/** - Proposed new skill guides
+- **commands/** - Proposed command improvements
+- **workflow/** - Proposed workflow changes
+- **other/** - Miscellaneous improvements
 
 ## Development Workflow
 
@@ -67,20 +85,30 @@ When making changes to this project:
 ## Project Structure
 
 ```
-commands/           # Implementation guides for slash commands
-skills/             # Knowledge base (tech stacks, patterns)
-setups/             # Setup profiles for bootstrapping projects
-  developer/        # Developer workflow profile
-tasks/              # One-time setup tasks
+templates/          # Content copied to new projects
+  commands/         # Command implementation guides
+  skills/           # Tech stack guides (Next.js, etc.)
+  profiles/         # Setup profiles (developer/, etc.)
+  tasks/            # One-time setup tasks
+inbox/              # Ideas and feedback for improvements
+  from-projects/    # Feedback from spawned projects
+  ideas/            # Your ideas to discuss
+suggestions/        # My proposals (categorized)
+  skills/           # Proposed new skills
+  commands/         # Proposed command improvements
+  workflow/         # Proposed workflow changes
+  other/            # Miscellaneous improvements
+docs/               # Internal documentation
 .claude/            # Claude Code configuration
   commands/         # Active slash commands
-  agents/           # Custom agent definitions (optional)
 .project/sessions/  # Local session logs (gitignored)
-CONTRIBUTING.md     # How to extend this project
+CLAUDE.md           # My instructions
+LEARNINGS.md        # Session insights → feeds suggestions/
 ```
 
 ## Recent Changes
 
+- **2026-01-16:** Reorganized folder structure - `templates/` for exportable content, `inbox/` for ideas and feedback, `suggestions/` for agent proposals; renamed `setups/` to `templates/profiles/`
 - **2026-01-13:** Added `/summary` command - generates accomplishments summary from git commits and session logs; categorizes by type (features, fixes, refactors, etc.); copy-paste ready output
 - **2026-01-13:** Enhanced `/new-idea` to be a consultative discovery conversation - discuss requirements, platform, technical decisions together; generates PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md with full context; supports user-provided files
 - **2026-01-13:** Restructured README with minimal approach - Quick Start, workflow diagram, links to docs/; moved details to docs/commands.md, docs/plugins.md, docs/content.md, docs/feedback.md

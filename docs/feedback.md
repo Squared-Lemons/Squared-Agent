@@ -10,15 +10,16 @@ How projects created from Squared Agent can send feedback back to improve future
 ┌─────────────────┐                         ┌──────────────────┐
 │  Squared Agent  │ ──── setup package ───► │   Your Project   │
 │                 │                         │                  │
-│                 │ ◄─── feedback ───────── │   /session-end   │
+│  inbox/         │ ◄─── feedback file ──── │   /session-end   │
+│  from-projects/ │                         │                  │
 └─────────────────┘                         └──────────────────┘
 ```
 
 1. You create a project from a Squared Agent setup package
 2. During development, you discover issues, patterns, or improvements
 3. At session end, feedback is auto-generated from your session
-4. You copy the feedback back to Squared Agent
-5. Squared Agent integrates improvements for future projects
+4. Save the feedback as a file in Squared Agent's `inbox/from-projects/`
+5. Squared Agent reviews and creates proposals in `suggestions/`
 
 ---
 
@@ -92,24 +93,19 @@ COPY THE FOLLOWING TO SQUARED-AGENT:
 
 Select everything between the `━━━` delimiters and copy.
 
-### Step 3: Open Squared Agent
+### Step 3: Save to Squared Agent
 
-```bash
-cd /path/to/squared-agent
-claude .
-```
-
-### Step 4: Paste the feedback
-
-Paste the feedback and tell Claude to integrate it:
+Save the feedback as a markdown file:
 
 ```
-Here's feedback from a project I built:
-
-[paste feedback here]
-
-Please integrate these improvements into the relevant skills, setups, or tasks.
+inbox/from-projects/YYYY-MM-DD-[project-name].md
 ```
+
+For example: `inbox/from-projects/2026-01-16-habit-tracker.md`
+
+### Step 4: Let Claude process it
+
+Next time you work with Squared Agent, I'll review the inbox and create proposals in `suggestions/` for improvements we can discuss and implement together.
 
 ---
 
