@@ -19,10 +19,11 @@ The `/end-session` command provides a structured workflow for ending coding sess
 | 5 | Captures lessons → docs/LEARNINGS.md |
 | 6 | Syncs supporting files for consistency |
 | 7 | Saves session log (local, gitignored archive) |
-| 8 | Generates/updates SETUP.md (handoff document) |
-| 9 | Generates creator feedback (auto-analyzed from session) |
-| 10 | Shows summary to user |
-| 11 | Commits with approval (user signs off last) |
+| 8 | Creates session note for next session |
+| 9 | Generates/updates SETUP.md (handoff document) |
+| 10 | Generates creator feedback (auto-analyzed from session) |
+| 11 | Shows summary to user |
+| 12 | Commits with approval (user signs off last) |
 
 ---
 
@@ -215,6 +216,52 @@ mkdir -p .project/sessions
 Then write/append the session summary to `.project/sessions/YYYY-MM-DD.md`.
 
 This creates a local archive of all session work that won't clutter the git repo.
+
+---
+
+## Step 7b: Create Session Note for Next Session
+
+Create or update `.project/session-note.md` as a handoff for the next session.
+
+### Ask the user
+
+```
+Any tasks or notes for the next session?
+(Leave blank if none)
+```
+
+### If user provides content
+
+Write to `.project/session-note.md`:
+
+```markdown
+# Next Session: [Task Title]
+
+## Task
+[User's description]
+
+## Context
+[Any relevant context from this session]
+
+## Files to start with
+[Relevant files if known]
+```
+
+### If user leaves blank
+
+Check if there are obvious follow-up tasks from this session:
+- Incomplete features
+- TODO comments added
+- Tests to write
+- Documentation to finish
+
+If so, suggest creating a note. Otherwise, delete any existing session note:
+
+```bash
+rm -f .project/session-note.md
+```
+
+This ensures `/start-session` in the next session either shows the note or the getting started guide.
 
 ---
 
@@ -447,10 +494,11 @@ To push: git push
 6. **Check agents/knowledge** for any that need updates based on session work
 7. **Create/update docs/LEARNINGS.md** with session insights
 8. **Save session log** to `.project/sessions/YYYY-MM-DD.md` (local archive)
-9. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
-10. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
-11. **Output summary** of what was done and what will be committed
-12. **Get user approval** and commit (do NOT push)
+9. **Create session note** - ask user for next session tasks, write to `.project/session-note.md`
+10. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
+11. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
+12. **Output summary** of what was done and what will be committed
+13. **Get user approval** and commit (do NOT push)
 
 Be thorough but concise. Focus on changes that will help future sessions understand the current state of the project.
 

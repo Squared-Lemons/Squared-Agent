@@ -1,110 +1,83 @@
-# Setups
+# Profiles
 
-Reusable setup profiles for bootstrapping projects with Claude Code workflows.
+[← Back to Templates](../README.md) · [← Back to README](../../README.md)
 
-## Available Setups
+---
 
-| Setup | Description |
-|-------|-------------|
-| [`developer/`](developer/) | Developer workflow with Feature-Dev agents, Ralph Loop, and session management |
+Base configurations that set up Claude Code for a project. Each profile includes plugins, permissions, hooks, and setup instructions.
 
-## How to Use
+## Available Profiles
 
-Run `/prepare-setup` and select a profile, or give the setup instructions to Claude Code directly:
+| Profile | Description |
+|---------|-------------|
+| [developer/](developer/) | Full developer workflow with plugins, session management, and best practices |
 
-```
-Read setups/developer/SETUP-INSTRUCTIONS.md and execute all steps.
-```
+---
 
-The agent will:
-1. Initialize git if needed
-2. Install plugins
-3. Read the `commands/` documentation and create the commands
-4. Set up supporting files
-5. Commit
+## developer
 
-## How to Extend
+**Location:** `templates/profiles/developer/`
 
-### Adding a New Setup Profile
+The standard developer workflow. Start here unless you have specific needs.
 
-1. **Create a profile folder**
-   ```
-   setups/[profile-name]/
-   ```
-   Examples: `minimal/`, `team/`, `fullstack/`
+| Feature | What It Configures |
+|---------|-------------------|
+| **Plugins** | feature-dev, ralph-loop, code-simplifier, playwright, context7 |
+| **Permissions** | Pre-allow build, test, lint, format, typecheck |
+| **Hooks** | Auto-format after Write/Edit operations |
+| **Agents** | Optional build-validator, code-reviewer, verify-app |
 
-2. **Create required files:**
-   ```
-   setups/[profile-name]/
-   ├── SETUP-INSTRUCTIONS.md    # Step-by-step bootstrap guide
-   └── README.md                # Profile description (optional)
-   ```
+**Files:**
+- `SETUP-INSTRUCTIONS.md` — Step-by-step setup guide with all configuration
 
-3. **Structure SETUP-INSTRUCTIONS.md:**
-   - Prerequisites check
-   - Git initialization
-   - Plugin installation
-   - Command creation (reference commands/ documentation)
-   - Supporting files setup
-   - Final commit
+**Best for:** Most development projects.
 
-4. **Update this README** - Add entry to the Available Setups table
+---
 
-5. **Update CLAUDE.md** - Add to Available Content section
+## Adding a Profile
 
-6. **Update /prepare-setup** - Ensure it lists the new profile
+1. Create folder: `templates/profiles/[profile-name]/`
 
-### Naming Convention
+2. Create `SETUP-INSTRUCTIONS.md` with:
+   - Prerequisites and requirements
+   - Plugin configuration (JSON for `.claude/settings.json`)
+   - Commands to create
+   - Supporting files
+   - Verification steps
 
-- Use lowercase folder names
-- Use descriptive single-word names when possible
-- For compound names, use hyphens: `full-stack/`, `open-source/`
+3. Update this README with the new profile
 
-### Template Structure
+**Naming:** Lowercase, hyphens for compound names (`full-stack/`, `open-source/`)
 
+**Template:**
 ```markdown
-# [Profile Name] Setup
+# [Profile Name] Setup Instructions
 
-Brief description of what this profile provides.
+Brief description.
 
 ## What's Included
+- Plugin: purpose
+- Command: purpose
 
-- Plugin 1: purpose
-- Plugin 2: purpose
-- Command 1: purpose
-- ...
+## Step 1: Configure Claude Code
+[settings.json content]
 
-## Prerequisites
+## Step 2: Create Commands
+[Reference command docs]
 
-- Required tools
-- Required accounts/access
-
-## Steps
-
-### Step 1: Initialize Git
-[Instructions]
-
-### Step 2: Install Plugins
-[Plugin list and installation commands]
-
-### Step 3: Create Commands
-[Reference to commands/ documentation]
-
-### Step 4: Supporting Files
+## Step 3: Supporting Files
 [Files to create]
 
-### Step 5: Commit
-[Commit instructions]
-
 ## Verification
-
-How to verify the setup worked correctly.
+[How to confirm setup worked]
 ```
 
-### Profile Ideas
+---
+
+## Profile Ideas
 
 Consider creating profiles for:
-- **minimal** - Just git and basic commands
-- **team** - Multi-developer workflow with code review
-- **fullstack** - Frontend + backend with database setup
-- **open-source** - GitHub workflows, issue templates, CI/CD
+- **minimal** — Git and basic commands only
+- **team** — Multi-developer workflow with code review
+- **fullstack** — Frontend + backend + database
+- **open-source** — GitHub workflows, issue templates, CI/CD

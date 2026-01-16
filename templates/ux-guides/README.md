@@ -1,37 +1,61 @@
 # UX Guides
 
-UI/UX patterns and implementation guides that agents follow when building interfaces.
+[← Back to Templates](../README.md) · [← Back to README](../../README.md)
 
-## Purpose
+---
 
-UX guides document reusable interface patterns - how to build specific UI systems that follow the master agent's standards. These are not framework guides (those are in `knowledge/`) but rather design patterns with implementation details.
+Reusable UI/UX patterns with implementation details. These are design patterns agents follow when building interfaces — not framework guides (those are in [knowledge/](../knowledge/)).
 
 ## Available Guides
 
 | Guide | Description |
 |-------|-------------|
-| [Canvas-Panel-Navigation-System](./Canvas-Panel-Navigation-System.md) | Horizontal panel navigation with canvas-style scrolling |
+| [Canvas-Panel-Navigation-System.md](Canvas-Panel-Navigation-System.md) | Horizontal panel navigation with infinite scroll |
 
-## How UX Guides Are Used
+---
 
-1. **During `/new-idea`** - Relevant UX patterns are included based on project requirements
-2. **During feature development** - Agents reference these for consistent UI implementation
-3. **As templates** - Code examples can be adapted for specific projects
+## Canvas-Panel-Navigation-System
 
-## How to Extend
+**Location:** `templates/ux-guides/Canvas-Panel-Navigation-System.md`
 
-### Adding a New UX Guide
+Horizontal, infinite-scrolling panel navigation for complex UIs.
 
-1. Create `templates/ux-guides/[Pattern-Name].md`
-2. Include:
-   - Overview of the pattern
-   - When to use it
-   - Implementation details with code examples
-   - Variations and customization options
-3. Update this README
-4. Update CLAUDE.md Available Content section
+| Feature | What It Provides |
+|---------|-----------------|
+| Architecture | CanvasProvider + CanvasContainer pattern |
+| Panel Management | Open, close, activate, resize |
+| URL Sync | Query params reflect panel state |
+| Keyboard Nav | Arrow keys, Home/End |
+| Unsaved Changes | Track dirty state per panel |
 
-### Naming Convention
+**Best for:** Apps with related entities needing context-preserving navigation:
+- CRMs and admin dashboards
+- IDE-like interfaces
+- Multi-document editors
 
-- Use Title-Case with hyphens: `[Pattern-Name].md`
-- Be descriptive: `Canvas-Panel-Navigation-System.md` not `panels.md`
+---
+
+## Adding a UX Guide
+
+1. Create file: `templates/ux-guides/[Pattern-Name].md`
+
+2. Structure with these sections:
+   - Overview — What the pattern is
+   - When to Use — Problem it solves
+   - Architecture — Components and their relationships
+   - Implementation — Code with explanations
+   - Variations — Customization options
+
+3. Update this README with the new guide
+
+**Naming:** Title-Case with hyphens (`Canvas-Panel-Navigation-System.md`)
+
+Be descriptive — `Canvas-Panel-Navigation-System.md` not `panels.md`
+
+---
+
+## How UX Guides Get Used
+
+1. **During `/new-idea`** — Included based on project requirements
+2. **During development** — Agents reference for consistent UI
+3. **As templates** — Code adapted for specific projects

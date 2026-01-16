@@ -52,10 +52,16 @@ Process feedback from the inbox and implement improvements. Scans `inbox/ideas/`
 Content that gets copied to new projects:
 
 #### Command Guides (`templates/commands/`)
+- **Start-Session-Command.md** - Branch-aware session entry with context loading
+- **New-Feature-Command.md** - Safe feature branch or worktree creation
+- **Complete-Feature-Command.md** - Branch completion via merge or PR
 - **END-SESSION-COMMAND.md** - End-session workflow with creator feedback loop
 - **Summary-Command.md** - Accomplishments summary from git history and session logs
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **New-Idea-Workflow.md** - Consultative discovery process for new projects
+
+#### Workflows (`templates/workflows/`)
+- **Session-Git-Workflow.md** - The core git workflow this agent uses and passes to spawned projects
 
 #### UX Guides (`templates/ux-guides/`)
 - **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
@@ -139,8 +145,10 @@ This enables the agent to select appropriate tools automatically without explici
 
 ```
 templates/          # Content copied to new projects
+  workflows/        # Development processes (Session-Git-Workflow)
   commands/         # Command implementation guides
   knowledge/        # Framework guides (Next.js, etc.)
+  ux-guides/        # UI/UX patterns
   profiles/         # Setup profiles (developer/, etc.)
   tasks/            # One-time setup tasks
 inbox/              # Ideas and feedback for improvements
@@ -163,6 +171,8 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-16:** Marketing-quality README rewrite - added hero section, problem statement, "What Your Projects Inherit" split, comprehensive Tool Intelligence diagram with session logs and /summary reporting; created `templates/workflows/` folder with Session-Git-Workflow; linked README hierarchy through templates/ folder READMEs; merged docs/templates.md into templates/README.md; added developer profile README
+- **2026-01-16:** Added Session Git Workflow template - comprehensive knowledge guide (`templates/knowledge/Session-Git-Workflow.md`) + command guides for start-session, new-feature, complete-feature; updated END-SESSION-COMMAND.md with session note handoff; enables new projects to inherit disciplined git workflow
 - **2026-01-16:** Added `/how-to-use`, `/get-feedback`, `/list-tools` commands; renamed `/list` to `/list-tools`; renamed `templates/skills/` to `templates/knowledge/`; created `templates/ux-guides/` for UI patterns; added `docs/workflow.md` and `docs/how-to-use.md`; converted README diagrams to Mermaid
 - **2026-01-16:** Implemented Session Git Workflow - `/start-session` replaces `/catch-up` with branch awareness; `/new-feature` creates feature branch or worktree; `/complete-feature` wraps up and creates PR; added Branch Protection Rule to enforce good git habits
 - **2026-01-16:** Added Tool Intelligence system - tracks tool usage patterns across sessions; `/end-session` updates `.project/tool-intelligence.md` with learned shortcuts; `/start-session` loads preferences at session start; enables proactive tool selection

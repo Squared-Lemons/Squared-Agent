@@ -1,93 +1,83 @@
 # Tasks
 
-One-time setup activities that can be included in setup packages. Tasks are executed after the base setup and commands are configured.
+[← Back to Templates](../README.md) · [← Back to README](../../README.md)
+
+---
+
+One-time setup activities that run after base configuration. Unlike commands (which run repeatedly), tasks execute once during project setup.
 
 ## Available Tasks
 
 | Task | Description |
 |------|-------------|
-| [ExistingProject-Investigate](./ExistingProject-Investigate.md) | Analyze existing codebase and generate documentation |
+| [ExistingProject-Investigate.md](ExistingProject-Investigate.md) | Analyze codebase and generate documentation |
 
-## How Tasks Are Used
+---
+
+## ExistingProject-Investigate
+
+**Location:** `templates/tasks/ExistingProject-Investigate.md`
+
+Analyze an existing codebase and generate comprehensive documentation.
+
+| Phase | What Happens |
+|-------|--------------|
+| Discovery | Map structure, identify stack, find configs |
+| Database | Document schema, relationships, migrations |
+| Codebase | Trace entry points, map architecture |
+| Dependencies | Review packages, infrastructure |
+| Output | Generate `@docs/` folder |
+
+**Creates:**
+| File | Contents |
+|------|----------|
+| `@docs/OVERVIEW.md` | Quick reference — stack, commands, structure |
+| `@docs/ARCHITECTURE.md` | System design and patterns |
+| `@docs/DATABASE.md` | Schema documentation |
+| `@docs/COMPONENTS.md` | Module breakdown |
+| `@docs/CONVENTIONS.md` | Code patterns |
+| `@docs/SETUP.md` | Local dev setup |
+
+**Best for:** Onboarding to an existing codebase. Run once, then use the generated docs.
+
+---
+
+## Adding a Task
+
+1. Create file: `templates/tasks/[Action]-[Target].md`
+
+2. Structure with these sections:
+   - Overview — What and why
+   - Prerequisites — Requirements before running
+   - Phases — Step-by-step execution
+   - Outputs — What gets created
+   - Verification — How to confirm success
+
+3. Update this README with the new task
+
+**Naming:** `[Action]-[Target].md`
+- Action: What's being done (Investigate, Migrate, Audit)
+- Target: What it's applied to (Project, Database, Dependencies)
+
+**Examples:** `Database-Migration.md`, `Security-Audit.md`, `Dependency-Update.md`
+
+---
+
+## How Tasks Get Used
 
 1. Run `/prepare-setup`
-2. Select a setup profile
-3. Choose which tasks to include
-4. The generated setup package includes task instructions
-5. Tasks are executed after base setup is complete
+2. Select a profile
+3. Choose tasks to include
+4. Setup package includes task instructions
+5. Tasks execute after base setup completes
 
-## How to Extend
+---
 
-### Adding a New Task
-
-1. **Create the task file**
-   ```
-   tasks/[Task-Description].md
-   ```
-   Examples: `Database-Migration.md`, `Security-Audit.md`, `Dependency-Cleanup.md`
-
-2. **Structure your task with these sections:**
-   - Overview - What this task accomplishes
-   - Prerequisites - What's needed before running
-   - Steps - Detailed execution instructions
-   - Outputs - What gets created/modified
-   - Verification - How to confirm success
-
-3. **Update this README** - Add entry to the Available Tasks table
-
-4. **Update CLAUDE.md** - Add to Available Content section
-
-### Naming Convention
-
-- Use `[Action]-[Target].md` format
-- Action: What's being done (Investigate, Migrate, Audit, etc.)
-- Target: What it's applied to (Project, Database, Dependencies, etc.)
-- Use Title-Case with hyphens
-
-### Template Structure
-
-```markdown
-# [Task Name]
-
-Brief description of what this task accomplishes.
-
-## Overview
-
-When and why to run this task.
-
-## Prerequisites
-
-- Required tools/access
-- Required state (e.g., "base setup complete")
-
-## Steps
-
-### Phase 1: [First Phase]
-1. Step one
-2. Step two
-
-### Phase 2: [Second Phase]
-1. Step one
-2. Step two
-
-## Outputs
-
-What gets created or modified:
-- File 1: description
-- File 2: description
-
-## Verification
-
-How to confirm the task completed successfully:
-- [ ] Check 1
-- [ ] Check 2
-```
-
-### Task Ideas
+## Task Ideas
 
 Consider creating tasks for:
-- **Database-Migration** - Set up or migrate database schema
-- **Security-Audit** - Review for common vulnerabilities
-- **Dependency-Update** - Update and audit dependencies
-- **Performance-Analysis** - Profile and identify bottlenecks
-- **Testing-Setup** - Configure test framework and initial tests
+- **Database-Migration** — Set up or migrate schema
+- **Security-Audit** — Review for vulnerabilities
+- **Dependency-Update** — Update and audit packages
+- **Performance-Analysis** — Profile and find bottlenecks
+- **Testing-Setup** — Configure test framework
