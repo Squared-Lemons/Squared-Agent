@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **Bootstrap new projects** via `/prepare-setup` and `/new-idea` commands
 - **Capture development patterns** in `templates/commands/` as implementation guides
-- **Build knowledge base** in `templates/skills/` for reference during development
+- **Build knowledge base** in `templates/knowledge/` for reference during development
 - **Improve continuously** through feedback in `inbox/` → proposals in `suggestions/`
 
 ## Commands
@@ -25,7 +25,7 @@ Create feature branch (or worktree) for safe development. Accepts a description,
 Wrap up feature branch - merge or create PR. Reviews changes, suggests squashing if many commits, then offers two options: merge directly to main (solo workflow) or create a pull request (team workflow).
 
 ### `/prepare-setup`
-Prepare a setup package for a new project. Asks for profile, commands, tasks, and skills to include, then creates a temp folder with all files and a SETUP.md guide.
+Prepare a setup package for a new project. Asks for profile, commands, tasks, and knowledge to include, then creates a temp folder with all files and a SETUP.md guide.
 
 ### `/end-session`
 End coding session - updates docs, captures learnings, generates SETUP.md handoff document, auto-generates creator feedback for user to copy back to master agent, and commits changes with approval.
@@ -39,6 +39,12 @@ Generate an accomplishments summary for a time period. Analyzes git commits and 
 ### `/new-idea`
 Consultative discovery conversation to design a new project. Discuss requirements, platform, and technical decisions together, then generate a comprehensive package (PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, SETUP.md) for the target agent to build v1.
 
+### `/how-to-use`
+Display the human-editable guide for using this agent. Content lives at `docs/how-to-use.md` so users can add their own tips and notes.
+
+### `/get-feedback`
+Process feedback from the inbox and implement improvements. Scans `inbox/ideas/` and `inbox/from-projects/`, presents summaries, helps discuss and plan implementation, then guides through making and testing changes.
+
 ## Available Content
 
 ### Templates (`templates/`)
@@ -50,9 +56,11 @@ Content that gets copied to new projects:
 - **Summary-Command.md** - Accomplishments summary from git history and session logs
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **New-Idea-Workflow.md** - Consultative discovery process for new projects
+
+#### UX Guides (`templates/ux-guides/`)
 - **Canvas-Panel-Navigation-System.md** - React UI pattern for horizontal navigation
 
-#### Skills (`templates/skills/`)
+#### Knowledge (`templates/knowledge/`)
 - **Next.js-App-Build-Guide.md** - Next.js + Better Auth + Drizzle + Turborepo patterns
 
 #### Setup Profiles (`templates/profiles/`)
@@ -70,7 +78,7 @@ Raw input for improvements:
 ### Suggestions (`suggestions/`)
 
 My proposals for improvements, organized by category:
-- **skills/** - Proposed new skill guides
+- **knowledge/** - Proposed new knowledge guides
 - **commands/** - Proposed command improvements
 - **workflow/** - Proposed workflow changes
 - **other/** - Miscellaneous improvements
@@ -132,14 +140,14 @@ This enables the agent to select appropriate tools automatically without explici
 ```
 templates/          # Content copied to new projects
   commands/         # Command implementation guides
-  skills/           # Tech stack guides (Next.js, etc.)
+  knowledge/        # Framework guides (Next.js, etc.)
   profiles/         # Setup profiles (developer/, etc.)
   tasks/            # One-time setup tasks
 inbox/              # Ideas and feedback for improvements
   from-projects/    # Feedback from spawned projects
   ideas/            # Your ideas to discuss
 suggestions/        # My proposals (categorized)
-  skills/           # Proposed new skills
+  knowledge/        # Proposed new knowledge guides
   commands/         # Proposed command improvements
   workflow/         # Proposed workflow changes
   other/            # Miscellaneous improvements
@@ -155,6 +163,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-16:** Added `/how-to-use`, `/get-feedback`, `/list-tools` commands; renamed `/list` to `/list-tools`; renamed `templates/skills/` to `templates/knowledge/`; created `templates/ux-guides/` for UI patterns; added `docs/workflow.md` and `docs/how-to-use.md`; converted README diagrams to Mermaid
 - **2026-01-16:** Implemented Session Git Workflow - `/start-session` replaces `/catch-up` with branch awareness; `/new-feature` creates feature branch or worktree; `/complete-feature` wraps up and creates PR; added Branch Protection Rule to enforce good git habits
 - **2026-01-16:** Added Tool Intelligence system - tracks tool usage patterns across sessions; `/end-session` updates `.project/tool-intelligence.md` with learned shortcuts; `/start-session` loads preferences at session start; enables proactive tool selection
 - **2026-01-16:** Reorganized folder structure - `templates/` for exportable content, `inbox/` for ideas and feedback, `suggestions/` for agent proposals; renamed `setups/` to `templates/profiles/`
@@ -167,8 +176,8 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 - **2026-01-12:** Integrated creator feedback - enhanced Next.js skill with Better Auth gotchas, handoff template, DX checklist; added SETUP.md auto-generation and auto-generated creator feedback to session-end; added Plugins section to README
 - **2026-01-12:** Updated README and CLAUDE.md to reflect new purpose as master agent for project bootstrapping
 - **2026-01-12:** Auto-organize docs into `docs/` on setup completion; copy-paste friendly creator feedback display
-- **2026-01-12:** Enhanced `/prepare-setup` with commands and skills selection; added creator feedback loop to `/end-session`
-- **2026-01-12:** Added `skills/` knowledge base with Next.js App Build Guide
+- **2026-01-12:** Enhanced `/prepare-setup` with commands and knowledge selection; added creator feedback loop to `/end-session`
+- **2026-01-12:** Added `knowledge/` base with Next.js App Build Guide
 - **2026-01-12:** Added `/prepare-setup` command for bootstrapping new projects with setup profiles, commands, and tasks
 - **2026-01-12:** Added New Feature Workflow pattern and setups/tasks structure
 - **2026-01-11:** Initial project setup - created README.md, configured commands, established documentation structure

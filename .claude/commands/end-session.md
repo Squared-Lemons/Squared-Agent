@@ -15,7 +15,7 @@ Wrap up this coding session by updating documentation and capturing lessons lear
 1. **Reviews session changes** - Analyzes git diff and commits from this session
 2. **Updates README.md** - Keeps user-facing documentation accurate (commands, workflows, setup)
 3. **Updates CLAUDE.md** - Syncs implementation status, recent changes, known issues
-4. **Updates agents/skills** - Reflects any workflow changes or new patterns
+4. **Updates agents/knowledge** - Reflects any workflow changes or new patterns
 5. **Captures lessons** - Documents what worked, what didn't, and insights gained
 6. **Saves session log** - Archives summary to `.project/sessions/YYYY-MM-DD.md` (local, not in git)
 7. **Generates SETUP.md** - Auto-creates/updates handoff document with env vars, OAuth setup, feature status
@@ -96,9 +96,9 @@ If workflows changed, update:
 Check if any agent definitions need updating:
 - `.claude/agents/*.md` - agent capabilities and instructions
 
-### Skills
-Check if any skills were added or modified:
-- `.claude/skills/*/SKILL.md` - skill definitions
+### Knowledge
+Check if any knowledge were added or modified:
+- `.claude/knowledge/*/SKILL.md` - skill definitions
 
 ### Commands
 Check if any commands were added or modified:
@@ -207,7 +207,7 @@ Then create `.project/tool-intelligence.md` with the template structure (see the
 - ShadCN (get_component, get_block, list_components)
 - DataForSeo, n8n, HF-Data, PodMule-MCP
 
-**Plugins** - Check if plugin skills were invoked:
+**Plugins** - Check if plugin knowledge were invoked:
 - /feature-dev, /frontend-design, /ralph-loop
 
 **Browser Automation** - Check for claude-in-chrome usage:
@@ -305,8 +305,8 @@ Automatically generate useful feedback for the master agent based on this sessio
 
 Review the session and identify:
 
-**Skills Gaps**
-- What information was missing from skills docs that you had to figure out?
+**Knowledge Gaps**
+- What information was missing from knowledge docs that you had to figure out?
 - What errors or outdated info did you encounter?
 - What patterns did you implement that should be documented?
 
@@ -336,9 +336,9 @@ CREATOR FEEDBACK - Copy to Squared-Agent
 
 ## Feedback from [Project Name] - YYYY-MM-DD
 
-### Skills Gaps
+### Knowledge Gaps
 - [Specific missing info that would have helped]
-- [Patterns worth adding to skills docs]
+- [Patterns worth adding to knowledge docs]
 
 ### Setup Issues
 - [Config that should be pre-configured]
@@ -494,7 +494,7 @@ That's fine - the previous note (if any) will remain.
 3. **Make updates** to README.md if commands, workflows, or setup changed
 4. **Read CLAUDE.md** and identify needed updates
 5. **Make updates** to CLAUDE.md (implementation status, recent changes, known issues)
-6. **Check agents/skills** for any that need updates based on session work
+6. **Check agents/knowledge** for any that need updates based on session work
 7. **Create/update LEARNINGS.md** with session insights
 8. **Save session log** to `.project/sessions/YYYY-MM-DD.md` (local archive)
 8b. **Update tool intelligence** in `.project/tool-intelligence.md` with tools used and patterns learned

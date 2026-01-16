@@ -78,7 +78,7 @@ Create `.claude/settings.json` with plugins, permissions, and hooks:
 
 ## Step 3: Create Commands
 
-Read the following documentation files and create commands/skills/agents as specified:
+Read the following documentation files and create commands/knowledge/agents as specified:
 
 ### End-Session Command
 - **Documentation:** `END-SESSION-COMMAND.md`
@@ -163,7 +163,7 @@ Create `LEARNINGS.md` in project root for capturing session insights.
 Move setup files into `docs/` folder to keep the project root clean. Only `CLAUDE.md` and `README.md` should remain at root.
 
 ```bash
-mkdir -p docs/commands docs/skills
+mkdir -p docs/commands docs/knowledge
 ```
 
 ### Move these files to docs/
@@ -174,7 +174,7 @@ mkdir -p docs/commands docs/skills
 | `SETUP-INSTRUCTIONS.md` | `docs/SETUP-INSTRUCTIONS.md` |
 | `LEARNINGS.md` | `docs/LEARNINGS.md` |
 | `commands/*.md` | `docs/commands/` |
-| `skills/*.md` | `docs/skills/` |
+| `knowledge/*.md` | `docs/knowledge/` |
 
 ```bash
 # Move setup files (if they exist)
@@ -186,9 +186,9 @@ mv LEARNINGS.md docs/ 2>/dev/null || true
 mv commands/*.md docs/commands/ 2>/dev/null || true
 rmdir commands 2>/dev/null || true
 
-# Move skills
-mv skills/*.md docs/skills/ 2>/dev/null || true
-rmdir skills 2>/dev/null || true
+# Move knowledge
+mv knowledge/*.md docs/knowledge/ 2>/dev/null || true
+rmdir knowledge 2>/dev/null || true
 ```
 
 ### Keep at root

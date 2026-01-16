@@ -27,7 +27,7 @@ How projects created from Squared Agent can send feedback back to improve future
 
 When you run `/end-session` in a project created from Squared Agent, it analyzes your session for:
 
-### Skills Gaps
+### Knowledge Gaps
 - Missing information in skill docs
 - Errors or outdated patterns
 - New patterns worth documenting
@@ -60,9 +60,9 @@ COPY THE FOLLOWING TO SQUARED-AGENT:
 
 ## Feedback from [Project Name] - YYYY-MM-DD
 
-### Skills Gaps
+### Knowledge Gaps
 - [Specific missing info that would have helped]
-- [Patterns worth adding to skills docs]
+- [Patterns worth adding to knowledge docs]
 
 ### Setup Issues
 - [Config that should be pre-configured]
@@ -115,7 +115,7 @@ Based on feedback, Squared Agent may update:
 
 | Content Type | Example Improvements |
 |--------------|----------------------|
-| **Skills** | Add missing patterns, fix outdated info, add gotchas |
+| **Knowledge** | Add missing patterns, fix outdated info, add gotchas |
 | **Setups** | Add pre-configuration, improve instructions |
 | **Commands** | Add new commands, improve existing workflows |
 | **Tasks** | Add new setup tasks |

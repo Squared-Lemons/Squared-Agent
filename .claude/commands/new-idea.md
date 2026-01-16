@@ -107,10 +107,10 @@ Don't ask these as a checklist - weave them into natural conversation.
 
 Once you understand the project, recommend what to include:
 
-### Available Skills
-Check what platform skills exist:
+### Available Knowledge
+Check what platform knowledge exist:
 ```bash
-ls templates/skills/*.md 2>/dev/null | grep -v README
+ls templates/knowledge/*.md 2>/dev/null | grep -v README
 ```
 
 Recommend relevant ones with reasoning.
@@ -141,7 +141,7 @@ When the user is ready (they'll say something like "looks good" or "let's do it"
 
 ```bash
 OUTPUT_DIR="/tmp/new-idea-$(date +%Y%m%d-%H%M%S)"
-mkdir -p "$OUTPUT_DIR/skills" "$OUTPUT_DIR/commands" "$OUTPUT_DIR/provided-files"
+mkdir -p "$OUTPUT_DIR/knowledge" "$OUTPUT_DIR/commands" "$OUTPUT_DIR/provided-files"
 echo "$OUTPUT_DIR"
 ```
 
@@ -254,7 +254,7 @@ This folder contains everything needed to build [Project Name].
 
 - **PROJECT-BRIEF.md** - Full project context and requirements
 - **TECHNICAL-DECISIONS.md** - Technology choices with rationale
-- **skills/** - Platform-specific guidance and patterns
+- **knowledge/** - Platform-specific guidance and patterns
 - **commands/** - Development workflow guides
 - **provided-files/** - Original files from the user
 
@@ -264,7 +264,7 @@ Read these files in order:
 
 1. **PROJECT-BRIEF.md** - Understand what we're building and why
 2. **TECHNICAL-DECISIONS.md** - Understand the technical approach
-3. **skills/*.md** - Learn platform patterns and gotchas
+3. **knowledge/*.md** - Learn platform patterns and gotchas
 
 Then:
 
@@ -288,9 +288,9 @@ After setup, verify:
 
 ### Copy Files
 
-Copy relevant skills:
+Copy relevant knowledge:
 ```bash
-cp "templates/skills/[Platform]-App-Build-Guide.md" "$OUTPUT_DIR/skills/"
+cp "templates/knowledge/[Platform]-App-Build-Guide.md" "$OUTPUT_DIR/knowledge/"
 ```
 
 Copy recommended commands:
@@ -308,7 +308,7 @@ Remove empty folders:
 ```bash
 rmdir "$OUTPUT_DIR/provided-files" 2>/dev/null || true
 rmdir "$OUTPUT_DIR/commands" 2>/dev/null || true
-rmdir "$OUTPUT_DIR/skills" 2>/dev/null || true
+rmdir "$OUTPUT_DIR/knowledge" 2>/dev/null || true
 ```
 
 ---
@@ -324,7 +324,7 @@ Contents:
 ├── PROJECT-BRIEF.md       # Full project context
 ├── TECHNICAL-DECISIONS.md # Technical choices
 ├── SETUP.md               # Instructions for target agent
-├── skills/                # Platform guidance
+├── knowledge/                # Platform guidance
 ├── commands/              # Workflow guides
 └── provided-files/        # Your original files (if any)
 

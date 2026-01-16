@@ -31,7 +31,7 @@ The output is everything a target agent needs to build version 1.
 │  RECOMMENDATIONS                    │
 │                                     │
 │  • Suggest platform                 │
-│  • Recommend skills/commands        │
+│  • Recommend knowledge/commands        │
 │  • Note custom requirements         │
 │  • User confirms                    │
 └─────────────────────────────────────┘
@@ -43,7 +43,7 @@ The output is everything a target agent needs to build version 1.
 │  ├── PROJECT-BRIEF.md              │
 │  ├── TECHNICAL-DECISIONS.md        │
 │  ├── SETUP.md                      │
-│  ├── skills/                       │
+│  ├── knowledge/                       │
 │  ├── commands/                     │
 │  └── provided-files/               │
 └─────────────────────────────────────┘
@@ -127,7 +127,7 @@ Instructions for the target agent:
 - Steps to take
 - Verification checklist
 
-### skills/
+### knowledge/
 
 Platform-specific guidance copied from Squared Agent.
 
@@ -205,14 +205,14 @@ If the user provides files (designs, specs, existing code), include them in the 
 
 ## Extending This Workflow
 
-### Adding Platform Skills
+### Adding Platform Knowledge
 
-When a new platform skill is added to `skills/`, it becomes available for recommendation during the conversation.
+When a new platform skill is added to `knowledge/`, it becomes available for recommendation during the conversation.
 
 ### Custom Requirements
 
-If a project needs something not covered by existing skills/commands, note it in PROJECT-BRIEF.md under "Open Questions" or "Custom Needs".
+If a project needs something not covered by existing knowledge/commands, note it in PROJECT-BRIEF.md under "Open Questions" or "Custom Needs".
 
 ### Post-Conversation Improvements
 
-After a project is built, send feedback via `/end-session` to improve the skills and workflows for future projects.
+After a project is built, send feedback via `/end-session` to improve the knowledge and workflows for future projects.

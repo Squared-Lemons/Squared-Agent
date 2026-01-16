@@ -1,37 +1,37 @@
-# Skills
+# Knowledge
 
 Knowledge base that informs how agents build things. These are reference guides and documentation that agents consult when implementing specific technologies or patterns.
 
 ## Purpose
 
-Skills are **not** step-by-step setup instructions (those live in `setups/`). Instead, they are comprehensive guides that document:
+Knowledge are **not** step-by-step setup instructions (those live in `setups/`). Instead, they are comprehensive guides that document:
 
 - Architecture patterns and best practices
 - Common pitfalls and solutions
 - Code examples and templates
 - Configuration requirements
 
-Agents reference these skills when building features that use the documented technologies.
+Agents reference these knowledge when building features that use the documented technologies.
 
-## Available Skills
+## Available Knowledge
 
-| Skill | Description |
+| Knowledge Guide | Description |
 |-------|-------------|
 | [Next.js-App-Build-Guide](./Next.js-App-Build-Guide.md) | Building Next.js apps with Better Auth, Drizzle ORM, and Turborepo monorepo |
 
-## How Skills Are Used
+## How Knowledge Are Used
 
-1. **During feature development** - Agents consult relevant skills for implementation guidance
-2. **In setup profiles** - Setup instructions may reference skills for detailed context
-3. **For troubleshooting** - Skills document common pitfalls and solutions
+1. **During feature development** - Agents consult relevant knowledge for implementation guidance
+2. **In setup profiles** - Setup instructions may reference knowledge for detailed context
+3. **For troubleshooting** - Knowledge document common pitfalls and solutions
 
 ## How to Extend
 
-### Adding a New Skill
+### Adding a New Knowledge Guide
 
 1. **Create the skill file**
    ```
-   skills/[Technology]-[Pattern]-Guide.md
+   knowledge/[Technology]-[Pattern]-Guide.md
    ```
    Examples: `React-Testing-Guide.md`, `PostgreSQL-Optimization-Guide.md`
 
@@ -43,7 +43,7 @@ Agents reference these skills when building features that use the documented tec
    - Common Pitfalls - Known issues and solutions
    - Checklist - Quick reference for implementation
 
-3. **Update this README** - Add entry to the Available Skills table
+3. **Update this README** - Add entry to the Available Knowledge table
 
 4. **Update CLAUDE.md** - Add to Available Content section
 

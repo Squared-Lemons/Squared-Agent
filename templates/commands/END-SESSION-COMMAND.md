@@ -15,7 +15,7 @@ The `/end-session` command provides a structured workflow for ending coding sess
 | 1 | Reviews git diff and commits from the session |
 | 2 | Updates README.md (user-facing documentation) |
 | 3 | Updates CLAUDE.md (technical docs, status tables) |
-| 4 | Updates workflow docs (agents, skills, commands) |
+| 4 | Updates workflow docs (agents, knowledge, commands) |
 | 5 | Captures lessons → docs/LEARNINGS.md |
 | 6 | Syncs supporting files for consistency |
 | 7 | Saves session log (local, gitignored archive) |
@@ -48,7 +48,7 @@ Wrap up this coding session by updating documentation and capturing lessons lear
 1. **Reviews session changes** - Analyzes git diff and commits from this session
 2. **Updates README.md** - Keeps user-facing documentation accurate (commands, workflows, setup)
 3. **Updates CLAUDE.md** - Syncs implementation status, recent changes, known issues
-4. **Updates agents/skills** - Reflects any workflow changes or new patterns
+4. **Updates agents/knowledge** - Reflects any workflow changes or new patterns
 5. **Captures lessons** - Documents insights in docs/LEARNINGS.md
 6. **Saves session log** - Archives summary to `.project/sessions/YYYY-MM-DD.md` (local, not in git)
 7. **Generates SETUP.md** - Auto-creates/updates handoff document with env vars, OAuth setup, feature status
@@ -128,9 +128,9 @@ If workflows changed, update:
 Check if any agent definitions need updating:
 - `.claude/agents/*.md` - agent capabilities and instructions
 
-### Skills
-Check if any skills were added or modified:
-- `.claude/skills/*/SKILL.md` - skill definitions
+### Knowledge
+Check if any knowledge were added or modified:
+- `.claude/knowledge/*/SKILL.md` - skill definitions
 
 ### Commands
 Check if any commands were added or modified:
@@ -285,8 +285,8 @@ Automatically generate useful feedback for the master agent based on this sessio
 
 Review the session and identify:
 
-**Skills Gaps**
-- What information was missing from skills docs that you had to figure out?
+**Knowledge Gaps**
+- What information was missing from knowledge docs that you had to figure out?
 - What errors or outdated info did you encounter?
 - What patterns did you implement that should be documented?
 
@@ -316,9 +316,9 @@ CREATOR FEEDBACK - Copy to Squared-Agent
 
 ## Feedback from [Project Name] - YYYY-MM-DD
 
-### Skills Gaps
+### Knowledge Gaps
 - [Specific missing info that would have helped]
-- [Patterns worth adding to skills docs]
+- [Patterns worth adding to knowledge docs]
 
 ### Setup Issues
 - [Config that should be pre-configured]
@@ -444,7 +444,7 @@ To push: git push
 3. **Make updates** to README.md if commands, workflows, or setup changed
 4. **Read CLAUDE.md** and identify needed updates
 5. **Make updates** to CLAUDE.md (implementation status, recent changes, known issues)
-6. **Check agents/skills** for any that need updates based on session work
+6. **Check agents/knowledge** for any that need updates based on session work
 7. **Create/update docs/LEARNINGS.md** with session insights
 8. **Save session log** to `.project/sessions/YYYY-MM-DD.md` (local archive)
 9. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues

@@ -7,7 +7,7 @@ This guide explains how to extend and improve the Squared Agent master agent.
 | Add This | Location | Naming Pattern |
 |----------|----------|----------------|
 | Command guide | `templates/commands/` | `[COMMAND-NAME]-COMMAND.md` |
-| Skill | `templates/skills/` | `[Technology]-[Pattern]-Guide.md` |
+| Knowledge | `templates/knowledge/` | `[Technology]-[Pattern]-Guide.md` |
 | Setup profile | `templates/profiles/[name]/` | lowercase folder name |
 | Task | `templates/tasks/` | `[Action]-[Target].md` |
 | Idea | `inbox/ideas/` | `[topic].md` |
@@ -25,7 +25,7 @@ Implementation guides that describe how to create slash commands. Agents read th
 
 **When to add:** You have a reusable workflow pattern that should become a slash command.
 
-#### Skills (`templates/skills/`)
+#### Knowledges (`templates/knowledge/`)
 
 Knowledge base documentation that agents consult during feature development. These are reference guides, not setup instructions.
 
@@ -68,7 +68,7 @@ I create proposals here based on inbox items and learnings. Each suggestion is a
 ### Files
 - Use Title-Case with hyphens
 - Commands: `[NAME]-COMMAND.md`
-- Skills: `[Tech]-[Pattern]-Guide.md`
+- Knowledges: `[Tech]-[Pattern]-Guide.md`
 - Tasks: `[Action]-[Target].md`
 
 ## Workflow

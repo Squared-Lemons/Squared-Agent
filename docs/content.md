@@ -24,15 +24,15 @@ Full developer workflow with plugins, commands, and session management.
 
 ---
 
-## Skills (Knowledge Base)
+## Knowledge (Knowledge Base)
 
-Skills in `templates/skills/` are reference documents for building with specific technologies.
+Knowledge in `templates/knowledge/` are reference documents for building with specific technologies.
 
 ### Next.js-App-Build-Guide
 
 Complete guide for building Next.js applications.
 
-**Location:** `templates/skills/Next.js-App-Build-Guide.md`
+**Location:** `templates/knowledge/Next.js-App-Build-Guide.md`
 
 **Covers:**
 - Project structure with Turborepo
@@ -79,11 +79,15 @@ How the /new-idea command works and how to extend it.
 
 ---
 
+## UX Guides
+
+UI/UX patterns in `templates/ux-guides/` for building consistent interfaces.
+
 ### Canvas-Panel-Navigation-System
 
 React UI pattern for horizontal panel navigation.
 
-**Location:** `templates/commands/Canvas-Panel-Navigation-System.md`
+**Location:** `templates/ux-guides/Canvas-Panel-Navigation-System.md`
 
 **Provides:** Reusable pattern for building canvas-style UIs with horizontal scrolling.
 
@@ -113,7 +117,7 @@ Analyze an existing codebase and generate documentation.
 
 ### Adding a Skill
 
-1. Create `templates/skills/<Technology>-App-Build-Guide.md`
+1. Create `templates/knowledge/<Technology>-App-Build-Guide.md`
 2. Include: Overview, Project Structure, Key Patterns, Common Gotchas, Resources
 3. The skill will appear in `/new-idea` platform selection
 

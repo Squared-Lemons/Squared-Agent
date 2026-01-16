@@ -126,7 +126,7 @@ Welcome! This is your master agent for bootstrapping projects.
 
 ## Project Structure
 
-  templates/     → Exportable content (commands, skills, profiles)
+  templates/     → Exportable content (commands, knowledge, profiles)
   inbox/         → Your ideas and project feedback
   suggestions/   → My improvement proposals
 

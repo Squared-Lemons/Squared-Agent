@@ -1,6 +1,6 @@
 ---
 name: prepare-setup
-description: Prepare a setup package for a new project with selected profile, commands, tasks, and skills
+description: Prepare a setup package for a new project with selected profile, commands, tasks, and knowledge
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
@@ -18,7 +18,7 @@ Create a setup package for bootstrapping a new project.
 2. Select which setup files to include from that profile
 3. Select which commands to include from `templates/commands/`
 4. Select which tasks to run at the end from `templates/tasks/`
-5. Select which skills to include from `templates/skills/`
+5. Select which knowledge to include from `templates/knowledge/`
 6. Generate a `SETUP.md` guide file
 7. Copy all selected files to a temp folder
 
@@ -38,8 +38,8 @@ ls templates/commands/*.md 2>/dev/null | grep -v README || echo "No commands fou
 # List task docs (markdown files in templates/tasks/, excluding README)
 ls templates/tasks/*.md 2>/dev/null | grep -v README || echo "No tasks found"
 
-# List skill docs (markdown files in templates/skills/, excluding README)
-ls templates/skills/*.md 2>/dev/null | grep -v README || echo "No skills found"
+# List skill docs (markdown files in templates/knowledge/, excluding README)
+ls templates/knowledge/*.md 2>/dev/null | grep -v README || echo "No knowledge found"
 ```
 
 ---
@@ -51,7 +51,7 @@ Check if arguments were provided in `$ARGUMENTS`. Arguments can be:
 - `--setup <file1,file2>` - Skip setup files question (comma-separated, or "all")
 - `--commands <file1,file2>` - Skip commands question (comma-separated, or "all" or "none")
 - `--tasks <file1,file2>` - Skip tasks question (comma-separated, or "all" or "none")
-- `--skills <file1,file2>` - Skip skills question (comma-separated, or "all" or "none")
+- `--knowledge <file1,file2>` - Skip knowledge question (comma-separated, or "all" or "none")
 
 If an argument is not provided, ask the user using AskUserQuestion.
 
@@ -103,17 +103,17 @@ If task files exist:
 - Options: List each .md file in `templates/tasks/` (excluding README.md)
 - Include "All" and "None" as options
 
-### 2e. Skills Selection
+### 2e. Knowledge Selection
 
-If `--skills` not in arguments:
+If `--knowledge` not in arguments:
 ```bash
-ls templates/skills/*.md 2>/dev/null | grep -v README
+ls templates/knowledge/*.md 2>/dev/null | grep -v README
 ```
 
 If skill files exist:
-- Use AskUserQuestion with header "Skills" and `multiSelect: true`
-- Question: "Which skills (knowledge docs) should be included?"
-- Options: List each .md file in `templates/skills/` (excluding README.md)
+- Use AskUserQuestion with header "Knowledge" and `multiSelect: true`
+- Question: "Which knowledge (knowledge docs) should be included?"
+- Options: List each .md file in `templates/knowledge/` (excluding README.md)
 - Include "All" and "None" as options
 
 ---
@@ -124,7 +124,7 @@ Create a timestamped temp folder with subdirectories:
 
 ```bash
 OUTPUT_DIR="/tmp/project-setup-$(date +%Y%m%d-%H%M%S)"
-mkdir -p "$OUTPUT_DIR/commands" "$OUTPUT_DIR/skills"
+mkdir -p "$OUTPUT_DIR/commands" "$OUTPUT_DIR/knowledge"
 ```
 
 ---
@@ -157,16 +157,16 @@ For each selected task doc:
 cp "templates/tasks/<filename>.md" "$OUTPUT_DIR/"
 ```
 
-### 4d. Copy Selected Skills (to skills/ subfolder)
+### 4d. Copy Selected Knowledge (to knowledge/ subfolder)
 
 For each selected skill doc:
 ```bash
-cp "templates/skills/<filename>.md" "$OUTPUT_DIR/skills/"
+cp "templates/knowledge/<filename>.md" "$OUTPUT_DIR/knowledge/"
 ```
 
-If no skills selected, remove the empty skills folder:
+If no knowledge selected, remove the empty knowledge folder:
 ```bash
-rmdir "$OUTPUT_DIR/skills" 2>/dev/null || true
+rmdir "$OUTPUT_DIR/knowledge" 2>/dev/null || true
 ```
 
 ---
@@ -180,7 +180,7 @@ The file should:
 2. Tell the agent to read each setup file in order
 3. Explain commands are implementation guides to set up
 4. List each task doc to execute at the end
-5. Explain skills are reference documentation
+5. Explain knowledge are reference documentation
 6. Provide a final verification checklist
 
 ### Template for SETUP.md:
@@ -205,10 +205,10 @@ This package contains everything needed to set up a new project with the **[prof
 ### Tasks (root)
 [List each selected task, or "None" if none selected]
 
-### Skills (skills/ folder)
+### Knowledge (knowledge/ folder)
 [List each selected skill, or "None" if none selected]
 
-> Skills are knowledge base documents - reference guides that inform how to build things. Consult them during development, not during setup.
+> Knowledge are knowledge base documents - reference guides that inform how to build things. Consult them during development, not during setup.
 
 ---
 
@@ -247,15 +247,15 @@ For each command guide:
 
 [Or if no tasks: "No additional tasks selected."]
 
-### Step 4: Skills Reference
+### Step 4: Knowledge Reference
 
-[If skills were selected:]
-The `skills/` folder contains reference documentation:
+[If knowledge were selected:]
+The `knowledge/` folder contains reference documentation:
 [List each skill file]
 
 These are not setup instructions - they are knowledge docs for the agent to consult during feature development.
 
-[Or if no skills: "No skills documentation included."]
+[Or if no knowledge: "No knowledge documentation included."]
 
 ---
 
@@ -266,7 +266,7 @@ After setup completes, the setup instructions will organize documentation:
 **Moved to `docs/`:**
 - SETUP.md, SETUP-INSTRUCTIONS.md, LEARNINGS.md
 - commands/ → docs/commands/
-- skills/ → docs/skills/
+- knowledge/ → docs/knowledge/
 
 **Kept at root:**
 - CLAUDE.md (required by Claude Code)
@@ -311,7 +311,7 @@ Contents:
 - [list of setup files]
 - commands/ [list of command files, or "empty" if none]
 - [list of task files]
-- skills/ [list of skill files, or "empty" if none]
+- knowledge/ [list of skill files, or "empty" if none]
 
 To use: Copy this folder to your new project and tell Claude Code:
 "Read all files in this folder, starting with SETUP.md, and execute the setup."
@@ -338,10 +338,10 @@ open "$OUTPUT_DIR"
 
 ### Fully specified (no questions)
 ```
-/prepare-setup --profile developer --setup all --commands all --tasks none --skills all
+/prepare-setup --profile developer --setup all --commands all --tasks none --knowledge all
 ```
 
 ### Include specific items
 ```
-/prepare-setup --profile developer --commands END-SESSION-COMMAND --skills Next.js-App-Build-Guide
+/prepare-setup --profile developer --commands END-SESSION-COMMAND --knowledge Next.js-App-Build-Guide
 ```

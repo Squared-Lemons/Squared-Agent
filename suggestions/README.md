@@ -4,7 +4,7 @@ My proposals for improving this agent, organized by category.
 
 ## Categories
 
-- **skills/** - Proposed new skill guides
+- **knowledge/** - Proposed new skill guides
 - **commands/** - Proposed command improvements
 - **workflow/** - Proposed workflow changes
 - **other/** - Miscellaneous improvements

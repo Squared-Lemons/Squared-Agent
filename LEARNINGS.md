@@ -6,6 +6,30 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-16: Documentation & Terminology Improvements
+
+**What Was Done**
+- Added `/how-to-use` command with human-editable guide at `docs/how-to-use.md`
+- Added `/get-feedback` command for processing inbox and implementing improvements
+- Renamed `/list` to `/list-tools` for clarity
+- Renamed `templates/skills/` to `templates/knowledge/` - better reflects that these are framework guides from other agents
+- Created `templates/ux-guides/` for UI/UX patterns (moved Canvas navigation here)
+- Added `docs/workflow.md` explaining the development workflow with Mermaid diagrams
+- Converted README.md ASCII diagrams to Mermaid for better rendering
+- Updated 20+ files with skills→knowledge terminology
+
+**What Worked Well**
+- Separating content types: commands (how to build slash commands), knowledge (framework guides), ux-guides (UI patterns)
+- Human-editable docs pattern: command reads from a .md file users can customize
+- Mermaid in .md files, ASCII in terminal output - best of both worlds
+
+**Key Insight**
+- **Naming reflects purpose** - "skills" implied agent abilities; "knowledge" correctly describes framework guides created by other agents
+- **Let users extend** - `/how-to-use` points to a file users can add their own tips to
+- **Consistent folder patterns** - templates/ has clear categories that map to what gets copied to new projects
+
+---
+
 ### 2026-01-16: Session Git Workflow Implementation
 
 **What Was Done**
@@ -40,7 +64,7 @@ Insights and lessons captured from coding sessions to improve future development
 **What Was Done**
 - Reorganized entire project structure for clarity
 - Created `templates/` folder containing all exportable content
-- Moved `commands/`, `skills/`, `tasks/` into `templates/`
+- Moved `commands/`, `knowledge/`, `tasks/` into `templates/`
 - Renamed `setups/` to `templates/profiles/`
 - Created `inbox/` for ideas and project feedback
 - Created `suggestions/` for agent-generated improvement proposals
@@ -90,7 +114,7 @@ Insights and lessons captured from coding sessions to improve future development
   - `PROJECT-BRIEF.md` - Full project context
   - `TECHNICAL-DECISIONS.md` - Choices with rationale
   - `SETUP.md` - Instructions for target agent
-  - `skills/`, `commands/`, `provided-files/`
+  - `knowledge/`, `commands/`, `provided-files/`
 
 ---
 
@@ -118,7 +142,7 @@ Insights and lessons captured from coding sessions to improve future development
 - `/prepare-setup` and `/new-idea` both create packages that get copied elsewhere
 
 **Command Difference**
-- `/prepare-setup` - Generic setup package (profile + commands + tasks + skills)
+- `/prepare-setup` - Generic setup package (profile + commands + tasks + knowledge)
 - `/new-idea` - Idea-specific package (platform + idea description + commands)
 - Both create temp folders with SETUP.md that target agents execute
 
@@ -201,17 +225,17 @@ Insights and lessons captured from coding sessions to improve future development
 
 ---
 
-### 2026-01-12: Skills Knowledge Base & Feedback Loop
+### 2026-01-12: Knowledge Base & Feedback Loop
 
 **What Was Done**
-- Created `skills/` folder as knowledge base for agent development
+- Created `knowledge/` folder as knowledge base for agent development
 - Added Next.js App Build Guide (Better Auth, Drizzle, Turborepo patterns)
-- Enhanced `/prepare-setup` to include commands and skills selection
+- Enhanced `/prepare-setup` to include commands and knowledge selection
 - Added creator feedback loop to `/end-session` command
 
 **What Worked Well**
-- Separating skills (knowledge docs) from commands (implementation guides) creates clear mental model
-- Skills go in `skills/` subfolder in output, keeping root clean
+- Separating knowledge (knowledge docs) from commands (implementation guides) creates clear mental model
+- Knowledge goes in `knowledge/` subfolder in output, keeping root clean
 - Creator feedback loop creates continuous improvement cycle between projects and master agent
 
 **Key Insight**
@@ -219,7 +243,7 @@ Insights and lessons captured from coding sessions to improve future development
   1. **Profiles** (`setups/`) - Bootstrap instructions
   2. **Commands** (`Commands/`) - Slash command implementation guides
   3. **Tasks** (`tasks/`) - One-time setup activities
-  4. **Skills** (`skills/`) - Reference knowledge for building
+  4. **Knowledge** (`knowledge/`) - Reference guides for building
 
 **Process Improvement**
 - `/end-session` now asks for feedback to send back to master agent
