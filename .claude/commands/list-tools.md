@@ -1,4 +1,4 @@
-# List - Available Commands & Content
+# List Tools - Available Commands & Content
 
 Display available slash commands and template content.
 
@@ -24,7 +24,9 @@ Display available slash commands and template content.
   /new-idea         → Design a new project through guided discovery
   /prepare-setup    → Package templates for an existing project idea
   /summary          → Generate accomplishments report from git history
-  /list             → Show this list
+  /list-tools       → Show this list
+  /how-to-use       → Quick start guide (human-editable)
+  /get-feedback     → Process inbox feedback and implement improvements
 
 ## Plugin Skills
 
@@ -61,7 +63,7 @@ Display available slash commands and template content.
 ## Template Content (templates/)
 
   commands/   → END-SESSION, Summary, New Feature Workflow, etc.
-  skills/     → Next.js + Better Auth + Drizzle guide
+  knowledge/  → Next.js + Better Auth + Drizzle guide
   profiles/   → developer/ setup profile
   tasks/      → ExistingProject-Investigate
 

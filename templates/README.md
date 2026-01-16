@@ -5,7 +5,8 @@ Everything in this folder gets copied to new projects when you run `/prepare-set
 ## Contents
 
 - **commands/** - Implementation guides for building Claude Code commands
-- **skills/** - Tech stack guides (Next.js, etc.)
+- **knowledge/** - Framework guides (Next.js, etc.)
+- **ux-guides/** - UI/UX patterns and implementation guides
 - **profiles/** - Complete setup profiles for different project types
 - **tasks/** - One-time setup tasks to run after initial setup
 

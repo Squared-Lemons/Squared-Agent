@@ -14,7 +14,7 @@ This is a **conversation**, not a form. Claude:
 1. Asks about your idea and explores requirements
 2. Helps you think through platform and technology choices
 3. Discusses authentication, data, UI/UX, integrations
-4. Recommends skills and commands based on your needs
+4. Recommends knowledge and commands based on your needs
 5. Generates a complete project package with full context
 
 ### Usage
@@ -38,7 +38,7 @@ Discuss requirements & platform
     ↓
 Make technical decisions together
     ↓
-Recommendations (skills, commands)
+Recommendations (knowledge, commands)
     ↓
 Generate package
     ↓
@@ -53,7 +53,7 @@ A folder containing:
 - `PROJECT-BRIEF.md` - Full project context from conversation
 - `TECHNICAL-DECISIONS.md` - Technology choices with rationale
 - `SETUP.md` - Instructions for target agent
-- `skills/` - Platform-specific guidance
+- `knowledge/` - Platform-specific guidance
 - `commands/` - Workflow guides
 - `provided-files/` - Any files you provided
 
@@ -76,7 +76,7 @@ Create a generic setup package for a new project.
 2. Asks which setup files to include
 3. Asks which command guides to include
 4. Asks which tasks to run after setup
-5. Asks which skills to include
+5. Asks which knowledge to include
 6. Creates a setup package with SETUP.md guide
 7. Opens the folder for you to copy
 
@@ -89,7 +89,7 @@ Create a generic setup package for a new project.
 Or with arguments:
 
 ```
-/prepare-setup --profile developer --commands all --skills all
+/prepare-setup --profile developer --commands all --knowledge all
 ```
 
 ### Arguments
@@ -100,7 +100,7 @@ Or with arguments:
 | `--setup <files>` | Skip setup files selection (comma-separated or "all") |
 | `--commands <files>` | Skip commands selection (comma-separated, "all", or "none") |
 | `--tasks <files>` | Skip tasks selection (comma-separated, "all", or "none") |
-| `--skills <files>` | Skip skills selection (comma-separated, "all", or "none") |
+| `--knowledge <files>` | Skip knowledge selection (comma-separated, "all", or "none") |
 
 ### Output
 
@@ -108,7 +108,7 @@ A folder containing:
 - `SETUP.md` - Step-by-step setup guide
 - `SETUP-INSTRUCTIONS.md` - Detailed setup instructions
 - `commands/` - Selected command guides
-- `skills/` - Selected knowledge docs
+- `knowledge/` - Selected knowledge docs
 
 ### When to use
 
@@ -225,7 +225,7 @@ You'll be asked:
 
 ## Command Implementation Guides
 
-The `commands/` folder contains implementation guides for setting up these commands in new projects:
+The `templates/commands/` folder contains implementation guides for setting up these commands in new projects:
 
 | File | Purpose |
 |------|---------|
@@ -233,6 +233,15 @@ The `commands/` folder contains implementation guides for setting up these comma
 | `Summary-Command.md` | Accomplishments summary from git history |
 | `New Feature Workflow.md` | Feature development with Feature-Dev and Ralph Loop |
 | `New-Idea-Workflow.md` | How /new-idea works and how to extend it |
-| `Canvas-Panel-Navigation-System.md` | React UI pattern for horizontal navigation |
 
 These guides are copied to new projects during setup and used to create the corresponding commands.
+
+## UX Guides
+
+The `templates/ux-guides/` folder contains UI/UX patterns:
+
+| File | Purpose |
+|------|---------|
+| `Canvas-Panel-Navigation-System.md` | React UI pattern for horizontal navigation |
+
+These are implementation guides for building consistent interfaces.

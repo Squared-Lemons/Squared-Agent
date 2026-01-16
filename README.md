@@ -53,43 +53,25 @@ Tell Claude: "Read SETUP.md and help me set up this project"
 
 ## How It Works
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      SQUARED AGENT                               │
-│                                                                  │
-│  /new-idea                                                       │
-│     │                                                            │
-│     ├─► Discovery conversation                                  │
-│     ├─► Discuss requirements & platform                         │
-│     ├─► Make technical decisions                                │
-│     └─► Generate project package                                │
-│              │                                                   │
-│              ▼                                                   │
-│     ┌──────────────────────┐                                    │
-│     │  Project Package     │                                    │
-│     │  - PROJECT-BRIEF.md  │  ◄── Full context                  │
-│     │  - TECHNICAL-DECISIONS│                                   │
-│     │  - SETUP.md          │                                    │
-│     │  - skills/           │                                    │
-│     │  - commands/         │                                    │
-│     └────────┬─────────────┘                                    │
-└──────────────┼──────────────────────────────────────────────────┘
-               │
-               │  Copy to new folder
-               ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                      YOUR NEW PROJECT                            │
-│                                                                  │
-│  "Read SETUP.md and build this project"                         │
-│     │                                                            │
-│     ├─► Claude reads project brief                              │
-│     ├─► Claude understands WHY decisions were made              │
-│     ├─► Claude enters plan mode                                 │
-│     └─► Claude builds version 1                                 │
-│              │                                                   │
-│              ▼                                                   │
-│     Working app!                                                 │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph SA["SQUARED AGENT"]
+        A["/new-idea"] --> B["Discovery conversation"]
+        B --> C["Discuss requirements & platform"]
+        C --> D["Make technical decisions"]
+        D --> E["Generate project package"]
+        E --> PKG["📦 Project Package<br/>• PROJECT-BRIEF.md<br/>• TECHNICAL-DECISIONS.md<br/>• SETUP.md<br/>• knowledge/<br/>• commands/"]
+    end
+
+    PKG -->|"Copy to new folder"| NP
+
+    subgraph NP["YOUR NEW PROJECT"]
+        F["Read SETUP.md"] --> G["Claude reads project brief"]
+        G --> H["Understands WHY decisions were made"]
+        H --> I["Enters plan mode"]
+        I --> J["Builds version 1"]
+        J --> K["✅ Working app!"]
+    end
 ```
 
 ---
@@ -111,6 +93,9 @@ Tell Claude: "Read SETUP.md and help me set up this project"
 | `/new-idea` | Discovery conversation → project package |
 | `/prepare-setup` | Create generic setup package |
 | `/summary` | Generate accomplishments report |
+| `/how-to-use` | Quick start guide |
+| `/list-tools` | List all commands, plugins, and tools |
+| `/get-feedback` | Process inbox and implement improvements |
 
 ---
 
@@ -118,9 +103,10 @@ Tell Claude: "Read SETUP.md and help me set up this project"
 
 | Doc | What's in it |
 |-----|--------------|
+| [docs/workflow.md](docs/workflow.md) | Development workflow and best practices |
 | [docs/commands.md](docs/commands.md) | Full command documentation |
 | [docs/plugins.md](docs/plugins.md) | Plugins and configuration details |
-| [docs/content.md](docs/content.md) | Available profiles, skills, and tasks |
+| [docs/content.md](docs/content.md) | Available profiles, knowledge, and tasks |
 | [docs/feedback.md](docs/feedback.md) | Creator feedback loop |
 
 ---
@@ -130,7 +116,8 @@ Tell Claude: "Read SETUP.md and help me set up this project"
 ```
 templates/          # Content copied to new projects
   commands/         # Command implementation guides
-  skills/           # Tech stack guides
+  knowledge/        # Framework guides
+  ux-guides/        # UI/UX patterns
   profiles/         # Setup profiles
   tasks/            # One-time setup tasks
 inbox/              # Ideas and feedback for improvements
@@ -144,21 +131,14 @@ docs/               # Documentation
 
 ## Continuous Improvement
 
-```
-┌─────────────────────────────────────────┐
-│         CONTINUOUS IMPROVEMENT          │
-│                                         │
-│  inbox/ideas/       Your ideas          │
-│  inbox/from-projects/ Project feedback  │
-│         ↓                               │
-│  LEARNINGS.md       I capture patterns  │
-│         ↓                               │
-│  suggestions/       I propose changes   │
-│         ↓                               │
-│  We discuss → implement                 │
-│         ↓                               │
-│  templates/ gets better                 │
-└─────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    A["inbox/ideas/<br/>Your ideas"] --> C["LEARNINGS.md<br/>Capture patterns"]
+    B["inbox/from-projects/<br/>Project feedback"] --> C
+    C --> D["suggestions/<br/>Propose changes"]
+    D --> E["Discuss & implement"]
+    E --> F["templates/<br/>Gets better"]
+    F -.->|"Better projects"| B
 ```
 
 When you run `/end-session` in a spawned project, it generates feedback. Save that feedback to `inbox/from-projects/` in this repo to help improve templates.
