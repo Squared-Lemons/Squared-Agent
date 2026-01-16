@@ -31,7 +31,7 @@ flowchart TB
         H -->|Feature complete| I["/complete-feature"]
         H -->|Session over| J["/end-session"]
         I --> K["Merge or PR"]
-        J --> L["Docs + commit"]
+        J --> L["Docs + tokens + commit"]
     end
 ```
 
@@ -128,3 +128,43 @@ Use worktrees when you need to keep current work intact while starting something
 4. **Commit is the final sign-off** — User reviews everything first
 5. **Local data stays local** — Session logs don't clutter git
 6. **Learnings compound** — Insights captured for future sessions
+7. **Token tracking is automatic** — Usage captured at session end for cost insights
+
+---
+
+## Token Tracking
+
+Token usage is captured automatically at session end for cost estimation and optimization.
+
+### How It Works
+
+| Step | Command | Action |
+|------|---------|--------|
+| 1 | `/end-session` | Extracts token data from Claude Code session files |
+| 2 | - | Appends raw usage to `.project/token-usage.md` |
+| 3 | `/summary` | Aggregates data and calculates costs at report time |
+
+### What's Tracked
+
+| Metric | Description |
+|--------|-------------|
+| Input tokens | Raw prompts sent to Claude |
+| Output tokens | Model responses |
+| Cache read tokens | Previously cached context |
+| Cache creation tokens | New cache entries |
+| Billing type | `subscription` or `api` |
+| Turns | Number of exchanges per session |
+
+### Billing Types
+
+- **subscription** — Interactive Claude Code sessions (covered by monthly plan, tracked against limits)
+- **api** — Background agents, automated tasks, programmatic calls (charged per token)
+
+### File Locations
+
+| File | Purpose |
+|------|---------|
+| `.project/token-usage.md` | Cumulative token history with raw data |
+| `.project/sessions/` | Daily session logs |
+
+All files in `.project/` are gitignored — they're personal to each user

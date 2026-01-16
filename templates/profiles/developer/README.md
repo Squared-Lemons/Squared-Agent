@@ -42,7 +42,10 @@ project/
 │   │   └── commit.md
 │   └── agents/             # Optional custom agents
 ├── .project/               # Local data (gitignored)
-│   └── sessions/
+│   ├── sessions/           # Daily session logs
+│   ├── token-usage.md      # Cumulative token history
+│   ├── session-note.md     # Handoff between sessions
+│   └── tool-intelligence.md # Learned tool preferences
 ├── CLAUDE.md               # Agent instructions
 └── LEARNINGS.md            # Session insights
 ```

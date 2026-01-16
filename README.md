@@ -25,6 +25,7 @@ Every new project starts with the same friction:
 | **Credential leakage** | MCP API keys accidentally committed or shared between projects |
 | **Lost learnings** | Discover a great tool shortcut, forget it by next project |
 | **No workflow** | Every session starts cold — no context, no plan |
+| **No cost visibility** | Token usage scattered across sessions → no idea what you're spending |
 
 Squared Agent solves all of these.
 
@@ -117,9 +118,25 @@ Select from:
 
 **[Full templates reference →](templates/README.md)**
 
+### Bringing the Agent into Existing Projects
+
+Already have a codebase? Tasks are included to guide the agent through discovery and documentation.
+
+The agent explores your project structure, identifies patterns, and documents what it finds — leaving you to fill in the blanks and teach it about your existing systems. You review its findings, correct assumptions, and add context only you know.
+
+```mermaid
+flowchart LR
+    A["Run investigation task"] --> B["Agent explores codebase"]
+    B --> C["Generates documentation"]
+    C --> D["You fill in gaps"]
+    D --> E["Agent learns your system"]
+```
+
+This collaborative onboarding means the agent gets productive faster, and your project knowledge lives in `CLAUDE.md` where it compounds over time.
+
 ---
 
-# What Your Projects Inherit
+# Projects That Follow Your Best Practices
 
 Everything below defines the baseline every spawned project receives. Squared Agent runs this setup, then the new project evolves independently — building its own tool intelligence, capturing its own learnings, and feeding improvements back.
 
@@ -150,6 +167,8 @@ flowchart LR
 | `/end-session` | Done for now — update docs, capture learnings, commit |
 
 Protected branches (`main`, `master`, `develop`, `release/*`) block direct changes and guide you to create a feature branch first.
+
+**Token tracking** is built in — `/end-session` captures usage, `/summary` calculates costs. Track spending against subscription limits and know when to upgrade or optimize.
 
 **[Full Session Git Workflow →](templates/workflows/Session-Git-Workflow.md)**
 
