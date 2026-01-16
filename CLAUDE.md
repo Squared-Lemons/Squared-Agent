@@ -141,6 +141,43 @@ The agent learns which tools work best for which tasks, evolving with each sessi
 
 This enables the agent to select appropriate tools automatically without explicit instruction.
 
+## Token Usage Tracking
+
+Session-level token tracking for cost estimation and optimization.
+
+**Location**: `.project/token-usage.md` (gitignored - personal to each user)
+**Updated by**: `/end-session` extracts token data from Claude Code session files
+**Reported by**: `/summary` calculates costs at report time using current pricing
+
+**Data source**: Claude Code stores session data in `~/.claude/projects/<project-path>/<session-id>.jsonl`. Each assistant message includes usage metrics (input/output tokens, cache reads/writes).
+
+**What it tracks** (raw tokens only, no pre-calculated costs):
+- Input tokens (raw prompts)
+- Output tokens (model responses)
+- Cache read tokens (previously cached context)
+- Cache creation tokens (new cache entries)
+- Billing type (`subscription` or `api`)
+- Turns per session
+
+**Subscription limits** (user-configured in `.project/token-usage.md`):
+- Daily token limit
+- Hourly token limit
+
+**Billing types**:
+- **subscription**: Interactive Claude Code sessions (covered by monthly plan, tracked against limits)
+- **api**: Background agents, automated tasks, programmatic API calls (charged per token)
+
+**Cost/limit calculation** (at report time):
+- Subscription: Usage vs configured daily/hourly limits, % utilization, tier assessment
+- API: `(input × $15 + output × $75 + cache_read × $1.50 + cache_creation × $18.75) / 1,000,000`
+
+This enables users to:
+- Track subscription usage against plan limits
+- Assess if subscription tier is appropriate
+- Estimate API costs for background agents
+- Identify token-heavy sessions for optimization
+- Monitor cache efficiency
+
 ## Project Structure
 
 ```
@@ -165,12 +202,14 @@ docs/               # Internal documentation
 .project/           # Local data (gitignored)
   sessions/         # Session logs by date
   tool-intelligence.md  # Learned tool preferences
+  token-usage.md    # Cumulative token stats and cost tracking
 CLAUDE.md           # My instructions
 LEARNINGS.md        # Session insights → feeds suggestions/
 ```
 
 ## Recent Changes
 
+- **2026-01-16:** Token usage tracking for cost estimation - `/end-session` extracts raw token data from Claude Code session files and logs to `.project/token-usage.md` with billing type (`subscription` vs `api`); `/summary` calculates costs at report time and tracks subscription usage against configurable daily/hourly limits for tier assessment; supports future background agents via API billing type
 - **2026-01-16:** Marketing-quality README rewrite - added hero section, problem statement, "What Your Projects Inherit" split, comprehensive Tool Intelligence diagram with session logs and /summary reporting; created `templates/workflows/` folder with Session-Git-Workflow; linked README hierarchy through templates/ folder READMEs; merged docs/templates.md into templates/README.md; added developer profile README
 - **2026-01-16:** Added Session Git Workflow template - comprehensive knowledge guide (`templates/knowledge/Session-Git-Workflow.md`) + command guides for start-session, new-feature, complete-feature; updated END-SESSION-COMMAND.md with session note handoff; enables new projects to inherit disciplined git workflow
 - **2026-01-16:** Added `/how-to-use`, `/get-feedback`, `/list-tools` commands; renamed `/list` to `/list-tools`; renamed `templates/skills/` to `templates/knowledge/`; created `templates/ux-guides/` for UI patterns; added `docs/workflow.md` and `docs/how-to-use.md`; converted README diagrams to Mermaid

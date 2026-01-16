@@ -293,8 +293,9 @@ flowchart TB
 
 | Output | Location | In Repo? | Purpose |
 |--------|----------|----------|---------|
-| **Session logs** | `.project/sessions/` | No (gitignored) | Timestamped work history |
+| **Session logs** | `.project/sessions/` | No (gitignored) | Timestamped work history + token usage |
 | **Tool intelligence** | `.project/tool-intelligence.md` | No (gitignored) | Learned shortcuts and patterns |
+| **Token usage** | `.project/token-usage.md` | No (gitignored) | Cumulative cost tracking |
 | **Session note** | `.project/session-note.md` | No (gitignored) | Task handoff for next session |
 
 ### What Tool Intelligence Tracks
@@ -303,6 +304,24 @@ flowchart TB
 - **Plugin patterns**: How `/feature-dev` uses `/ralph-loop` where appropriate
 - **Browser tips**: Effective `claude-in-chrome` patterns
 - **Core efficiency**: When to use Task agents vs direct tools
+
+### Token Usage & Cost Tracking
+
+Every session captures raw token usage from Claude Code:
+
+| Metric | Description |
+|--------|-------------|
+| **Billing type** | `subscription` (Claude Code plan) or `api` (background agents) |
+| **Input tokens** | Tokens in your prompts |
+| **Output tokens** | Tokens in Claude's responses |
+| **Cache read** | Tokens retrieved from cache (cheaper) |
+| **Cache creation** | Tokens added to cache |
+
+Costs and limits are calculated at report time:
+- **Subscription sessions**: Tracked against your configured daily/hourly limits to assess tier needs
+- **API sessions**: Charged per token (estimated in `/summary` reports)
+
+Configure your subscription limits in `.project/token-usage.md` to track usage against your plan's daily and hourly caps. `/summary` will show % utilization and recommend tier changes if you're frequently hitting limits.
 
 ### Reporting with `/summary`
 
@@ -314,7 +333,15 @@ Generate accomplishments reports from your session logs:
 /summary month      # Monthly accomplishments
 ```
 
-Output is copy-paste ready for standups, status updates, or client reports.
+Output includes:
+- Categorized git commits (features, fixes, refactors, etc.)
+- Session highlights from logs
+- **Token usage** by billing type (subscription vs API)
+- **Subscription limit analysis** with % utilization and tier recommendations
+- **Estimated API costs** calculated at report time with current pricing
+- Cache efficiency percentage
+
+Copy-paste ready for standups, status updates, or client reports.
 
 ### How It Works
 
@@ -384,6 +411,7 @@ docs/                   # Documentation
 .project/               # Local data (gitignored)
   sessions/             # Session logs by date
   tool-intelligence.md  # Learned tool preferences
+  token-usage.md        # Cumulative token stats
 ```
 
 ---

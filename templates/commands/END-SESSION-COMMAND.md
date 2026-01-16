@@ -19,6 +19,7 @@ The `/end-session` command provides a structured workflow for ending coding sess
 | 5 | Captures lessons → docs/LEARNINGS.md |
 | 6 | Syncs supporting files for consistency |
 | 7 | Saves session log (local, gitignored archive) |
+| 7b | Extracts token usage for cost tracking |
 | 8 | Creates session note for next session |
 | 9 | Generates/updates SETUP.md (handoff document) |
 | 10 | Generates creator feedback (auto-analyzed from session) |
@@ -219,7 +220,96 @@ This creates a local archive of all session work that won't clutter the git repo
 
 ---
 
-## Step 7b: Create Session Note for Next Session
+## Step 7b: Extract Token Usage
+
+Extract token usage from the current Claude Code session for cost tracking.
+
+### Find the session JSONL file
+
+Claude Code stores session data in `~/.claude/projects/<project-path>/<session-id>.jsonl`
+
+```bash
+# Get project path (replace / with -)
+PROJECT_PATH=$(pwd | sed 's|^/||' | sed 's|/|-|g')
+SESSION_DIR=~/.claude/projects/$PROJECT_PATH
+
+# Get most recent session file (likely current session)
+LATEST_SESSION=$(ls -t "$SESSION_DIR"/*.jsonl 2>/dev/null | head -1)
+echo "Session file: $LATEST_SESSION"
+```
+
+### Parse token usage
+
+Extract token metrics from assistant messages:
+
+```bash
+cat "$LATEST_SESSION" | jq -s '
+  [.[] | select(.type == "assistant") | .message.usage // empty] |
+  {
+    input_tokens: (map(.input_tokens // 0) | add),
+    output_tokens: (map(.output_tokens // 0) | add),
+    cache_read_input_tokens: (map(.cache_read_input_tokens // 0) | add),
+    cache_creation_input_tokens: (map(.cache_creation_input_tokens // 0) | add),
+    turns: length
+  }
+'
+```
+
+### Determine billing type
+
+- **subscription**: Interactive Claude Code sessions (default for manual work)
+- **api**: Background agents, automated tasks, programmatic API calls
+
+For normal sessions, use `subscription`. When running as a background agent or via API, use `api`.
+
+### Add Token Usage section to session log
+
+Include this section in the session log (raw tokens only, no cost):
+
+```markdown
+### Token Usage
+| Metric | Value |
+|--------|-------|
+| Billing type | subscription |
+| Input tokens | [input_tokens] |
+| Output tokens | [output_tokens] |
+| Cache read | [cache_read_input_tokens] |
+| Cache creation | [cache_creation_input_tokens] |
+| Turns | [turns] |
+```
+
+### Update cumulative token stats
+
+Also update `.project/token-usage.md` with raw token data (costs calculated at report time):
+
+```markdown
+# Token Usage History
+
+Raw token data. Costs are calculated at report time using current pricing.
+
+## Subscription Limits
+
+Configure your subscription tier limits here for usage tracking:
+
+| Limit | Value | Notes |
+|-------|-------|-------|
+| Daily limit | [tokens] | Your plan's daily token limit |
+| Hourly limit | [tokens] | Your plan's hourly token limit |
+
+## Session Log
+| Date | Type | Input | Output | Cache Read | Cache Create | Turns |
+|------|------|-------|--------|------------|--------------|-------|
+| YYYY-MM-DD HH:MM | subscription | [n] | [n] | [n] | [n] | [n] |
+| YYYY-MM-DD HH:MM | api | [n] | [n] | [n] | [n] | [n] |
+```
+
+If the file doesn't exist, create it with the first session's data and prompt user to configure their subscription limits.
+
+**Important**: Store raw tokens only. `/summary` calculates costs and limit usage at report time.
+
+---
+
+## Step 7c: Create Session Note for Next Session
 
 Create or update `.project/session-note.md` as a handoff for the next session.
 
