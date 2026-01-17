@@ -57,6 +57,15 @@ The output is everything a target agent needs to build version 1.
 │                                     │
 │  Agent enters plan mode and builds  │
 └─────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│  POST-SETUP CLEANUP                 │
+│                                     │
+│  mv setup files → agent/setup/     │
+│  Everything version-controlled      │
+│  Parent directory clean             │
+└─────────────────────────────────────┘
 ```
 
 ---
@@ -212,6 +221,18 @@ When a new platform skill is added to `knowledge/`, it becomes available for rec
 ### Custom Requirements
 
 If a project needs something not covered by existing knowledge/commands, note it in PROJECT-BRIEF.md under "Open Questions" or "Custom Needs".
+
+### Post-Setup Cleanup
+
+After the project is built and verified, the target agent consolidates setup files:
+
+```bash
+mkdir -p agent/setup
+mv ../SETUP.md ../PROJECT-BRIEF.md ../TECHNICAL-DECISIONS.md agent/setup/
+mv ../commands ../knowledge ../provided-files agent/setup/ 2>/dev/null || true
+```
+
+This keeps everything version-controlled with the project and cleans up the parent directory.
 
 ### Post-Conversation Improvements
 

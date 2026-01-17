@@ -284,6 +284,29 @@ After setup, verify:
 - [ ] CLAUDE.md created
 - [ ] Git repository initialized
 - [ ] Ready to start building features
+
+## Post-Setup Cleanup
+
+After the project has been successfully built and verified, consolidate all setup documentation into the project:
+
+\`\`\`bash
+mkdir -p agent/setup
+mv ../SETUP.md ../PROJECT-BRIEF.md ../TECHNICAL-DECISIONS.md agent/setup/
+mv ../commands ../knowledge ../provided-files agent/setup/ 2>/dev/null || true
+\`\`\`
+
+This keeps everything version-controlled with the project:
+- **agent/setup/SETUP.md** - Original setup instructions
+- **agent/setup/PROJECT-BRIEF.md** - Requirements and decisions
+- **agent/setup/TECHNICAL-DECISIONS.md** - Technology choices
+- **agent/setup/commands/** - Workflow guides
+- **agent/setup/knowledge/** - Platform guidance
+- **agent/setup/provided-files/** - Original user files
+
+Benefits:
+- Future sessions can reference requirements without external files
+- Parent directory stays clean for new projects
+- Original intent is documented alongside implementation
 ```
 
 ### Copy Files
