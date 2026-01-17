@@ -141,7 +141,7 @@ When the user is ready (they'll say something like "looks good" or "let's do it"
 
 ```bash
 OUTPUT_DIR="/tmp/new-idea-$(date +%Y%m%d-%H%M%S)"
-mkdir -p "$OUTPUT_DIR/knowledge" "$OUTPUT_DIR/commands" "$OUTPUT_DIR/provided-files"
+mkdir -p "$OUTPUT_DIR/.claude/commands" "$OUTPUT_DIR/knowledge" "$OUTPUT_DIR/commands" "$OUTPUT_DIR/provided-files"
 echo "$OUTPUT_DIR"
 ```
 
@@ -252,11 +252,25 @@ This folder contains everything needed to build [Project Name].
 
 ## What's Included
 
+- **.claude/commands/** - Slash commands for development workflow
 - **PROJECT-BRIEF.md** - Full project context and requirements
 - **TECHNICAL-DECISIONS.md** - Technology choices with rationale
 - **knowledge/** - Platform-specific guidance and patterns
-- **commands/** - Development workflow guides
+- **commands/** - Workflow documentation (reference)
 - **provided-files/** - Original files from the user
+
+## Available Commands
+
+After opening in Claude Code, these slash commands are available:
+
+| Command | Purpose |
+|---------|---------|
+| `/start-session` | Begin session with branch safety check |
+| `/new-feature` | Create feature branch for safe development |
+| `/complete-feature` | Merge or create PR when done |
+| `/commit` | Draft commit message and commit changes |
+| `/end-session` | Update docs, capture learnings, commit |
+| `/summary` | Generate accomplishments report |
 
 ## For the Target Agent
 
@@ -316,7 +330,7 @@ Copy relevant knowledge:
 cp "templates/knowledge/[Platform]-App-Build-Guide.md" "$OUTPUT_DIR/knowledge/"
 ```
 
-Copy recommended commands:
+Copy recommended command guides (documentation):
 ```bash
 cp "templates/commands/[Selected].md" "$OUTPUT_DIR/commands/"
 ```
@@ -326,6 +340,23 @@ Copy user's provided files (if any):
 # If user provided files at start
 cp -r "[provided-path]"/* "$OUTPUT_DIR/provided-files/"
 ```
+
+### Copy Claude Code Commands
+
+Copy the actual slash command definitions so they work in the new project:
+```bash
+# Core workflow commands every project needs
+cp ".claude/commands/start-session.md" "$OUTPUT_DIR/.claude/commands/"
+cp ".claude/commands/new-feature.md" "$OUTPUT_DIR/.claude/commands/"
+cp ".claude/commands/complete-feature.md" "$OUTPUT_DIR/.claude/commands/"
+cp ".claude/commands/end-session.md" "$OUTPUT_DIR/.claude/commands/"
+cp ".claude/commands/commit.md" "$OUTPUT_DIR/.claude/commands/"
+cp ".claude/commands/summary.md" "$OUTPUT_DIR/.claude/commands/"
+```
+
+**Important:** The start-session.md command contains Squared-Agent-specific content (Getting Started guide). After copying, edit `$OUTPUT_DIR/.claude/commands/start-session.md` to:
+1. Remove or replace the "SQUARED AGENT - Getting Started" section with project-appropriate content
+2. Keep the branch safety check and git status sections
 
 Remove empty folders:
 ```bash
@@ -344,11 +375,13 @@ Report what was created:
 Project package created at: [OUTPUT_DIR]
 
 Contents:
+├── .claude/
+│   └── commands/          # Slash commands (/start-session, /new-feature, etc.)
 ├── PROJECT-BRIEF.md       # Full project context
 ├── TECHNICAL-DECISIONS.md # Technical choices
 ├── SETUP.md               # Instructions for target agent
-├── knowledge/                # Platform guidance
-├── commands/              # Workflow guides
+├── knowledge/             # Platform guidance
+├── commands/              # Workflow documentation
 └── provided-files/        # Your original files (if any)
 
 To build this project:
@@ -356,8 +389,8 @@ To build this project:
 2. Open with Claude Code: claude .
 3. Tell Claude: "Read SETUP.md and build this project"
 
-The target agent will read all context, enter plan mode,
-and build version 1 following our practices.
+The slash commands (/start-session, /new-feature, /commit, etc.)
+will be available immediately after opening in Claude Code.
 ```
 
 Open the folder:
