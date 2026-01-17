@@ -26,6 +26,7 @@ The disciplined git workflow that keeps codebases safe. This is the core workflo
 | Session Commands | `/start-session`, `/commit`, `/end-session` |
 | Feature Commands | `/new-feature`, `/complete-feature` |
 | Worktree Support | Parallel development without stashing |
+| Token Tracking | Automatic usage capture and cost reporting |
 
 **Commands created:**
 - `.claude/commands/start-session.md`
