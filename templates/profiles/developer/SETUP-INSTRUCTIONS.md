@@ -44,6 +44,7 @@ Create `.claude/settings.json` with plugins, permissions, and hooks:
   "enabledPlugins": {
     "ralph-loop@claude-plugins-official": true,
     "feature-dev@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "playwright@claude-plugins-official": true,
     "context7@claude-plugins-official": true

@@ -108,6 +108,41 @@ Or I can help you squash everything into one commit with a summary message.
 
 ---
 
+## Step 4.5: Template Sync Check
+
+Check if templates are out of sync with your changes:
+
+```bash
+ls .project/sync-report.md 2>/dev/null || echo "NO_SYNC_REPORT"
+```
+
+### If sync report exists
+
+Display:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️  Templates Out of Sync
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your command templates may be out of sync with active commands.
+Consider syncing before completing this feature.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Ask using AskUserQuestion:
+- **Sync now** - Run /sync-templates before completing
+- **Skip** - Continue without syncing
+
+If user chooses to sync, invoke `/sync-templates` and wait for completion.
+
+### If no sync report
+
+Continue to Step 5.
+
+---
+
 ## Step 5: Choose Completion Method
 
 Ask the user:
@@ -272,7 +307,8 @@ Want to update docs or wrap up the session?
 2. Check for uncommitted changes, handle them
 3. Show diff from merge-base to HEAD
 4. Offer to squash if many commits
-5. Ask: merge directly or create PR?
-6. If merge: checkout main, merge, push, cleanup branch
-7. If PR: push branch, create PR via `gh`, show cleanup instructions
-8. Suggest `/end-session` for docs updates
+5. Check for template sync report - offer to sync if exists
+6. Ask: merge directly or create PR?
+7. If merge: checkout main, merge, push, cleanup branch
+8. If PR: push branch, create PR via `gh`, show cleanup instructions
+9. Suggest `/end-session` for docs updates

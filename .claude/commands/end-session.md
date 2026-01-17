@@ -15,15 +15,16 @@ Wrap up this coding session by updating documentation and capturing lessons lear
 1. **Reviews session changes** - Analyzes git diff and commits from this session
 2. **Updates README.md** - Keeps user-facing documentation accurate (commands, workflows, setup)
 3. **Updates CLAUDE.md** - Syncs implementation status, recent changes, known issues
-4. **Updates agents/knowledge** - Reflects any workflow changes or new patterns
-5. **Captures lessons** - Documents what worked, what didn't, and insights gained
-6. **Saves session log** - Archives summary to `.project/sessions/YYYY-MM-DD.md` (local, not in git)
-7. **Extracts token usage** - Parses Claude Code session for cost tracking and estimation
-8. **Generates SETUP.md** - Auto-creates/updates handoff document with env vars, OAuth setup, feature status
-9. **Generates creator feedback** - Auto-generates feedback from session for user to copy to master agent
-10. **Shows summary** - Lists all changes ready to commit
-11. **Commits with approval** - User signs off on commit message (does NOT push)
-12. **Session note** - Optional note to yourself for next session (shown by /start-session)
+4. **Checks template sync** - Offers to sync if templates are out of date
+5. **Updates agents/knowledge** - Reflects any workflow changes or new patterns
+6. **Captures lessons** - Documents what worked, what didn't, and insights gained
+7. **Saves session log** - Archives summary to `.project/sessions/YYYY-MM-DD.md` (local, not in git)
+8. **Extracts token usage** - Parses Claude Code session for cost tracking and estimation
+9. **Generates SETUP.md** - Auto-creates/updates handoff document with env vars, OAuth setup, feature status
+10. **Generates creator feedback** - Auto-generates feedback from session for user to copy to master agent
+11. **Shows summary** - Lists all changes ready to commit
+12. **Commits with approval** - User signs off on commit message (does NOT push)
+13. **Session note** - Optional note to yourself for next session (shown by /start-session)
 
 ---
 
@@ -86,6 +87,49 @@ Review and update each section:
 - Remove any issues that were fixed
 - Add any new issues discovered
 - Be specific about reproduction steps
+
+---
+
+## Step 3.5: Check Template Sync
+
+Check if templates are out of sync with active commands.
+
+```bash
+ls .project/sync-report.md 2>/dev/null || echo "NO_SYNC_REPORT"
+```
+
+### If sync report exists
+
+Read `.project/sync-report.md` and display summary:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️  Template Sync Check
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[N] templates are out of sync with your active commands.
+
+Changes in your commands won't propagate to spawned projects
+until templates are updated.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Ask using AskUserQuestion:
+- **Sync now** - Run /sync-templates interactively
+- **Skip** - Continue without syncing (can sync later)
+
+If user chooses to sync, invoke `/sync-templates` and wait for completion.
+
+After handling (sync or skip), delete the report:
+
+```bash
+rm -f .project/sync-report.md
+```
+
+### If no sync report
+
+Continue to Step 4.
 
 ---
 
@@ -584,16 +628,17 @@ That's fine - the previous note (if any) will remain.
 3. **Make updates** to README.md if commands, workflows, or setup changed
 4. **Read CLAUDE.md** and identify needed updates
 5. **Make updates** to CLAUDE.md (implementation status, recent changes, known issues)
-6. **Check agents/knowledge** for any that need updates based on session work
-7. **Create/update LEARNINGS.md** with session insights
-8. **Save session log** to `.project/sessions/YYYY-MM-DD.md` (local archive)
-8b. **Extract token usage** from Claude Code session JSONL, add to session log and `.project/token-usage.md`
-8c. **Update tool intelligence** in `.project/tool-intelligence.md` with tools used and patterns learned
-9. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
-10. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
-11. **Output summary** of what was done and what will be committed
-12. **Get user approval** and commit (do NOT push)
-13. **Ask about session note** - offer to save a note for next session (shown by /start-session)
+6. **Check template sync** - if `.project/sync-report.md` exists, offer to run /sync-templates
+7. **Check agents/knowledge** for any that need updates based on session work
+8. **Create/update LEARNINGS.md** with session insights
+9. **Save session log** to `.project/sessions/YYYY-MM-DD.md` (local archive)
+10. **Extract token usage** from Claude Code session JSONL, add to session log and `.project/token-usage.md`
+11. **Update tool intelligence** in `.project/tool-intelligence.md` with tools used and patterns learned
+12. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
+13. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
+14. **Output summary** of what was done and what will be committed
+15. **Get user approval** and commit (do NOT push)
+16. **Ask about session note** - offer to save a note for next session (shown by /start-session)
 
 Be thorough but concise. Focus on changes that will help future sessions understand the current state of the project.
 

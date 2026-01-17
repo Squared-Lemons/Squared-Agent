@@ -137,10 +137,31 @@ Ask user to confirm or adjust your recommendations.
 
 When the user is ready (they'll say something like "looks good" or "let's do it"):
 
+### Choose save location
+
+First, determine a slugified project name from the discussion (e.g., "habit-tracker", "football-team-manager").
+
+Then ask where to save via macOS folder picker:
+
+```bash
+# Ask user where to save via macOS folder picker
+SELECTED_FOLDER=$(osascript -e 'tell application "System Events" to choose folder with prompt "Choose where to save the project package:"' 2>/dev/null | sed 's/alias //' | sed 's/:/\//g' | sed 's/^/\//')
+
+if [ -n "$SELECTED_FOLDER" ] && [ "$SELECTED_FOLDER" != "/" ]; then
+    echo "SELECTED:$SELECTED_FOLDER"
+else
+    echo "CANCELLED"
+fi
+```
+
+Based on the result:
+- If **SELECTED**, use: `OUTPUT_DIR="$SELECTED_FOLDER/[project-slug]"` (e.g., `~/Projects/habit-tracker`)
+- If **CANCELLED**, fall back to: `OUTPUT_DIR="/tmp/[project-slug]"` (e.g., `/tmp/habit-tracker`)
+
 ### Create output folder
 
 ```bash
-OUTPUT_DIR="/tmp/new-idea-$(date +%Y%m%d-%H%M%S)"
+OUTPUT_DIR="[chosen-path]/[project-slug]"
 mkdir -p "$OUTPUT_DIR/.claude/commands" "$OUTPUT_DIR/knowledge" "$OUTPUT_DIR/commands" "$OUTPUT_DIR/provided-files"
 echo "$OUTPUT_DIR"
 ```
@@ -393,11 +414,24 @@ rmdir "$OUTPUT_DIR/knowledge" 2>/dev/null || true
 
 ## Step 6: Handoff
 
-Report what was created:
+Report what was created, noting the save location:
 
+**If user chose a custom location:**
 ```
 Project package created at: [OUTPUT_DIR]
 
+(Saved to your chosen location)
+```
+
+**If fell back to /tmp:**
+```
+Project package created at: [OUTPUT_DIR]
+
+(Saved to temporary folder - move it somewhere permanent before rebooting)
+```
+
+Then show the contents:
+```
 Contents:
 ├── .claude/
 │   └── commands/          # Slash commands (/start-session, /new-feature, etc.)
@@ -409,9 +443,8 @@ Contents:
 └── provided-files/        # Your original files (if any)
 
 To build this project:
-1. Copy this folder to a new project directory
-2. Open with Claude Code: claude .
-3. Tell Claude: "Read SETUP.md and build this project"
+1. Open with Claude Code: cd [OUTPUT_DIR] && claude .
+2. Tell Claude: "Read SETUP.md and build this project"
 
 The slash commands (/start-session, /new-feature, /commit, etc.)
 will be available immediately after opening in Claude Code.
