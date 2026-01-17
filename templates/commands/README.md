@@ -42,10 +42,11 @@ The complete end-session workflow with documentation updates and creator feedbac
 | 2 | Updates README.md and CLAUDE.md |
 | 3 | Captures lessons in LEARNINGS.md |
 | 4 | Saves session log (gitignored) |
-| 5 | Creates session note for next time |
-| 6 | Generates SETUP.md handoff |
-| 7 | Generates creator feedback |
-| 8 | Commits with user approval |
+| 5 | Extracts token usage for cost tracking |
+| 6 | Creates session note for next time |
+| 7 | Generates SETUP.md handoff |
+| 8 | Generates creator feedback |
+| 9 | Commits with user approval |
 
 **Creates:** `.claude/commands/end-session.md`, `.claude/commands/commit.md`
 
