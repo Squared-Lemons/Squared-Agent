@@ -288,6 +288,30 @@ Then:
 4. Set up development commands from commands/ guides
 5. Create CLAUDE.md documenting the project
 
+## CLAUDE.md Requirements
+
+When creating CLAUDE.md, include these sections:
+
+### Browser Automation (required)
+
+\`\`\`markdown
+## Browser Automation
+
+**Default:** Use \`claude-in-chrome\` (mcp__claude-in-chrome__*) for all browser testing.
+
+**Key tools:**
+- \`tabs_context_mcp\` - Get current tabs (call first)
+- \`tabs_create_mcp\` - Create new tab
+- \`read_page\` - Get page structure with element refs
+- \`computer\` - Click, type, screenshot
+- \`navigate\` - Go to URL
+
+**Pattern:**
+1. Call \`tabs_context_mcp\` to see existing tabs
+2. Create new tab with \`tabs_create_mcp\`
+3. Navigate and interact
+\`\`\`
+
 ## Verification Checklist
 
 After setup, verify:

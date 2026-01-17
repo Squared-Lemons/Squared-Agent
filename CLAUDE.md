@@ -141,6 +141,28 @@ The agent learns which tools work best for which tasks, evolving with each sessi
 
 This enables the agent to select appropriate tools automatically without explicit instruction.
 
+## Browser Automation
+
+**Default:** Use `claude-in-chrome` (mcp__claude-in-chrome__*) for all browser testing and automation.
+
+**Why chrome over Playwright:**
+- Real browser with user's actual session/cookies
+- Works with authenticated sites without re-login
+- Visual feedback in actual Chrome window
+- Better for testing against real user state
+
+**Key tools:**
+- `tabs_context_mcp` - Get current tabs (call first)
+- `tabs_create_mcp` - Create new tab
+- `read_page` - Get page structure with element refs
+- `computer` - Click, type, screenshot
+- `navigate` - Go to URL
+
+**Pattern:**
+1. Call `tabs_context_mcp` to see existing tabs
+2. Create new tab with `tabs_create_mcp` (don't reuse existing)
+3. Navigate and interact
+
 ## Token Usage Tracking
 
 Session-level token tracking for cost estimation and optimization.
