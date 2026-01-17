@@ -76,7 +76,7 @@ The agent handles the rest — configures plugins, creates commands, sets up per
 
 ---
 
-## Creating Setup Packages
+## Agent Packages
 
 Two ways to create setup packages for new projects:
 
@@ -234,6 +234,21 @@ Built into Claude Code:
 | `Edit` | Modify existing files |
 | `Bash` | Run terminal commands |
 | `Task` | Launch specialized agents |
+
+---
+
+## Token Tracking
+
+Built-in cost visibility for every session. Know what you're spending.
+
+| Command | What It Does |
+|---------|--------------|
+| `/end-session` | Captures token usage from Claude Code session files |
+| `/summary` | Calculates costs and tracks against subscription limits |
+
+Track input/output tokens, cache efficiency, and billing type (`subscription` vs `api`). Configure your plan's daily/hourly limits to see utilization percentages and get tier recommendations.
+
+**[Full details →](#token-usage--cost-tracking)**
 
 ---
 
