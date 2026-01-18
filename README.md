@@ -2,7 +2,7 @@
 
 **Bootstrap new projects with Claude Code. Ship faster with built-in workflows.**
 
-Stop spending the first hour of every project configuring tools, setting up git workflows, and remembering which commands work best. Squared Agent packages everything you need — session management, branch protection, tool intelligence, and platform-specific guides — into a single setup you copy to new projects.
+Stop spending the first hour of every project configuring tools, setting up git workflows, and remembering which commands work best. Squared Agent packages everything you need — session management, branch protection, tool intelligence, and platform-specific guides — into a single setup you copy to new or existing projects.
 
 ```mermaid
 flowchart LR
