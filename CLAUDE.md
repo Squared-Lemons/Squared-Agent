@@ -46,7 +46,7 @@ Display the human-editable guide for using this agent. Content lives at `docs/ho
 Process feedback from the inbox and implement improvements. Scans `inbox/ideas/` and `inbox/from-projects/`, presents summaries, helps discuss and plan implementation, then guides through making and testing changes.
 
 ### `/sync-templates`
-Sync active commands to template files for spawned projects. Compares `.claude/commands/` with `templates/commands/`, detects drift, and updates template code blocks while preserving prose. Supports `--audit` (report only) and `--background` (silent) modes. Integrates with `/start-session`, `/end-session`, and `/complete-feature`.
+Sync active commands to template files for spawned projects. Compares `.claude/commands/` with `templates/commands/`, detects drift, and updates template code blocks while preserving prose. Supports `--audit` (report only) and `--background` (silent) modes. Integrates with `/start-session`, `/end-session`, and `/complete-feature`. See [Template Sync Workflow](docs/template-sync-workflow.md) for the full "evolve then deploy" pattern.
 
 ## Available Content
 
@@ -234,6 +234,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-18:** Added `docs/template-sync-workflow.md` explaining the "evolve then deploy" pattern; linked from README.md and CLAUDE.md; documents how the master agent acts as a staging environment for command improvements before propagating to spawned projects
 - **2026-01-17:** Added `/sync-templates` command for keeping templates in sync with active commands; detects drift between `.claude/commands/` and `templates/commands/`, auto-updates code blocks while preserving prose; integrates with `/start-session` (background audit), `/end-session` and `/complete-feature` (sync prompts); supports `--audit` and `--background` modes
 - **2026-01-17:** Added post-setup cleanup step to `/new-idea` workflow - after project is built and verified, setup files (SETUP.md, PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, commands/, knowledge/, provided-files/) are moved into `agent/setup/` within the project for version control and clean parent directory
 - **2026-01-17:** README polish and template README updates - renamed "Creating Setup Packages" to "Agent Packages"; added Token Tracking section after Tools & Integrations; updated templates/commands/README.md with token extraction step in END-SESSION-COMMAND; added Token Tracking component to templates/workflows/README.md Session-Git-Workflow description
