@@ -152,6 +152,8 @@ flowchart LR
     D -.->|"Improvements flow back"| SA
 ```
 
+**Template sync** keeps your commands evolving safely. Improve commands in `.claude/commands/` (your staging area), test them in daily use, then run `/sync-templates` to propagate changes to `templates/`. Future spawned projects automatically inherit your tested improvements. **[Template Sync Workflow →](docs/template-sync-workflow.md)**
+
 ---
 
 ## Session Git Workflow
