@@ -6,6 +6,31 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-19: Knowledge Template Enhancement with Installed Skills
+
+**What Was Done**
+- Reviewed Next.js App Build Guide against newly installed skills (vercel-react-best-practices, web-design-guidelines)
+- Enhanced `templates/knowledge/web/nextjs/Next.js-App-Build-Guide.md` with:
+  - **Performance Patterns (Critical)** section: waterfalls, bundle size, server-side caching, Suspense boundaries
+  - **UI/UX Checklist** section: accessibility, forms, performance, responsive
+  - **Skills for Deeper Learning** section: references to installed skills for more detail
+- Template grew from 101 lines to 266 lines of actionable guidance
+
+**What Worked Well**
+- Reading the full skill AGENTS.md files revealed the depth of guidance available
+- Extracting the most impactful patterns (CRITICAL priority) for the template kept it focused
+- Checklist format for UI/UX makes it actionable vs wall of text
+
+**Key Insights**
+- **Skills are comprehensive but need summary integration**: The 2400-line Vercel guide is too much to copy; better to extract key patterns and reference the skill for deep dives
+- **Templates should be practical quick references**: Knowledge templates work best as "what you need to know now" with links to "learn more"
+- **Interactive CLI tools need user execution**: `npx add-skill` requires TTY for interactive selection - agent should ask user to run it, not try to automate around it
+
+**Pattern Established**
+- Skill integration flow: install skill → read full guidance → extract critical patterns → add to relevant template → reference skill for deeper learning
+
+---
+
 ### 2026-01-19: Clean-Branches Command
 
 **What Was Done**
