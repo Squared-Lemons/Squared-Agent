@@ -1,0 +1,83 @@
+{
+  "source": "https://agentskills.io/home",
+  "defaultRepo": "anthropics/skills",
+  "skills": {},
+  "recommended": {
+    "web": [
+      {
+        "name": "frontend-design",
+        "description": "Production-grade UI without generic AI aesthetics",
+        "install": "npx add-skill anthropics/skills -s frontend-design"
+      },
+      {
+        "name": "webapp-testing",
+        "description": "End-to-end web application testing",
+        "install": "npx add-skill anthropics/skills -s webapp-testing"
+      },
+      {
+        "name": "web-artifacts-builder",
+        "description": "Build interactive web components",
+        "install": "npx add-skill anthropics/skills -s web-artifacts-builder"
+      },
+      {
+        "name": "theme-factory",
+        "description": "Generate consistent design themes",
+        "install": "npx add-skill anthropics/skills -s theme-factory"
+      }
+    ],
+    "patterns": [
+      {
+        "name": "mcp-builder",
+        "description": "Create MCP servers for tool integration",
+        "install": "npx add-skill anthropics/skills -s mcp-builder"
+      },
+      {
+        "name": "docx",
+        "description": "Word document creation and editing",
+        "install": "npx add-skill anthropics/skills -s docx"
+      },
+      {
+        "name": "pptx",
+        "description": "PowerPoint presentation creation",
+        "install": "npx add-skill anthropics/skills -s pptx"
+      },
+      {
+        "name": "xlsx",
+        "description": "Excel spreadsheet manipulation",
+        "install": "npx add-skill anthropics/skills -s xlsx"
+      },
+      {
+        "name": "pdf",
+        "description": "PDF document handling",
+        "install": "npx add-skill anthropics/skills -s pdf"
+      },
+      {
+        "name": "skill-creator",
+        "description": "Create new agent skills",
+        "install": "npx add-skill anthropics/skills -s skill-creator"
+      }
+    ]
+  },
+  "categories": {
+    "web": {
+      "description": "Web frameworks (Next.js, React, etc.)",
+      "knowledgePath": "templates/knowledge/web/"
+    },
+    "database": {
+      "description": "Database tools (Drizzle, Prisma, etc.)",
+      "knowledgePath": "templates/knowledge/database/"
+    },
+    "auth": {
+      "description": "Authentication providers (Better Auth, Clerk, etc.)",
+      "knowledgePath": "templates/knowledge/auth/"
+    },
+    "monorepo": {
+      "description": "Build and monorepo tools (Turborepo, etc.)",
+      "knowledgePath": "templates/knowledge/monorepo/"
+    },
+    "patterns": {
+      "description": "Framework-agnostic patterns and practices",
+      "knowledgePath": "templates/knowledge/patterns/"
+    }
+  }
+}

@@ -180,6 +180,40 @@ Protected branches (`main`, `master`, `develop`, `release/*`) block direct chang
 
 Squared Agent works with 40+ tools organized across four categories.
 
+### Agent Skills
+
+[Agent Skills](https://agentskills.io/home) is an open standard (originally developed by Anthropic) for giving AI agents new capabilities. Skills are folders containing instructions, scripts, and resources that agents discover and use to perform tasks more accurately.
+
+```
+/add-skill anthropics/skills
+```
+
+Spawned projects are told which skills to install based on their technology stack. Skills are installed during setup via `npx add-skill`.
+
+#### Recommended Skills
+
+| Skill | Purpose | Category |
+|-------|---------|----------|
+| **frontend-design** | Production-grade UI without generic AI aesthetics | web |
+| **webapp-testing** | End-to-end web application testing | web |
+| **mcp-builder** | Create MCP servers for tool integration | patterns |
+| **docx** | Word document creation and editing | patterns |
+| **pptx** | PowerPoint presentation creation | patterns |
+| **xlsx** | Excel spreadsheet manipulation | patterns |
+| **pdf** | PDF document handling | patterns |
+
+#### How Skills Work
+
+| Step | What Happens |
+|------|--------------|
+| **Catalogue** | `/add-skill [source]` runs `npx add-skill` and updates `templates/skills/skill-mapping.json` |
+| **Recommend** | `/prepare-setup` and `/new-idea` list recommended skills based on knowledge categories |
+| **Install** | Spawned agent runs `npx add-skill anthropics/skills -s [skill]` during setup |
+
+> **Note:** Skills are different from Claude Code plugins. Skills are portable across any agent that supports the [Agent Skills spec](https://agentskills.io/home) (Cursor, VS Code, Claude Code, Gemini CLI, etc.).
+
+**[Skills reference →](templates/skills/README.md)**
+
 ### MCP Servers via Toolhive
 
 We recommend [Toolhive](https://github.com/stacklok/toolhive) for managing MCP servers. Here are the plugins we suggest configuring:
@@ -418,6 +452,8 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 | `/how-to-use` | Display the human-editable guide |
 | `/list-tools` | List all commands, plugins, and tools |
 | `/get-feedback` | Process inbox and implement improvements |
+| `/add-skill` | Install and catalogue agent skills for spawned projects |
+| `/sync-templates` | Sync active commands to template files |
 
 ---
 
@@ -427,6 +463,7 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 templates/              # Content copied to new projects
   commands/             # Command implementation guides
   knowledge/            # Framework guides (Next.js, etc.)
+  skills/               # Agent skills (Vercel agent-skills)
   ux-guides/            # UI/UX patterns
   profiles/             # Setup profiles (developer/, etc.)
   tasks/                # One-time setup tasks

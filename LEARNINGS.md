@@ -6,6 +6,35 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-19: Agent Skills Integration & Documentation System
+
+**What Was Done**
+- Integrated Agent Skills system ([agentskills.io](https://agentskills.io/home)) for portable agent capabilities
+- Created `/add-skill` command to install and catalogue skills
+- Created `templates/skills/` with `skill-mapping.json` for category-based recommendations
+- Updated `/prepare-setup` and `/new-idea` to recommend skills based on knowledge categories
+- Created `/sync-docs` command for documentation consistency
+- Created `docs/style-guide.md` with voice, terminology, and formatting standards
+- Created `docs/doc-patterns/` with templates for README, command, and knowledge docs
+- Split monolithic Next.js guide into category folders: `web/`, `database/`, `auth/`, `monorepo/`, `patterns/`
+
+**What Worked Well**
+- Install-not-copy model for skills: spawned projects install fresh via `npx add-skill` instead of copying skill files
+- Category-based skill mapping: skills are recommended based on selected knowledge categories
+- Style guide with terminology table catches inconsistent naming across docs
+
+**Key Insights**
+- **Skills ≠ Claude Code plugins**: Skills are portable across any agent (Cursor, VS Code, Gemini CLI), plugins are Claude Code specific
+- **Install fresh, don't copy**: Spawned projects get latest versions by installing during setup, not copying stale files
+- **Documentation drift is inevitable**: Need systematic tooling (`/sync-docs`) to maintain consistency across 20+ files
+- **Terminology matters**: "spawned project" vs "child project", "install" vs "copy" - consistent terms reduce confusion
+
+**Pattern Established**
+- Skills flow: `/add-skill` catalogues → `skill-mapping.json` tracks → `/prepare-setup` recommends → spawned agent installs
+- Doc consistency: `style-guide.md` defines standards → `doc-patterns/` provides templates → `/sync-docs` enforces
+
+---
+
 ### 2026-01-16: Documentation & Terminology Improvements
 
 **What Was Done**

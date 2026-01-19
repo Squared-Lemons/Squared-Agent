@@ -4,61 +4,107 @@
 
 ---
 
-Framework and platform guides that help Claude build correctly with specific technologies. These capture patterns, gotchas, and best practices learned from real projects.
+Framework and platform guides organized by category. Select what you need for each project.
 
 > **Note:** For development workflows like Session Git Workflow, see [workflows/](../workflows/README.md).
 
-## Available Knowledge
+## Categories
 
-| Guide | Description |
-|-------|-------------|
-| [Next.js-App-Build-Guide.md](Next.js-App-Build-Guide.md) | Next.js with Better Auth, Drizzle ORM, Turborepo |
+### Web Frameworks
+
+| Platform | Guide | Description |
+|----------|-------|-------------|
+| **Next.js** | [web/nextjs/](web/nextjs/) | App Router patterns, overview of stack |
+
+### Databases
+
+| Database | Guide | Description |
+|----------|-------|-------------|
+| **Drizzle ORM** | [database/drizzle/](database/drizzle/) | SQLite, schema, migrations, Next.js config |
+
+### Authentication
+
+| Auth | Guide | Description |
+|------|-------|-------------|
+| **Better Auth** | [auth/better-auth/](auth/better-auth/) | OAuth, organizations, singular table names |
+
+### Monorepo
+
+| Tool | Guide | Description |
+|------|-------|-------------|
+| **Turborepo** | [monorepo/turborepo/](monorepo/turborepo/) | pnpm workspaces, turbo.json, packages |
+
+### Patterns (framework-agnostic)
+
+| Pattern | Guide | Description |
+|---------|-------|-------------|
+| Server Actions | [patterns/Server-Actions-Patterns.md](patterns/Server-Actions-Patterns.md) | CRUD, validation, error handling |
+| Route Protection | [patterns/Route-Protection-Onboarding.md](patterns/Route-Protection-Onboarding.md) | Auth guards, onboarding flows |
+| Developer Experience | [patterns/Developer-Experience-Checklist.md](patterns/Developer-Experience-Checklist.md) | Handoffs, seed scripts, checklists |
 
 ---
 
-## Next.js-App-Build-Guide
+## Selection During /prepare-setup
 
-**Location:** `templates/knowledge/Next.js-App-Build-Guide.md`
+Choose from each category independently:
 
-Comprehensive guide for building Next.js applications with authentication and database.
+```
+1. Web framework?     → Next.js / None
+2. Database?          → Drizzle / None
+3. Auth?              → Better Auth / None
+4. Monorepo?          → Turborepo / None
+5. Patterns?          → Server Actions, Route Protection, DX Checklist
+```
 
-| Section | What It Covers |
-|---------|---------------|
-| Monorepo Setup | Turborepo with apps/ and packages/ |
-| Database | Drizzle ORM patterns, schema, migrations |
-| Authentication | Better Auth setup, providers, gotchas |
-| Environment | Variable management across packages |
-| UI Components | shadcn/ui in monorepo |
-| Server Actions | Data mutation patterns |
-| Route Protection | Middleware and onboarding |
-| Common Pitfalls | Real issues and solutions |
+---
 
-**Best for:** Next.js projects needing auth, database, or monorepo structure.
+## Common Combinations
+
+| Project Type | Web | Database | Auth | Monorepo | Patterns |
+|--------------|-----|----------|------|----------|----------|
+| Full-stack SaaS | Next.js | Drizzle | Better Auth | Turborepo | All |
+| Simple Next.js | Next.js | Drizzle | - | - | Server Actions |
+| API backend | - | Drizzle | Better Auth | - | Server Actions |
+| Monorepo setup | - | - | - | Turborepo | - |
+
+---
+
+## Related Skills
+
+Knowledge guides are complemented by [Agent Skills](https://agentskills.io/home) - portable capabilities that work across Claude Code, Cursor, VS Code, and more.
+
+**Recommended skills by category:**
+
+| Category | Skills |
+|----------|--------|
+| web | frontend-design, webapp-testing, web-artifacts-builder, theme-factory |
+| patterns | mcp-builder, docx, pptx, xlsx, pdf, skill-creator |
+
+**Install recommended skills:**
+```bash
+npx add-skill anthropics/skills
+```
+
+Skills matching selected knowledge categories are automatically included when running `/prepare-setup` or `/new-idea`.
 
 ---
 
 ## Adding Knowledge
 
-1. Create file: `templates/knowledge/[Technology]-Guide.md`
+1. Create category folder if needed: `templates/knowledge/[category]/[tool]/`
+2. Add guide: `[Tool]-Guide.md`
+3. Update this README
 
-2. Structure with these sections:
-   - Overview — What and why
-   - Architecture — How components fit together
-   - Setup — Configuration requirements
-   - Key Patterns — Implementation examples
-   - Common Pitfalls — Issues and solutions
-   - Checklist — Quick reference
+**Structure:**
+```
+templates/knowledge/
+├── [category]/
+│   └── [tool]/
+│       └── [Tool]-Guide.md
+```
 
-3. Update this README with the new guide
-
-**Naming:** `[Technology]-Guide.md` or `[Technology]-[Pattern]-Guide.md`
-
-**Examples:** `React-Testing-Guide.md`, `PostgreSQL-Optimization-Guide.md`
-
----
-
-## How Knowledge Gets Used
-
-1. **During `/new-idea`** — Recommended based on platform choice
-2. **During development** — Agents consult for implementation guidance
-3. **For troubleshooting** — Reference for common pitfalls
+**Examples:**
+- `database/prisma/Prisma-Guide.md`
+- `auth/clerk/Clerk-Guide.md`
+- `web/remix/Remix-Guide.md`
+- `mobile/react-native/React-Native-Guide.md`
