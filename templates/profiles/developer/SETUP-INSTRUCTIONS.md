@@ -79,17 +79,34 @@ Create `.claude/settings.json` with plugins, permissions, and hooks:
 
 ## Step 3: Create Commands
 
-Read the following documentation files and create commands/knowledge/agents as specified:
+Read the command documentation files and create the corresponding commands in `.claude/commands/`.
 
-### End-Session Command
-- **Documentation:** `END-SESSION-COMMAND.md`
-- **Create:** `.claude/commands/end-session.md` and `.claude/commands/commit.md`
-- Follow the implementation guide in the documentation
+### Core Session Commands
 
-### New Feature Command
-- **Documentation:** `New Feature Workflow.md`
-- **Create:** `.claude/commands/new-feature.md`
-- Follow the workflow and command template in the documentation
+| Documentation | Creates | Purpose |
+|--------------|---------|---------|
+| `Start-Session-Command.md` | `/start-session` | Begin session with branch safety check |
+| `END-SESSION-COMMAND.md` | `/end-session`, `/commit` | End session, update docs, commit |
+| `Summary-Command.md` | `/summary` | Generate accomplishments report |
+
+### Feature Development Commands
+
+| Documentation | Creates | Purpose |
+|--------------|---------|---------|
+| `New-Feature-Command.md` | `/new-feature` | Create feature branch for safe development |
+| `Complete-Feature-Command.md` | `/complete-feature` | Merge or create PR when done |
+| `Clean-Branches-Command.md` | `/clean-branches` | Remove merged or stale branches |
+
+### Environment Commands
+
+| Documentation | Creates | Purpose |
+|--------------|---------|---------|
+| `Local-Env-Command.md` | `/local-env` | Manage local domains and trusted HTTPS |
+
+For each documentation file:
+1. Read the implementation guide
+2. Create the command in `.claude/commands/` following the guide
+3. Test that the command works
 
 ---
 
@@ -244,9 +261,12 @@ After setup, these commands should be available:
 - `/start-session` - Begin session with branch awareness and context loading
 - `/new-feature` - Create feature branch for safe development
 - `/complete-feature` - Wrap up feature branch with merge or PR
+- `/clean-branches` - Remove merged or stale feature branches
 - `/end-session` - End session, update docs, capture token usage, commit
 - `/commit` - Quick commit with approval
-- `/cancel-ralph` - Stop a running Ralph Loop
+- `/summary` - Generate accomplishments report
+- `/local-env` - Manage local domains and trusted HTTPS
+- `/cancel-ralph` - Stop a running Ralph Loop (from plugin)
 
 Token tracking is automatic — `/end-session` captures usage data, `/summary` calculates costs
 

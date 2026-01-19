@@ -318,9 +318,11 @@ After opening in Claude Code, these commands are available:
 | `/start-session` | Begin session with branch safety check |
 | `/new-feature` | Create feature branch for safe development |
 | `/complete-feature` | Merge or create PR when done |
+| `/clean-branches` | Remove merged or stale branches |
 | `/commit` | Draft commit message and commit changes |
 | `/end-session` | Update docs, capture learnings, commit |
 | `/summary` | Generate accomplishments report |
+| `/local-env` | Manage local domains and HTTPS (init, setup, start, stop) |
 
 ## For the Target Agent
 
@@ -423,9 +425,11 @@ Copy the actual command definitions so they work in the new project:
 cp ".claude/commands/start-session.md" "$OUTPUT_DIR/.claude/commands/"
 cp ".claude/commands/new-feature.md" "$OUTPUT_DIR/.claude/commands/"
 cp ".claude/commands/complete-feature.md" "$OUTPUT_DIR/.claude/commands/"
+cp ".claude/commands/clean-branches.md" "$OUTPUT_DIR/.claude/commands/"
 cp ".claude/commands/end-session.md" "$OUTPUT_DIR/.claude/commands/"
 cp ".claude/commands/commit.md" "$OUTPUT_DIR/.claude/commands/"
 cp ".claude/commands/summary.md" "$OUTPUT_DIR/.claude/commands/"
+cp ".claude/commands/local-env.md" "$OUTPUT_DIR/.claude/commands/"
 ```
 
 **Important:** The start-session.md command contains Squared-Agent-specific content (Getting Started guide). After copying, edit `$OUTPUT_DIR/.claude/commands/start-session.md` to:

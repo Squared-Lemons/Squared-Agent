@@ -38,8 +38,14 @@ ls templates/commands/*.md 2>/dev/null | grep -v README || echo "No commands fou
 # List task docs (markdown files in templates/tasks/, excluding README)
 ls templates/tasks/*.md 2>/dev/null | grep -v README || echo "No tasks found"
 
-# List skill docs (markdown files in templates/knowledge/, excluding README)
-ls templates/knowledge/*.md 2>/dev/null | grep -v README || echo "No knowledge found"
+# List knowledge categories and their contents
+echo "=== Knowledge Categories ==="
+for category in web database auth monorepo patterns local-env; do
+  if [ -d "templates/knowledge/$category" ]; then
+    echo "[$category]:"
+    find "templates/knowledge/$category" -name "*.md" -not -name "README.md" 2>/dev/null
+  fi
+done
 ```
 
 ---
@@ -104,18 +110,30 @@ If task files exist:
 - Options: List each .md file in `templates/tasks/` (excluding README.md)
 - Include "All" and "None" as options
 
-### 2e. Knowledge Selection
+### 2e. Knowledge Selection (Per Category)
 
-If `--knowledge` not in arguments:
+Knowledge is organized by category. Ask about each category that has content:
+
+**Categories:**
+- `web/` - Web frameworks (Next.js, etc.)
+- `database/` - Database tools (Drizzle, etc.)
+- `auth/` - Authentication (Better Auth, etc.)
+- `monorepo/` - Monorepo tools (Turborepo, etc.)
+- `patterns/` - Reusable patterns
+- `local-env/` - Local development setup
+
+For each category with content, use AskUserQuestion:
+- Header: Category name (e.g., "Web Framework")
+- Question: "Which [category] knowledge should be included?"
+- Options: List each .md file in `templates/knowledge/[category]/` subdirectories
+- Include "None" as an option
+
+Example for web category:
 ```bash
-ls templates/knowledge/*.md 2>/dev/null | grep -v README
+find templates/knowledge/web -name "*.md" -not -name "README.md" 2>/dev/null
 ```
 
-If skill files exist:
-- Use AskUserQuestion with header "Knowledge" and `multiSelect: true`
-- Question: "Which knowledge (knowledge docs) should be included?"
-- Options: List each .md file in `templates/knowledge/` (excluding README.md)
-- Include "All" and "None" as options
+Track selected knowledge files with their full paths for copying later.
 
 ### 2f. Skills Selection
 
@@ -187,9 +205,19 @@ cp "templates/tasks/<filename>.md" "$OUTPUT_DIR/"
 
 ### 4d. Copy Selected Knowledge (to knowledge/ subfolder)
 
-For each selected skill doc:
+Knowledge files are in category subdirectories. Preserve the category structure:
+
 ```bash
-cp "templates/knowledge/<filename>.md" "$OUTPUT_DIR/knowledge/"
+# For each selected knowledge file (e.g., templates/knowledge/web/nextjs/Next.js-App-Build-Guide.md)
+# Create the category subfolder and copy
+mkdir -p "$OUTPUT_DIR/knowledge/[category]"
+cp "templates/knowledge/[category]/[subfolder]/[filename].md" "$OUTPUT_DIR/knowledge/[category]/"
+```
+
+Example:
+```bash
+mkdir -p "$OUTPUT_DIR/knowledge/web"
+cp "templates/knowledge/web/nextjs/Next.js-App-Build-Guide.md" "$OUTPUT_DIR/knowledge/web/"
 ```
 
 If no knowledge selected, remove the empty knowledge folder:
