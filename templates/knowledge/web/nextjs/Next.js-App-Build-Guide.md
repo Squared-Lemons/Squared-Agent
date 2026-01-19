@@ -17,6 +17,157 @@ A comprehensive stack for building Next.js applications with authentication, dat
 
 ---
 
+## Performance Patterns (Critical)
+
+These patterns have the highest impact on application performance. Follow them from the start.
+
+### Eliminate Waterfalls
+
+Waterfalls are the #1 performance killer. Each sequential `await` adds full network latency.
+
+```typescript
+// ❌ Incorrect: sequential (3 round trips)
+const user = await fetchUser()
+const posts = await fetchPosts()
+const comments = await fetchComments()
+
+// ✅ Correct: parallel (1 round trip)
+const [user, posts, comments] = await Promise.all([
+  fetchUser(),
+  fetchPosts(),
+  fetchComments()
+])
+```
+
+**In Server Components:** Use component composition to parallelize data fetching:
+
+```tsx
+// ❌ Sidebar waits for Page's fetch
+export default async function Page() {
+  const header = await fetchHeader()
+  return <div><Header data={header} /><Sidebar /></div>
+}
+
+// ✅ Both fetch simultaneously
+export default function Page() {
+  return <div><Header /><Sidebar /></div>
+}
+async function Header() {
+  const data = await fetchHeader()
+  return <div>{data}</div>
+}
+```
+
+### Bundle Size
+
+Avoid barrel file imports - they load thousands of unused modules:
+
+```typescript
+// ❌ Loads entire library (~200-800ms cold start cost)
+import { Check, X } from 'lucide-react'
+
+// ✅ Loads only what you need
+import Check from 'lucide-react/dist/esm/icons/check'
+import X from 'lucide-react/dist/esm/icons/x'
+
+// Or configure Next.js to optimize automatically:
+// next.config.js
+module.exports = {
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@mui/material']
+  }
+}
+```
+
+Use `next/dynamic` for heavy components not needed on initial render:
+
+```tsx
+const MonacoEditor = dynamic(
+  () => import('./monaco-editor').then(m => m.MonacoEditor),
+  { ssr: false }
+)
+```
+
+### Server-Side Caching
+
+Use `React.cache()` for per-request deduplication:
+
+```typescript
+import { cache } from 'react'
+
+export const getCurrentUser = cache(async () => {
+  const session = await auth()
+  if (!session?.user?.id) return null
+  return await db.user.findUnique({ where: { id: session.user.id } })
+})
+// Multiple calls in same request = single query
+```
+
+Use `after()` for non-blocking operations:
+
+```typescript
+import { after } from 'next/server'
+
+export async function POST(request: Request) {
+  await updateDatabase(request)
+  after(async () => {
+    await logUserAction() // Runs after response sent
+  })
+  return Response.json({ status: 'success' })
+}
+```
+
+### Suspense Boundaries
+
+Show wrapper UI faster while data loads:
+
+```tsx
+function Page() {
+  return (
+    <div>
+      <Header />
+      <Suspense fallback={<Skeleton />}>
+        <DataDisplay />
+      </Suspense>
+      <Footer />
+    </div>
+  )
+}
+// Header and Footer render immediately
+```
+
+---
+
+## UI/UX Checklist
+
+Build accessible, responsive interfaces from the start.
+
+### Accessibility
+- [ ] All interactive elements reachable via keyboard
+- [ ] Focus states visible on all interactive elements
+- [ ] Color contrast meets WCAG AA (4.5:1 for text)
+- [ ] Images have meaningful alt text
+- [ ] Form inputs have associated labels
+
+### Forms
+- [ ] Clear error messages with guidance to fix
+- [ ] Input validation on blur and submit
+- [ ] Loading states on submit buttons
+- [ ] Success confirmation after submission
+
+### Performance
+- [ ] Images use Next.js `<Image>` with proper sizing
+- [ ] Long lists use `content-visibility: auto`
+- [ ] Heavy components lazy-loaded with `next/dynamic`
+- [ ] No layout shift (reserve space for async content)
+
+### Responsive
+- [ ] Works on mobile, tablet, desktop
+- [ ] Touch targets minimum 44x44px on mobile
+- [ ] No horizontal scroll on mobile
+
+---
+
 ## Quick Start
 
 ### 1. Set Up Monorepo
@@ -94,6 +245,20 @@ Use [Developer Experience Checklist](../../patterns/Developer-Experience-Checkli
 | Static site with DB | Drizzle only |
 | Auth without organizations | Better Auth (skip org sections) |
 | Existing project, add auth | Better Auth, Route Protection |
+
+---
+
+## Skills for Deeper Learning
+
+These agent skills provide comprehensive guidance on specific topics:
+
+| Skill | What It Covers |
+|-------|----------------|
+| **vercel-react-best-practices** | 40+ performance rules: waterfalls, bundle size, server/client optimization, re-renders |
+| **web-design-guidelines** | Complete UI/UX checklist: accessibility, forms, animations, dark mode, localization |
+| **frontend-design** | Production-grade interface design with high polish |
+
+To install skills: `npx add-skill [source] -s [skill-name]`
 
 ---
 

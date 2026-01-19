@@ -67,13 +67,18 @@ cat /tmp/skills-before.txt
 
 ## Step 3: Install Skills
 
-Run the add-skill CLI:
+The `npx add-skill` CLI requires interactive selection, so ask the user to run it in their terminal.
 
-```bash
-npx add-skill "$SOURCE"
+**Tell the user:**
+```
+Please run this command in your terminal:
+
+npx add-skill [SOURCE]
+
+Let me know when it's done.
 ```
 
-Wait for the command to complete. It will install skills to `.claude/skills/`.
+Wait for the user to confirm before proceeding to Step 4.
 
 ---
 

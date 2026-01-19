@@ -1,8 +1,41 @@
 {
   "source": "https://agentskills.io/home",
   "defaultRepo": "anthropics/skills",
-  "skills": {},
+  "skills": {
+    "create-auth": {
+      "source": "better-auth/skills",
+      "description": "Guide for adding authentication to TypeScript/JavaScript applications using Better Auth",
+      "categories": ["auth", "web", "patterns"]
+    },
+    "better-auth-best-practices": {
+      "source": "better-auth/skills",
+      "description": "Integration guide for Better Auth - the comprehensive TypeScript authentication framework",
+      "categories": ["auth", "web", "patterns"]
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "description": "React and Next.js performance optimization guidelines from Vercel Engineering (45 rules)",
+      "categories": ["web", "patterns"]
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "description": "Review UI code for Web Interface Guidelines compliance (accessibility, UX, design)",
+      "categories": ["web", "patterns"]
+    }
+  },
   "recommended": {
+    "auth": [
+      {
+        "name": "create-auth",
+        "description": "Guide for adding Better Auth to TypeScript/JavaScript apps",
+        "install": "npx add-skill better-auth/skills"
+      },
+      {
+        "name": "better-auth-best-practices",
+        "description": "Integration guide for Better Auth framework",
+        "install": "npx add-skill better-auth/skills"
+      }
+    ],
     "web": [
       {
         "name": "frontend-design",
@@ -23,6 +56,16 @@
         "name": "theme-factory",
         "description": "Generate consistent design themes",
         "install": "npx add-skill anthropics/skills -s theme-factory"
+      },
+      {
+        "name": "vercel-react-best-practices",
+        "description": "React/Next.js performance optimization (45 rules from Vercel)",
+        "install": "npx add-skill vercel-labs/agent-skills"
+      },
+      {
+        "name": "web-design-guidelines",
+        "description": "UI code review for accessibility, UX, design compliance",
+        "install": "npx add-skill vercel-labs/agent-skills"
       }
     ],
     "patterns": [

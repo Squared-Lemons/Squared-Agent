@@ -26,6 +26,7 @@ The `/start-session` command is the recommended entry point for any coding sessi
 
 ```markdown
 ---
+name: start-session
 description: Begin session with branch awareness and context loading
 allowed-tools: Read, Bash
 ---
@@ -104,6 +105,27 @@ If file exists, read `.project/tool-intelligence.md` silently. Use this knowledg
 
 ---
 
+## Step 4.5: Background Template Sync Audit (silently)
+
+Check if this is the master agent (Squared-Agent) by looking for the sync-templates command:
+
+\```bash
+ls .claude/commands/sync-templates.md 2>/dev/null || echo "NO_SYNC_TEMPLATES"
+\```
+
+If sync-templates exists, run a background audit to detect template drift:
+
+\```bash
+# Run sync audit in background, write results to report file
+# This will be picked up by /end-session or /complete-feature
+\```
+
+Invoke `/sync-templates --background` silently. This creates `.project/sync-report.md` if templates are out of sync, which will be shown at session end.
+
+Do not display anything to the user - this runs silently.
+
+---
+
 ## Step 5: Load Session Note
 
 \```bash
@@ -126,7 +148,38 @@ Read `.project/session-note.md` and display:
 
 ### If no session note exists
 
-Display the project-specific getting started guide or a generic welcome message.
+Display the Getting Started guide:
+
+\```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SQUARED AGENT - Getting Started
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Welcome! This is your master agent for bootstrapping projects.
+
+## Quick Commands
+
+  /new-idea        → Design a new project through guided discovery
+  /new-feature     → Create feature branch (safe to make changes)
+  /prepare-setup   → Package templates for an existing project idea
+  /summary         → Generate accomplishments report
+  /end-session     → Wrap up session, update docs, commit
+
+## First Steps
+
+1. Have a project idea? Run /new-idea to design it together
+2. Ready to code? Run /new-feature "description" first
+3. Want to explore? Check templates/ for available content
+4. Have feedback? Drop files in inbox/ideas/
+
+## Project Structure
+
+  templates/     → Exportable content (commands, knowledge, profiles)
+  inbox/         → Your ideas and project feedback
+  suggestions/   → My improvement proposals
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\```
 
 ---
 
@@ -136,8 +189,9 @@ Display the project-specific getting started guide or a generic welcome message.
 2. Check if on protected branch → show warning if yes
 3. Show git status (modified files, ahead/behind)
 4. Load tool intelligence silently if exists
-5. Show session note or getting started guide
-6. Keep output concise and actionable
+5. Run background template sync audit if sync-templates command exists (silently)
+6. Show session note or Getting Started guide
+7. Keep output concise and actionable
 ```
 
 ---

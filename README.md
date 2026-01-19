@@ -191,6 +191,15 @@ Squared Agent works with 40+ tools organized across four categories.
 
 Spawned projects are told which skills to install based on their technology stack. Skills are installed during setup via `npx add-skill`.
 
+#### Installed Skills
+
+| Skill | Purpose | Source |
+|-------|---------|--------|
+| **create-auth** | Guide for adding Better Auth to TypeScript/JavaScript apps | better-auth/skills |
+| **better-auth-best-practices** | Integration guide for Better Auth framework | better-auth/skills |
+| **vercel-react-best-practices** | React/Next.js performance optimization (45 rules from Vercel) | vercel-labs/agent-skills |
+| **web-design-guidelines** | UI code review for accessibility, UX, design compliance | vercel-labs/agent-skills |
+
 #### Recommended Skills
 
 | Skill | Purpose | Category |
