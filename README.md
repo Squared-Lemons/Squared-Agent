@@ -454,6 +454,7 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 | `/get-feedback` | Process inbox and implement improvements |
 | `/add-skill` | Install and catalogue skills for spawned projects |
 | `/sync-templates` | Sync active commands to template files |
+| `/sync-docs` | Synchronize documentation terminology and patterns |
 
 ---
 
