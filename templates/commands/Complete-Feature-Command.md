@@ -27,191 +27,319 @@ The `/complete-feature` command handles the completion of a feature branch. It r
 
 ```markdown
 ---
+name: complete-feature
 description: Wrap up feature branch - merge or create PR
 allowed-tools: Bash, AskUserQuestion
 ---
 
-# Complete Feature - Merge or PR
+# Complete Feature - Branch Wrap-up
 
-Wrap up the current feature branch by merging to main or creating a pull request.
+Wrap up a feature branch: review changes, then either merge directly or create a pull request.
 
 ---
 
-## Step 1: Verify Feature Branch
+## Step 1: Verify Branch State
 
 \```bash
 git branch --show-current
 \```
 
-If on a protected branch (main, master, develop, release/*):
+If on `main`, `master`, `develop`, or `release/*`:
 
 \```
-You're on [branch], not a feature branch.
-This command is for completing feature branches.
+⚠️  You're on [branch] — this command is for feature branches.
 
-To start a feature: /new-feature "description"
+If you have uncommitted work, use:
+→ /new-feature "description"   to create a safe branch first
 \```
 
 Stop execution.
 
 ---
 
-## Step 2: Review Changes
-
-### Get branch info
+## Step 2: Check for Uncommitted Changes
 
 \```bash
-# Base branch (usually main)
-git merge-base HEAD main
-
-# All commits on this branch
-git log main..HEAD --oneline
-
-# Summary of changes
-git diff main..HEAD --stat
+git status --porcelain
 \```
 
-### Display summary
+If there are uncommitted changes:
+
+\```
+You have uncommitted changes:
+[list files]
+
+Would you like to:
+1. Commit them now (I'll help draft a message)
+2. Stash them for later
+3. Continue without committing (changes won't be included)
+\```
+
+Handle based on user choice.
+
+---
+
+## Step 3: Show Changes Summary
+
+Get the merge base and show diff:
+
+\```bash
+git merge-base HEAD main || git merge-base HEAD master
+\```
+
+\```bash
+git log --oneline [merge-base]..HEAD
+\```
+
+\```bash
+git diff --stat [merge-base]..HEAD
+\```
+
+Display:
 
 \```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Feature Branch Review: [branch-name]
+📋 Feature Summary: [branch-name]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Commits: [count]
-[commit list]
+Commits ([count]):
+[commit log]
 
-Files changed: [count]
-[file summary]
+Files changed:
+[diff stat]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 \```
 
 ---
 
-## Step 3: Suggest Squashing (if needed)
+## Step 4: Commit Review (if many commits)
 
-If more than 5 commits, suggest squashing:
+If there are more than 5 commits, suggest:
 
 \```
-This branch has [count] commits. Consider squashing into fewer commits
-for a cleaner history.
+You have [count] commits. Consider:
+1. Keep as-is (all commits preserved)
+2. Squash into fewer commits
 
-Options:
-1. Squash into single commit (recommended)
-2. Keep all commits as-is
-3. Interactive rebase (you handle manually)
+Most teams prefer clean history. Would you like to squash?
 \```
 
-### If squashing
+If user wants to squash, guide them through interactive rebase or suggest:
 
-\```bash
-# Reset to merge-base, keeping changes staged
-git reset --soft $(git merge-base HEAD main)
-git commit -m "[suggested message]"
+\```
+To squash interactively:
+git rebase -i [merge-base]
+
+Or I can help you squash everything into one commit with a summary message.
 \```
 
 ---
 
-## Step 4: Ask Completion Method
+## Step 4.5: Template Sync Check
+
+Check if templates are out of sync with your changes:
+
+\```bash
+ls .project/sync-report.md 2>/dev/null || echo "NO_SYNC_REPORT"
+\```
+
+### If sync report exists
+
+Display:
+
+\```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️  Templates Out of Sync
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your command templates may be out of sync with active commands.
+Consider syncing before completing this feature.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\```
+
+Ask using AskUserQuestion:
+- **Sync now** - Run /sync-templates before completing
+- **Skip** - Continue without syncing
+
+If user chooses to sync, invoke `/sync-templates` and wait for completion.
+
+### If no sync report
+
+Continue to Step 5.
+
+---
+
+## Step 5: Choose Completion Method
+
+Ask the user:
 
 \```
 How would you like to complete this feature?
 
 1. **Merge to main** (solo workflow)
-   - Merges branch directly to main
-   - Deletes feature branch after
-   - Best for: solo projects, small teams
+   Merges branch directly into main/master and pushes
 
 2. **Create Pull Request** (team workflow)
-   - Pushes branch to remote
-   - Creates PR via GitHub CLI
-   - Best for: code review, collaboration
+   Pushes branch and opens PR for review
 \```
 
 ---
 
-## Step 5: Execute Workflow
+## Step 6A: Direct Merge (if option 1)
 
-### Option A: Merge to Main
-
-\```bash
-# Ensure main is up to date
-git checkout main
-git pull origin main
-
-# Merge with no-ff to preserve branch history
-git merge --no-ff feature/[name] -m "Merge feature/[name]: [summary]"
-
-# Delete the feature branch
-git branch -d feature/[name]
-\```
-
-Output:
-\```
-✓ Merged feature/[name] to main
-✓ Deleted feature branch
-
-To push: git push origin main
-\```
-
-### Option B: Create Pull Request
+### Fetch and check for conflicts
 
 \```bash
-# Push branch to remote
-git push -u origin feature/[name]
+git fetch origin main || git fetch origin master
+git merge-base --is-ancestor origin/main HEAD || git merge-base --is-ancestor origin/master HEAD
+\```
 
-# Create PR using GitHub CLI
+If main has moved ahead, warn:
+
+\```
+⚠️  Main branch has new commits. Options:
+1. Rebase your changes on top (recommended)
+2. Merge main into your branch first
+3. Proceed anyway (may cause conflicts)
+\```
+
+### Perform the merge
+
+\```bash
+git checkout main || git checkout master
+git merge --no-ff [feature-branch] -m "Merge [feature-branch]: [summary]"
+git push origin main || git push origin master
+\```
+
+### Cleanup
+
+\```bash
+git branch -d [feature-branch]
+git push origin --delete [feature-branch]  # Optional: delete remote branch
+\```
+
+Display:
+
+\```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Feature Merged
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Branch [feature-branch] merged into main and pushed.
+Local branch deleted.
+
+You're now on main with your changes live.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Want to update docs or wrap up the session?
+→ /end-session
+\```
+
+For worktrees, also show:
+
+\```
+To remove the worktree:
+  git worktree remove ../worktrees/[name]
+\```
+
+---
+
+## Step 6B: Create Pull Request (if option 2)
+
+### Push to remote
+
+\```bash
+git push -u origin HEAD
+\```
+
+If push fails (no remote, auth issues), help troubleshoot.
+
+### Check if gh CLI is available
+
+\```bash
+which gh
+\```
+
+### If gh is available
+
+Draft PR details:
+
+\```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 Pull Request Draft
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Title: [Generated from branch name or commits]
+
+Body:
+## Summary
+[Generated from commit messages]
+
+## Changes
+[List of key changes]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create this PR? (You can edit the title/body first)
+\```
+
+If approved, create PR:
+
+\```bash
 gh pr create --title "[title]" --body "[body]"
 \```
 
-Output:
+Display the PR URL.
+
+### If gh is not available
+
 \```
-✓ Pushed feature/[name] to origin
-✓ Created PR: [url]
-
-Next steps:
-- Review the PR
-- Request reviewers
-- Merge when approved
-\```
-
----
-
-## Step 6: Cleanup (for worktrees)
-
-If this was a worktree, offer cleanup:
-
-\```bash
-# Check if in a worktree
-git worktree list
+GitHub CLI (gh) not found. To create PR:
+1. Install gh: https://cli.github.com/
+2. Or visit: https://github.com/[owner]/[repo]/compare/[branch]
 \```
 
-If worktree:
-\```
-This branch was created as a worktree.
-Would you like to remove the worktree directory?
+### Show cleanup instructions
 
-1. Yes, remove worktree
-2. No, keep it
 \```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Pull Request Created
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-If yes:
-\```bash
-git worktree remove ../worktrees/[name]
+PR: [URL]
+
+When PR is merged, clean up:
+
+For regular branches:
+  git checkout main && git pull
+  git branch -d [branch-name]
+
+For worktrees:
+  git worktree remove ../worktrees/[name]
+  git branch -d [branch-name]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Want to update docs or wrap up the session?
+→ /end-session
 \```
 
 ---
 
 ## Execution Instructions
 
-1. Verify on feature branch (not main/master/develop)
-2. Review all commits and changes since branching
-3. If many commits, suggest squashing
-4. Ask: merge directly or create PR
-5. Execute chosen workflow
-6. Offer worktree cleanup if applicable
-7. Provide next steps
+1. Verify on feature branch (not protected)
+2. Check for uncommitted changes, handle them
+3. Show diff from merge-base to HEAD
+4. Offer to squash if many commits
+5. Check for template sync report - offer to sync if exists
+6. Ask: merge directly or create PR?
+7. If merge: checkout main, merge, push, cleanup branch
+8. If PR: push branch, create PR via `gh`, show cleanup instructions
+9. Suggest `/end-session` for docs updates
 ```
 
 ---

@@ -57,6 +57,9 @@ Synchronize documentation across related files for consistency. Checks docs agai
 ### `/add-skill`
 Install a skill and catalogue it for spawned projects. Runs `npx add-skill [source]`, categorizes newly installed skills by knowledge category (web, database, auth, monorepo, patterns), copies to `templates/skills/`, and updates skill-mapping.json. Default source is `anthropics/skills`. See [agentskills.io](https://agentskills.io/home) for the open standard.
 
+### `/local-env`
+Manage local development environment with friendly domains and trusted HTTPS. Subcommands: `init` (first-time machine setup with mkcert, certs, proxy), `setup` (configure project domain and port range), `start`/`stop` (proxy control), `status` (show config), `list` (all registered projects). Uses mkcert for trusted certificates and Caddy or Node proxy for reverse proxying. Stores config in `~/.squared-agent/` with per-project settings in `.project/local-env.json`.
+
 ## Available Content
 
 ### Templates (`templates/`)
@@ -70,6 +73,7 @@ Content that gets copied to new projects:
 - **Clean-Branches-Command.md** - Remove merged or stale branches
 - **END-SESSION-COMMAND.md** - End-session workflow with creator feedback loop
 - **Summary-Command.md** - Accomplishments summary from git history and session logs
+- **Local-Env-Command.md** - Local environment management (domains, HTTPS, proxy)
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **New-Idea-Workflow.md** - Consultative discovery process for new projects
 
@@ -81,6 +85,7 @@ Content that gets copied to new projects:
 
 #### Knowledge (`templates/knowledge/`)
 - **Next.js-App-Build-Guide.md** - Next.js + Better Auth + Drizzle + Turborepo patterns
+- **local-env/** - Local development environment setup (mkcert, Caddy, domains)
 
 #### Skills (`templates/skills/`)
 [Agent Skills](https://agentskills.io/home) - an open standard (originally by Anthropic) for portable agent capabilities. Skills work across Claude Code, Cursor, VS Code, Gemini CLI, and more.
@@ -254,6 +259,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-19:** Added `/local-env` command for local development environments - friendly domains (`*.local`), trusted HTTPS via mkcert, automatic port range allocation (50 ports per project), Caddy or Node reverse proxy; stores config in `~/.squared-agent/` (global registry, certs, Caddyfile) and `.project/local-env.json` (per-project); subcommands: init, setup, start, stop, status, list
 - **2026-01-19:** Added `/sync-docs` command for documentation consistency; created `docs/style-guide.md` (voice, terminology, formatting rules) and `docs/doc-patterns/` (templates for README, command, knowledge docs); enables systematic documentation maintenance across all files
 - **2026-01-19:** Integrated Agent Skills ([agentskills.io](https://agentskills.io/home)) - open standard for portable agent capabilities; added `/add-skill` command (default: `anthropics/skills`); documented recommended skills (frontend-design, webapp-testing, mcp-builder, docx, pptx, xlsx, pdf); skills auto-deploy to spawned projects based on knowledge categories; works across Claude Code, Cursor, VS Code, Gemini CLI
 - **2026-01-18:** Reorganized knowledge into category folders for mix-and-match selection: `web/nextjs/`, `database/drizzle/`, `auth/better-auth/`, `monorepo/turborepo/`, `patterns/`; enables `/prepare-setup` to ask per-category (Web framework? Database? Auth? Monorepo? Patterns?); split guides can be combined independently for any project type
