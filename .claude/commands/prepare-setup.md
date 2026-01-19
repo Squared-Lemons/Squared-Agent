@@ -52,6 +52,7 @@ Check if arguments were provided in `$ARGUMENTS`. Arguments can be:
 - `--commands <file1,file2>` - Skip commands question (comma-separated, or "all" or "none")
 - `--tasks <file1,file2>` - Skip tasks question (comma-separated, or "all" or "none")
 - `--knowledge <file1,file2>` - Skip knowledge question (comma-separated, or "all" or "none")
+- `--skills <auto|none|skill1,skill2>` - Skip skills question ("auto" based on knowledge, "none", or comma-separated)
 
 If an argument is not provided, ask the user using AskUserQuestion.
 
@@ -115,6 +116,33 @@ If skill files exist:
 - Question: "Which knowledge (knowledge docs) should be included?"
 - Options: List each .md file in `templates/knowledge/` (excluding README.md)
 - Include "All" and "None" as options
+
+### 2f. Skills Selection
+
+[Agent Skills](https://agentskills.io/home) are portable capabilities that work across Claude Code, Cursor, VS Code, and more.
+
+If `--skills` not in arguments:
+```bash
+# Check skill-mapping.json for recommended skills
+cat templates/skills/skill-mapping.json 2>/dev/null
+```
+
+- Use AskUserQuestion with header "Skills" and `multiSelect: false`
+- Question: "Which skills should be included?"
+- Options:
+  - "Recommended (based on knowledge)" - Include recommended skills matching selected knowledge categories
+  - "None" - Don't include any skills
+  - [List installed skills from `templates/skills/*/` if any exist]
+
+**Recommended mode logic:**
+1. Read `templates/skills/skill-mapping.json`
+2. For each selected knowledge category (web, database, auth, monorepo, patterns)
+3. Include skills from the `recommended.[category]` array
+4. Example: If "Next.js" knowledge selected (category: web), include frontend-design, webapp-testing, etc.
+
+**Recommended skills by category:**
+- **web**: frontend-design, webapp-testing, web-artifacts-builder, theme-factory
+- **patterns**: mcp-builder, docx, pptx, xlsx, pdf, skill-creator
 
 ---
 
@@ -210,6 +238,11 @@ This package contains everything needed to set up a new project with the **[prof
 
 > Knowledge are knowledge base documents - reference guides that inform how to build things. Consult them during development, not during setup.
 
+### Skills (to install)
+[List each recommended skill based on knowledge categories, or "None" if none selected]
+
+> Skills are from [agentskills.io](https://agentskills.io/home) - portable capabilities that work across Claude Code, Cursor, VS Code, and more.
+
 ---
 
 ## Setup Instructions
@@ -257,6 +290,20 @@ These are not setup instructions - they are knowledge docs for the agent to cons
 
 [Or if no knowledge: "No knowledge documentation included."]
 
+### Step 5: Install Skills
+
+[If skills were recommended:]
+Install the recommended skills:
+
+```bash
+[For each skill, add:]
+npx add-skill anthropics/skills -s [skill-name]
+```
+
+Skills provide specialized capabilities and are automatically loaded once installed.
+
+[Or if no skills: "No skills recommended."]
+
 ---
 
 ## Final Organization
@@ -282,6 +329,7 @@ After completing all steps, verify:
 - [ ] All setup instructions have been executed
 - [ ] All commands have been created in `.claude/commands/`
 - [ ] All tasks have been completed
+- [ ] Recommended skills installed via `npx add-skill` (if any)
 - [ ] `CLAUDE.md` exists and documents available commands
 - [ ] Documentation organized into `docs/`
 - [ ] Initial commit made
@@ -311,7 +359,9 @@ Contents:
 - [list of setup files]
 - commands/ [list of command files, or "empty" if none]
 - [list of task files]
-- knowledge/ [list of skill files, or "empty" if none]
+- knowledge/ [list of knowledge files, or "empty" if none]
+
+Skills to install: [list recommended skills, or "none"]
 
 To use: Copy this folder to your new project and tell Claude Code:
 "Read all files in this folder, starting with SETUP.md, and execute the setup."

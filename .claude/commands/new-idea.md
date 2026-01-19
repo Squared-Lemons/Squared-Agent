@@ -126,6 +126,29 @@ Recommend relevant ones:
 - New Feature Workflow - for structured development
 - Others based on project needs
 
+### Available Skills
+
+[Agent Skills](https://agentskills.io/home) are portable capabilities that work across Claude Code, Cursor, VS Code, and more.
+
+Check recommended skills:
+```bash
+cat templates/skills/skill-mapping.json 2>/dev/null
+```
+
+Recommend skills based on the chosen stack:
+
+**For web projects (Next.js, React, etc.):**
+- **frontend-design** - Production-grade UI without generic AI aesthetics
+- **webapp-testing** - End-to-end web application testing
+- **web-artifacts-builder** - Build interactive web components
+- **theme-factory** - Generate consistent design themes
+
+**For all projects:**
+- **mcp-builder** - Create MCP servers for tool integration
+- **docx/pptx/xlsx/pdf** - Document creation and editing
+
+Explain that skills are automatically loaded by Claude Code and portable across other AI tools.
+
 ### Custom Needs
 Note anything not covered by existing docs that should be in the project brief.
 
@@ -280,9 +303,15 @@ This folder contains everything needed to build [Project Name].
 - **commands/** - Workflow documentation (reference)
 - **provided-files/** - Original files from the user
 
+## Skills to Install
+
+[List recommended skills based on project stack, or "None"]
+
+Skills are installed during setup via `npx add-skill anthropics/skills -s [skill-name]`
+
 ## Available Commands
 
-After opening in Claude Code, these slash commands are available:
+After opening in Claude Code, these commands are available:
 
 | Command | Purpose |
 |---------|---------|
@@ -388,7 +417,7 @@ cp -r "[provided-path]"/* "$OUTPUT_DIR/provided-files/"
 
 ### Copy Claude Code Commands
 
-Copy the actual slash command definitions so they work in the new project:
+Copy the actual command definitions so they work in the new project:
 ```bash
 # Core workflow commands every project needs
 cp ".claude/commands/start-session.md" "$OUTPUT_DIR/.claude/commands/"
@@ -434,7 +463,7 @@ Then show the contents:
 ```
 Contents:
 ├── .claude/
-│   └── commands/          # Slash commands (/start-session, /new-feature, etc.)
+│   └── commands/          # Commands (/start-session, /new-feature, etc.)
 ├── PROJECT-BRIEF.md       # Full project context
 ├── TECHNICAL-DECISIONS.md # Technical choices
 ├── SETUP.md               # Instructions for target agent
@@ -442,12 +471,14 @@ Contents:
 ├── commands/              # Workflow documentation
 └── provided-files/        # Your original files (if any)
 
+Skills to install: [list recommended skills]
+
 To build this project:
 1. Open with Claude Code: cd [OUTPUT_DIR] && claude .
 2. Tell Claude: "Read SETUP.md and build this project"
 
-The slash commands (/start-session, /new-feature, /commit, etc.)
-will be available immediately after opening in Claude Code.
+The commands (/start-session, /new-feature, /commit, etc.)
+will be available immediately. Skills are installed during setup.
 ```
 
 Open the folder:

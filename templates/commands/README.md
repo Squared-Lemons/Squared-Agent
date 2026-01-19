@@ -4,7 +4,7 @@
 
 ---
 
-Implementation guides for Claude Code slash commands. These are documentation files that agents read to generate actual executable commands in `.claude/commands/`.
+Implementation guides for Claude Code commands. These are documentation files that agents read to generate actual executable commands in `.claude/commands/`.
 
 ## How It Works
 

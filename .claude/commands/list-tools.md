@@ -1,6 +1,6 @@
 # List Tools - Available Commands & Content
 
-Display available slash commands and template content.
+Display available commands and template content.
 
 ---
 

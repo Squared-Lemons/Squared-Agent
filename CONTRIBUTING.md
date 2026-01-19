@@ -21,9 +21,9 @@ Everything in `templates/` gets copied to new projects.
 
 #### Commands (`templates/commands/`)
 
-Implementation guides that describe how to create slash commands. Agents read these to generate actual command implementations in `.claude/commands/`.
+Implementation guides that describe how to create commands. Agents read these to generate actual command implementations in `.claude/commands/`.
 
-**When to add:** You have a reusable workflow pattern that should become a slash command.
+**When to add:** You have a reusable workflow pattern that should become a command.
 
 #### Knowledges (`templates/knowledge/`)
 

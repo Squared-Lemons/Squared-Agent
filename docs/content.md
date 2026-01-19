@@ -47,7 +47,7 @@ Complete guide for building Next.js applications.
 
 ## Command Guides
 
-Guides in `templates/commands/` explain how to implement slash commands.
+Guides in `templates/commands/` explain how to implement commands.
 
 ### END-SESSION-COMMAND
 
