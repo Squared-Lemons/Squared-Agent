@@ -24,6 +24,7 @@ templates/commands/               .claude/commands/
 | [Start-Session-Command.md](Start-Session-Command.md) | `/start-session` | Begin session with branch awareness |
 | [New-Feature-Command.md](New-Feature-Command.md) | `/new-feature` | Create feature branch or worktree |
 | [Complete-Feature-Command.md](Complete-Feature-Command.md) | `/complete-feature` | Merge or create PR |
+| [Clean-Branches-Command.md](Clean-Branches-Command.md) | `/clean-branches` | Remove merged or stale branches |
 | [Summary-Command.md](Summary-Command.md) | `/summary` | Generate accomplishments report |
 | [New Feature Workflow.md](New%20Feature%20Workflow.md) | `/feature` | Multi-phase feature development |
 | [New-Idea-Workflow.md](New-Idea-Workflow.md) | — | Documents the `/new-idea` process |
@@ -97,6 +98,21 @@ Feature branch completion with merge or PR options.
 | PR | Push with -u, create PR via gh |
 
 **Creates:** `.claude/commands/complete-feature.md`
+
+---
+
+## Clean-Branches-Command
+
+**Location:** `templates/commands/Clean-Branches-Command.md`
+
+Branch maintenance utility for removing stale branches.
+
+| Category | What Gets Found |
+|----------|-----------------|
+| Merged | Branches merged into current branch |
+| Gone | Branches whose remote tracking was deleted |
+
+**Creates:** `.claude/commands/clean-branches.md`
 
 ---
 

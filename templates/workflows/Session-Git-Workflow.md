@@ -31,13 +31,14 @@ flowchart TB
         H -->|Feature complete| I["/complete-feature"]
         H -->|Session over| J["/end-session"]
         I --> K["Merge or PR"]
+        K -.->|Periodic| M["/clean-branches"]
         J --> L["Docs + tokens + commit"]
     end
 ```
 
 ---
 
-## The Five Commands
+## The Six Commands
 
 | Command | When to Use | What It Does |
 |---------|-------------|--------------|
@@ -45,6 +46,7 @@ flowchart TB
 | `/new-feature "desc"` | Starting new work | Creates feature branch or worktree |
 | `/commit` | During work | Quick commit with approval |
 | `/complete-feature` | Feature is done | Merge to main or create PR |
+| `/clean-branches` | Periodic maintenance | Remove merged or stale branches |
 | `/end-session` | Done for now | Update docs, capture learnings, commit |
 
 ---
@@ -114,7 +116,10 @@ Use worktrees when you need to keep current work intact while starting something
 # 6. Feature complete - merge it
 /complete-feature
 
-# 7. End session with documentation
+# 7. (Optional) Clean up old branches
+/clean-branches
+
+# 8. End session with documentation
 /end-session
 ```
 

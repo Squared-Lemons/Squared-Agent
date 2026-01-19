@@ -166,6 +166,7 @@ flowchart LR
 | `/new-feature "desc"` | Starting new work — creates feature branch or worktree |
 | `/commit` | During work — quick commit with approval |
 | `/complete-feature` | Feature is done — merge to main or create PR |
+| `/clean-branches` | Periodic maintenance — remove merged or stale branches |
 | `/end-session` | Done for now — update docs, capture learnings, commit |
 
 Protected branches (`main`, `master`, `develop`, `release/*`) block direct changes and guide you to create a feature branch first.
@@ -434,6 +435,7 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 | `/start-session` | Begin session with branch awareness and context loading |
 | `/new-feature "desc"` | Create feature branch (or worktree) for safe development |
 | `/complete-feature` | Wrap up feature branch — merge or create PR |
+| `/clean-branches` | Remove merged or stale feature branches |
 | `/end-session` | End session, update docs, capture learnings, commit |
 | `/commit` | Draft commit message, get approval, commit |
 

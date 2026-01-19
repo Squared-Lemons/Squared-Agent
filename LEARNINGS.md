@@ -6,6 +6,27 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-19: Clean-Branches Command
+
+**What Was Done**
+- Created `/clean-branches` command for branch maintenance
+- Added command to Session Git Workflow as the 6th command
+- Updated all documentation (CLAUDE.md, README.md, templates/)
+
+**What Worked Well**
+- Following the plan from plan mode made implementation straightforward
+- Consistent command patterns from existing commands (complete-feature, new-feature) provided clear templates
+- TodoWrite tracking ensured no documentation files were missed
+
+**Key Insight**
+- **Maintenance commands complete the workflow** - Session Git Workflow was missing a cleanup step; adding `/clean-branches` fills the gap between `/complete-feature` and `/end-session`
+
+**Pattern Established**
+- Branch cleanup flow: merged branches + gone branches → preview → approval → delete local → optionally delete remote
+- Safety rules: never delete protected branches, current branch, or worktree branches
+
+---
+
 ### 2026-01-19: Agent Skills Integration & Documentation System
 
 **What Was Done**

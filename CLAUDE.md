@@ -24,6 +24,9 @@ Create feature branch (or worktree) for safe development. Accepts a description,
 ### `/complete-feature`
 Wrap up feature branch - merge or create PR. Reviews changes, suggests squashing if many commits, then offers two options: merge directly to main (solo workflow) or create a pull request (team workflow).
 
+### `/clean-branches`
+Remove merged or stale feature branches. Finds branches merged into main and branches whose remote tracking is gone, previews them, and safely deletes selected branches. Protects main, master, develop, release/*, current branch, and worktree branches.
+
 ### `/prepare-setup`
 Prepare a setup package for a new project. Asks for profile, commands, tasks, and knowledge to include, then creates a temp folder with all files and a SETUP.md guide.
 
@@ -64,6 +67,7 @@ Content that gets copied to new projects:
 - **Start-Session-Command.md** - Branch-aware session entry with context loading
 - **New-Feature-Command.md** - Safe feature branch or worktree creation
 - **Complete-Feature-Command.md** - Branch completion via merge or PR
+- **Clean-Branches-Command.md** - Remove merged or stale branches
 - **END-SESSION-COMMAND.md** - End-session workflow with creator feedback loop
 - **Summary-Command.md** - Accomplishments summary from git history and session logs
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
