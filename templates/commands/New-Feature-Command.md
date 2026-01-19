@@ -27,6 +27,7 @@ The `/new-feature` command creates a safe workspace for development by branching
 
 ```markdown
 ---
+name: new-feature
 description: Create feature branch (or worktree) for safe development
 allowed-tools: Bash, AskUserQuestion
 ---
@@ -35,7 +36,7 @@ allowed-tools: Bash, AskUserQuestion
 
 Create a feature branch or worktree for safe development work.
 
-**Arguments**: $ARGUMENTS - Short description of the feature (e.g., "payment-redesign")
+**Arguments**: `$ARGUMENTS` - Short description of the feature (e.g., "payment-redesign")
 
 ---
 

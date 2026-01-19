@@ -67,7 +67,7 @@ Wrap up this coding session by updating documentation and capturing lessons lear
 
 First, understand what happened this session:
 
-```bash
+\```bash
 # Recent commits (likely this session)
 git log --oneline -10
 
@@ -76,7 +76,7 @@ git status
 
 # Full diff of recent work
 git diff HEAD~5..HEAD --stat
-```
+\```
 
 Read these to understand the session's scope.
 
@@ -431,12 +431,12 @@ Copy `.env.example` to `.env` and configure:
 
 ## Installation
 
-\```bash
+\\```bash
 pnpm install
 pnpm db:generate
 pnpm db:migrate
 pnpm dev
-\```
+\\```
 
 ## Feature Status
 
