@@ -150,6 +150,25 @@ This teaches good git habits and prevents accidental commits to protected branch
 - **Start in Plan Mode** - For complex tasks, use Plan Mode first (shift+tab twice)
 - **Update CLAUDE.md** - When Claude does something wrong, add a rule to prevent it
 
+### Adding New Commands
+
+When adding a command that spawned projects should inherit, follow this checklist:
+
+| Step | File(s) to Update | Purpose |
+|------|-------------------|---------|
+| 1. Create command | `.claude/commands/[name].md` | The actual executable command |
+| 2. Create template guide | `templates/commands/[Name]-Command.md` | Documentation for `/prepare-setup` |
+| 3. Update `/new-idea` | `.claude/commands/new-idea.md` | Add to copy list so spawned projects get it |
+| 4. Update setup instructions | `templates/profiles/developer/SETUP-INSTRUCTIONS.md` | List in commands table |
+| 5. Add knowledge (if relevant) | `templates/knowledge/[category]/` | Reference docs for the feature |
+| 6. Update CLAUDE.md | `CLAUDE.md` | Document the new command |
+
+**Why this matters:** Commands created in this agent but not added to the propagation paths won't reach spawned projects. The `/local-env` command was missing from steps 3-4, causing it not to appear in new projects.
+
+**Propagation paths:**
+- `/new-idea` → copies `.claude/commands/*.md` files directly to spawned projects
+- `/prepare-setup` → copies `templates/commands/*.md` guides, target agent creates commands from guides
+
 ## Tool Intelligence
 
 The agent learns which tools work best for which tasks, evolving with each session.
