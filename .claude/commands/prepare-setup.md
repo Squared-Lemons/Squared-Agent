@@ -128,7 +128,7 @@ cat templates/skills/skill-mapping.json 2>/dev/null
 ```
 
 - Use AskUserQuestion with header "Skills" and `multiSelect: false`
-- Question: "Which agent skills should be included?"
+- Question: "Which skills should be included?"
 - Options:
   - "Recommended (based on knowledge)" - Include recommended skills matching selected knowledge categories
   - "None" - Don't include any skills
@@ -293,7 +293,7 @@ These are not setup instructions - they are knowledge docs for the agent to cons
 ### Step 5: Install Skills
 
 [If skills were recommended:]
-Install the recommended agent skills:
+Install the recommended skills:
 
 ```bash
 [For each skill, add:]
@@ -302,7 +302,7 @@ npx add-skill anthropics/skills -s [skill-name]
 
 Skills provide specialized capabilities and are automatically loaded once installed.
 
-[Or if no skills: "No agent skills recommended."]
+[Or if no skills: "No skills recommended."]
 
 ---
 

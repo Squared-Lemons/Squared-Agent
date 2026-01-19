@@ -52,7 +52,7 @@ Sync active commands to template files for spawned projects. Compares `.claude/c
 Synchronize documentation across related files for consistency. Checks docs against style guide patterns (`docs/style-guide.md`), identifies terminology/formatting issues, and propagates changes. Supports `--audit` (report only) and `--scope [area]` (readme, commands, knowledge, skills) modes.
 
 ### `/add-skill`
-Install an agent skill and catalogue it for spawned projects. Runs `npx add-skill [source]`, categorizes newly installed skills by knowledge category (web, database, auth, monorepo, patterns), copies to `templates/skills/`, and updates skill-mapping.json. Default source is `anthropics/skills`. See [agentskills.io](https://agentskills.io/home) for the open standard.
+Install a skill and catalogue it for spawned projects. Runs `npx add-skill [source]`, categorizes newly installed skills by knowledge category (web, database, auth, monorepo, patterns), copies to `templates/skills/`, and updates skill-mapping.json. Default source is `anthropics/skills`. See [agentskills.io](https://agentskills.io/home) for the open standard.
 
 ## Available Content
 
@@ -223,7 +223,7 @@ templates/          # Content copied to new projects
   workflows/        # Development processes (Session-Git-Workflow)
   commands/         # Command implementation guides
   knowledge/        # Framework guides (Next.js, etc.)
-  skills/           # Agent skills (Vercel agent-skills)
+  skills/           # Skills (Vercel agent-skills)
   ux-guides/        # UI/UX patterns
   profiles/         # Setup profiles (developer/, etc.)
   tasks/            # One-time setup tasks
@@ -239,7 +239,7 @@ docs/               # Internal documentation
   style-guide.md    # Writing voice, terminology, formatting rules
   doc-patterns/     # Templates for README, command, knowledge docs
 .claude/            # Claude Code configuration
-  commands/         # Active slash commands
+  commands/         # Active commands
 .project/           # Local data (gitignored)
   sessions/         # Session logs by date
   tool-intelligence.md  # Learned tool preferences
@@ -257,7 +257,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 - **2026-01-17:** Added `/sync-templates` command for keeping templates in sync with active commands; detects drift between `.claude/commands/` and `templates/commands/`, auto-updates code blocks while preserving prose; integrates with `/start-session` (background audit), `/end-session` and `/complete-feature` (sync prompts); supports `--audit` and `--background` modes
 - **2026-01-17:** Added post-setup cleanup step to `/new-idea` workflow - after project is built and verified, setup files (SETUP.md, PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, commands/, knowledge/, provided-files/) are moved into `agent/setup/` within the project for version control and clean parent directory
 - **2026-01-17:** README polish and template README updates - renamed "Creating Setup Packages" to "Agent Packages"; added Token Tracking section after Tools & Integrations; updated templates/commands/README.md with token extraction step in END-SESSION-COMMAND; added Token Tracking component to templates/workflows/README.md Session-Git-Workflow description
-- **2026-01-16:** Token tracking in template builder - child projects now inherit token tracking by default; updated Session-Git-Workflow.md with Token Tracking section and principle #7; updated developer profile SETUP-INSTRUCTIONS.md to create `.project/token-usage.md` and gitignore full `.project/`; README improvements: added "No cost visibility" to problem statement, token tracking mention under Session Git Workflow, "Bringing the Agent into Existing Projects" section for existing codebases, renamed "What Your Projects Inherit" to "Projects That Follow Your Best Practices"
+- **2026-01-16:** Token tracking in template builder - spawned projects now inherit token tracking by default; updated Session-Git-Workflow.md with Token Tracking section and principle #7; updated developer profile SETUP-INSTRUCTIONS.md to create `.project/token-usage.md` and gitignore full `.project/`; README improvements: added "No cost visibility" to problem statement, token tracking mention under Session Git Workflow, "Bringing the Agent into Existing Projects" section for existing codebases, renamed "What Your Projects Inherit" to "Projects That Follow Your Best Practices"
 - **2026-01-16:** Token usage tracking for cost estimation - `/end-session` extracts raw token data from Claude Code session files and logs to `.project/token-usage.md` with billing type (`subscription` vs `api`); `/summary` calculates costs at report time and tracks subscription usage against configurable daily/hourly limits for tier assessment; supports future background agents via API billing type
 - **2026-01-16:** Marketing-quality README rewrite - added hero section, problem statement, "What Your Projects Inherit" split, comprehensive Tool Intelligence diagram with session logs and /summary reporting; created `templates/workflows/` folder with Session-Git-Workflow; linked README hierarchy through templates/ folder READMEs; merged docs/templates.md into templates/README.md; added developer profile README
 - **2026-01-16:** Added Session Git Workflow template - comprehensive knowledge guide (`templates/knowledge/Session-Git-Workflow.md`) + command guides for start-session, new-feature, complete-feature; updated END-SESSION-COMMAND.md with session note handoff; enables new projects to inherit disciplined git workflow

@@ -1,6 +1,6 @@
 # Command Pattern
 
-Template and guidelines for slash command documentation.
+Template and guidelines for command documentation.
 
 ---
 

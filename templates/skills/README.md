@@ -52,7 +52,7 @@ MASTER AGENT                          SPAWNED PROJECT
 | Skill | Purpose | Install |
 |-------|---------|---------|
 | **mcp-builder** | Create MCP servers for tool integration | `npx add-skill anthropics/skills -s mcp-builder` |
-| **skill-creator** | Create new agent skills | `npx add-skill anthropics/skills -s skill-creator` |
+| **skill-creator** | Create new skills | `npx add-skill anthropics/skills -s skill-creator` |
 
 ### Creative & Communication
 

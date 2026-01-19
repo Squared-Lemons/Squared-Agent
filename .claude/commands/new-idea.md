@@ -311,7 +311,7 @@ Skills are installed during setup via `npx add-skill anthropics/skills -s [skill
 
 ## Available Commands
 
-After opening in Claude Code, these slash commands are available:
+After opening in Claude Code, these commands are available:
 
 | Command | Purpose |
 |---------|---------|
@@ -417,7 +417,7 @@ cp -r "[provided-path]"/* "$OUTPUT_DIR/provided-files/"
 
 ### Copy Claude Code Commands
 
-Copy the actual slash command definitions so they work in the new project:
+Copy the actual command definitions so they work in the new project:
 ```bash
 # Core workflow commands every project needs
 cp ".claude/commands/start-session.md" "$OUTPUT_DIR/.claude/commands/"
@@ -463,7 +463,7 @@ Then show the contents:
 ```
 Contents:
 ├── .claude/
-│   └── commands/          # Slash commands (/start-session, /new-feature, etc.)
+│   └── commands/          # Commands (/start-session, /new-feature, etc.)
 ├── PROJECT-BRIEF.md       # Full project context
 ├── TECHNICAL-DECISIONS.md # Technical choices
 ├── SETUP.md               # Instructions for target agent
@@ -477,7 +477,7 @@ To build this project:
 1. Open with Claude Code: cd [OUTPUT_DIR] && claude .
 2. Tell Claude: "Read SETUP.md and build this project"
 
-The slash commands (/start-session, /new-feature, /commit, etc.)
+The commands (/start-session, /new-feature, /commit, etc.)
 will be available immediately. Skills are installed during setup.
 ```
 

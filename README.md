@@ -452,7 +452,7 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 | `/how-to-use` | Display the human-editable guide |
 | `/list-tools` | List all commands, plugins, and tools |
 | `/get-feedback` | Process inbox and implement improvements |
-| `/add-skill` | Install and catalogue agent skills for spawned projects |
+| `/add-skill` | Install and catalogue skills for spawned projects |
 | `/sync-templates` | Sync active commands to template files |
 
 ---
@@ -463,7 +463,7 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 templates/              # Content copied to new projects
   commands/             # Command implementation guides
   knowledge/            # Framework guides (Next.js, etc.)
-  skills/               # Agent skills (Vercel agent-skills)
+  skills/               # Skills (Vercel agent-skills)
   ux-guides/            # UI/UX patterns
   profiles/             # Setup profiles (developer/, etc.)
   tasks/                # One-time setup tasks
@@ -479,7 +479,7 @@ suggestions/            # Agent proposals (categorized)
 
 docs/                   # Documentation
 .claude/                # Claude Code configuration
-  commands/             # Active slash commands
+  commands/             # Active commands
 
 .project/               # Local data (gitignored)
   sessions/             # Session logs by date

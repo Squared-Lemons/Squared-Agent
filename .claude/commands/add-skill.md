@@ -1,12 +1,12 @@
 ---
 name: add-skill
-description: Install an agent skill and catalogue it for spawned projects
+description: Install a skill and catalogue it for spawned projects
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
 # Add Skill
 
-Install an [Agent Skill](https://agentskills.io/home) and catalogue it for spawned projects.
+Install a skill from [Agent Skills](https://agentskills.io/home) and catalogue it for spawned projects.
 
 **Arguments:** $ARGUMENTS
 
@@ -224,7 +224,7 @@ These skills are recommended for most projects:
 | Skill | Purpose |
 |-------|---------|
 | **mcp-builder** | Create MCP servers for tool integration |
-| **skill-creator** | Create new agent skills |
+| **skill-creator** | Create new skills |
 
 ### Creative & Communication
 | Skill | Purpose |

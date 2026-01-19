@@ -13,8 +13,8 @@ Everything in this folder gets copied to new projects via `/prepare-setup` or `/
 | [workflows/](workflows/README.md) | Development processes | Git workflow, session management |
 | [profiles/](profiles/README.md) | Base configurations | Plugins, permissions, hooks, agents |
 | [knowledge/](knowledge/README.md) | Framework guides | Platform-specific patterns and gotchas |
-| [skills/](skills/README.md) | Agent skills | Vercel agent-skills optimization rules |
-| [commands/](commands/README.md) | Command guides | Implementation docs for slash commands |
+| [skills/](skills/README.md) | Skills | Vercel agent-skills optimization rules |
+| [commands/](commands/README.md) | Command guides | Implementation docs for commands |
 | [ux-guides/](ux-guides/README.md) | UI patterns | Reusable interface implementations |
 | [tasks/](tasks/README.md) | One-time activities | Post-setup tasks like codebase analysis |
 
@@ -106,7 +106,7 @@ Recommended skills (frontend-design, webapp-testing, mcp-builder, docx, pptx, xl
 
 ## Commands
 
-Implementation guides for slash commands.
+Implementation guides for commands.
 
 | Guide | Creates | Purpose |
 |-------|---------|---------|

@@ -295,7 +295,7 @@ Insights and lessons captured from coding sessions to improve future development
 - Opening temp folder in Finder for easy access
 
 **Key Decision**
-- Setup packages are self-contained in temp folders, not integrated into target projects until user copies them
+- Setup packages are self-contained in temp folders, not integrated into spawned projects until user copies them
 
 ---
 
