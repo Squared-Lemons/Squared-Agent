@@ -160,33 +160,226 @@ Ask user to confirm or adjust your recommendations.
 
 When the user is ready (they'll say something like "looks good" or "let's do it"):
 
-### Choose save location
+### Determine project name
 
-First, determine a slugified project name from the discussion (e.g., "habit-tracker", "football-team-manager").
-
-Then ask where to save via macOS folder picker:
-
-```bash
-# Ask user where to save via macOS folder picker
-SELECTED_FOLDER=$(osascript -e 'tell application "System Events" to choose folder with prompt "Choose where to save the project package:"' 2>/dev/null | sed 's/alias //' | sed 's/:/\//g' | sed 's/^/\//')
-
-if [ -n "$SELECTED_FOLDER" ] && [ "$SELECTED_FOLDER" != "/" ]; then
-    echo "SELECTED:$SELECTED_FOLDER"
-else
-    echo "CANCELLED"
-fi
-```
-
-Based on the result:
-- If **SELECTED**, use: `OUTPUT_DIR="$SELECTED_FOLDER/[project-slug]"` (e.g., `~/Projects/habit-tracker`)
-- If **CANCELLED**, fall back to: `OUTPUT_DIR="/tmp/[project-slug]"` (e.g., `/tmp/habit-tracker`)
+Create a slugified project name from the discussion (e.g., "habit-tracker", "football-team-manager", "gym-management").
 
 ### Create output folder
 
+All project packages go in the `outbox/` folder within Squared-Agent:
+
 ```bash
-OUTPUT_DIR="[chosen-path]/[project-slug]"
+PROJECT_SLUG="[project-slug]"
+OUTPUT_DIR="outbox/$PROJECT_SLUG"
 mkdir -p "$OUTPUT_DIR/.claude/commands" "$OUTPUT_DIR/knowledge" "$OUTPUT_DIR/commands" "$OUTPUT_DIR/provided-files"
 echo "$OUTPUT_DIR"
+```
+
+### Generate README.md (Project Specification)
+
+Write a comprehensive project specification that serves as the new project's initial README.md. This document should be detailed enough for a target agent to understand and build the project:
+
+```markdown
+# [Project Name] - Project Specification
+
+A comprehensive guide to the v1 prototype for [brief description].
+
+---
+
+## Project Overview
+
+**Purpose:** [What the project does]
+
+**Target Users:** [Who uses it]
+
+**Approach:** [Technical approach - e.g., "Quick prototype using SQLite, designed for easy migration to PostgreSQL later"]
+
+---
+
+## V1 Scope
+
+### Included
+
+| Feature | Description |
+|---------|-------------|
+| **[Feature 1]** | [What it does] |
+| **[Feature 2]** | [What it does] |
+| **[Feature 3]** | [What it does] |
+
+### Explicitly Out of Scope (v2+)
+
+- [Feature that's NOT in v1]
+- [Feature that's NOT in v1]
+
+---
+
+## Technical Stack
+
+| Component | Technology | Rationale |
+|-----------|------------|-----------|
+| **Framework** | [X] | [Why] |
+| **Authentication** | [X] | [Why] |
+| **Database** | [X] | [Why] |
+| **Styling** | [X] | [Why] |
+| **Deployment** | Environment-managed | Handled by deployment environments |
+
+---
+
+## Project Structure
+
+\`\`\`
+[project-name]/
+├── [folder structure based on framework]
+└── ...
+\`\`\`
+
+---
+
+## Database Schema
+
+### Entity Relationship
+
+\`\`\`
+[ASCII diagram of entity relationships]
+\`\`\`
+
+### Tables
+
+[Detailed table definitions with columns, types, descriptions]
+
+---
+
+## Key Workflows
+
+[Describe the main user workflows with ASCII diagrams where helpful]
+
+---
+
+## Authentication Flow
+
+[Describe auth flow with diagram]
+
+---
+
+## [Other Relevant Sections]
+
+[Add sections specific to this project - multi-tenancy, API structure, etc.]
+
+---
+
+## Package Contents
+
+When generated, the project package includes:
+
+\`\`\`
+[project-name]/
+├── .claude/
+│   └── commands/       # Slash commands for development workflow
+├── knowledge/          # Platform-specific guidance
+├── commands/           # Workflow documentation
+├── provided-files/     # Original files from user
+├── PROJECT-BRIEF.md    # Full project context
+├── TECHNICAL-DECISIONS.md # Technology choices
+└── SETUP.md            # Instructions for target agent
+\`\`\`
+
+---
+
+## Available Commands
+
+After setup, these slash commands are available:
+
+| Command | Purpose |
+|---------|---------|
+| \`/start-session\` | Begin session with branch safety check, load context |
+| \`/new-feature\` | Create feature branch for safe development |
+| \`/complete-feature\` | Merge branch or create PR when done |
+| \`/clean-branches\` | Remove merged or stale branches |
+| \`/commit\` | Draft commit message with approval flow |
+| \`/end-session\` | Update docs, capture learnings, generate feedback, commit |
+| \`/summary\` | Generate accomplishments report for time period |
+| \`/local-env\` | Manage local domains and trusted HTTPS |
+
+---
+
+## Skills to Install
+
+The target agent should install these skills:
+
+\`\`\`bash
+npx add-skill anthropics/skills -s [skill-name]
+\`\`\`
+
+| Skill | Purpose |
+|-------|---------|
+| **[skill]** | [Why] |
+
+---
+
+## Development Workflow
+
+### Session Flow
+
+\`\`\`
+/start-session
+    │
+    ▼
+/new-feature "[description]"
+    │
+    ▼
+[Implement feature]
+    │
+    ▼
+/complete-feature
+    │
+    ▼
+/end-session
+\`\`\`
+
+### Git Workflow
+
+- **main** branch is protected
+- Create feature branches for all work
+- Merge via \`/complete-feature\` (direct merge or PR)
+- Clean up with \`/clean-branches\`
+
+---
+
+## Environment Variables
+
+\`\`\`env
+[Required environment variables]
+\`\`\`
+
+---
+
+## Post-Setup Checklist
+
+After the target agent builds the project:
+
+- [ ] Project structure matches [framework] conventions
+- [ ] Database schema created
+- [ ] Authentication working
+- [ ] [Feature 1] working
+- [ ] [Feature 2] working
+- [ ] CLAUDE.md created with project docs
+- [ ] Build passes without errors
+- [ ] Git repository initialized
+
+---
+
+## Future Versions (Roadmap)
+
+### V2: [Theme]
+- [Feature]
+- [Feature]
+
+### V3: [Theme]
+- [Feature]
+
+---
+
+*Generated by Squared Agent for [Project Name].*
 ```
 
 ### Generate PROJECT-BRIEF.md
@@ -296,6 +489,7 @@ This folder contains everything needed to build [Project Name].
 
 ## What's Included
 
+- **README.md** - Comprehensive project specification
 - **.claude/commands/** - Slash commands for development workflow
 - **PROJECT-BRIEF.md** - Full project context and requirements
 - **TECHNICAL-DECISIONS.md** - Technology choices with rationale
@@ -328,9 +522,10 @@ After opening in Claude Code, these commands are available:
 
 Read these files in order:
 
-1. **PROJECT-BRIEF.md** - Understand what we're building and why
-2. **TECHNICAL-DECISIONS.md** - Understand the technical approach
-3. **knowledge/*.md** - Learn platform patterns and gotchas
+1. **README.md** - Comprehensive project specification (overview, scope, tech stack, workflows)
+2. **PROJECT-BRIEF.md** - Full project context and requirements
+3. **TECHNICAL-DECISIONS.md** - Understand the technical approach
+4. **knowledge/*.md** - Learn platform patterns and gotchas
 
 Then:
 
@@ -478,25 +673,13 @@ rmdir "$OUTPUT_DIR/knowledge" 2>/dev/null || true
 
 ## Step 6: Handoff
 
-Report what was created, noting the save location:
+Report what was created:
 
-**If user chose a custom location:**
 ```
-Project package created at: [OUTPUT_DIR]
+Project package created at: outbox/[project-slug]/
 
-(Saved to your chosen location)
-```
-
-**If fell back to /tmp:**
-```
-Project package created at: [OUTPUT_DIR]
-
-(Saved to temporary folder - move it somewhere permanent before rebooting)
-```
-
-Then show the contents:
-```
 Contents:
+├── README.md              # Project specification (comprehensive guide)
 ├── .claude/
 │   └── commands/          # Commands (/start-session, /new-feature, etc.)
 ├── PROJECT-BRIEF.md       # Full project context
@@ -509,16 +692,17 @@ Contents:
 Skills to install: [list recommended skills]
 
 To build this project:
-1. Open with Claude Code: cd [OUTPUT_DIR] && claude .
-2. Tell Claude: "Read SETUP.md and build this project"
+1. Copy the folder to your projects directory
+2. Open with Claude Code: cd [project-slug] && claude .
+3. Tell Claude: "Read SETUP.md and build this project"
 
 The commands (/start-session, /new-feature, /commit, etc.)
 will be available immediately. Skills are installed during setup.
 ```
 
-Open the folder:
+Open the folder in Finder:
 ```bash
-open "$OUTPUT_DIR"
+open "outbox/$PROJECT_SLUG"
 ```
 
 ---

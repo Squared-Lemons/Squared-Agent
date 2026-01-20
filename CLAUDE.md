@@ -40,7 +40,7 @@ Draft a commit message, get approval, then commit changes.
 Generate an accomplishments summary for a time period. Analyzes git commits and session logs, categorizes by type (features, fixes, refactors, etc.), and produces a copy-paste ready report.
 
 ### `/new-idea`
-Consultative discovery conversation to design a new project. Discuss requirements, platform, and technical decisions together, then generate a comprehensive package (PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, SETUP.md) for the target agent to build v1.
+Consultative discovery conversation to design a new project. Discuss requirements, platform, and technical decisions together, then generate a comprehensive package to `outbox/[project-slug]/` including README.md (project specification), PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, SETUP.md, and workflow commands. The folder opens automatically in Finder when complete.
 
 ### `/how-to-use`
 Display the human-editable guide for using this agent. Content lives at `docs/how-to-use.md` so users can add their own tips and notes.
@@ -306,6 +306,7 @@ suggestions/        # My proposals (categorized)
   commands/         # Proposed command improvements
   workflow/         # Proposed workflow changes
   other/            # Miscellaneous improvements
+outbox/             # Generated project packages (from /new-idea)
 docs/               # Internal documentation
   style-guide.md    # Writing voice, terminology, formatting rules
   doc-patterns/     # Templates for README, command, knowledge docs
@@ -321,6 +322,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-20:** Enhanced `/new-idea` output - now generates README.md as comprehensive project specification; outputs to `outbox/[project-slug]/` instead of folder picker; auto-opens folder in Finder; updated New-Idea-Workflow.md template; generated gym-management project package as first example
 - **2026-01-20:** Integrated update propagation workflow - `/start-session` checks `inbox/updates/` for updates from master agent (spawned projects); `/end-session` exports update packages for spawned projects (master agent); fixed post-setup cleanup paths in `/new-idea`; added project structure diagrams to README Agent Packages section
 - **2026-01-19:** Enhanced Next.js App Build Guide with performance patterns from installed skills - added Performance Patterns (Critical) section covering waterfalls, bundle size, server-side caching, Suspense boundaries; added UI/UX Checklist with accessibility, forms, performance, responsive checks; added Skills for Deeper Learning section referencing vercel-react-best-practices, web-design-guidelines, frontend-design
 - **2026-01-19:** Added `/local-env` command for local development environments - friendly domains (`*.local`), trusted HTTPS via mkcert, automatic port range allocation (50 ports per project), Caddy or Node reverse proxy; stores config in `~/.squared-agent/` (global registry, certs, Caddyfile) and `.project/local-env.json` (per-project); subcommands: init, setup, start, stop, status, list

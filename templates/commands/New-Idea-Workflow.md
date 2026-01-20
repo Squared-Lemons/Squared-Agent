@@ -39,20 +39,29 @@ The output is everything a target agent needs to build version 1.
          ▼
 ┌─────────────────────────────────────┐
 │  GENERATE PACKAGE                   │
+│  (to outbox/[project-slug]/)        │
 │                                     │
+│  ├── README.md (project spec)      │
 │  ├── PROJECT-BRIEF.md              │
 │  ├── TECHNICAL-DECISIONS.md        │
 │  ├── SETUP.md                      │
-│  ├── knowledge/                       │
-│  ├── commands/                     │
+│  ├── .claude/commands/             │
+│  ├── knowledge/                    │
 │  └── provided-files/               │
+└─────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│  OPEN IN FINDER                     │
+│                                     │
+│  Package folder opens automatically │
 └─────────────────────────────────────┘
          │
          ▼
 ┌─────────────────────────────────────┐
 │  TARGET AGENT                       │
 │                                     │
-│  Copy to new folder → claude .      │
+│  Copy to projects → claude .        │
 │  "Read SETUP.md and build this"    │
 │                                     │
 │  Agent enters plan mode and builds  │
@@ -105,6 +114,26 @@ Based on requirements, discuss options:
 ---
 
 ## Output Files
+
+### README.md (Project Specification)
+
+Comprehensive project specification that serves as the initial README:
+- Project overview and purpose
+- V1 scope (included and explicitly excluded)
+- Technical stack with rationale
+- Project structure
+- Database schema and entity relationships
+- Key workflows with ASCII diagrams
+- Authentication flow
+- Package contents
+- Available commands
+- Skills to install
+- Development workflow
+- Environment variables
+- Post-setup checklist
+- Future roadmap
+
+This becomes the new project's initial README.md.
 
 ### PROJECT-BRIEF.md
 
@@ -222,17 +251,21 @@ When a new platform skill is added to `knowledge/`, it becomes available for rec
 
 If a project needs something not covered by existing knowledge/commands, note it in PROJECT-BRIEF.md under "Open Questions" or "Custom Needs".
 
+### Output Location
+
+Packages are saved to `outbox/[project-slug]/` within Squared Agent. The folder opens automatically in Finder when generation completes.
+
 ### Post-Setup Cleanup
 
 After the project is built and verified, the target agent consolidates setup files:
 
 ```bash
 mkdir -p agent/setup
-mv ../SETUP.md ../PROJECT-BRIEF.md ../TECHNICAL-DECISIONS.md agent/setup/
-mv ../commands ../knowledge ../provided-files agent/setup/ 2>/dev/null || true
+mv SETUP.md PROJECT-BRIEF.md TECHNICAL-DECISIONS.md agent/setup/
+mv commands knowledge provided-files agent/setup/ 2>/dev/null || true
 ```
 
-This keeps everything version-controlled with the project and cleans up the parent directory.
+This keeps everything version-controlled with the project. README.md stays at root.
 
 ### Post-Conversation Improvements
 
