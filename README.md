@@ -495,6 +495,7 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 | Command | Description |
 |---------|-------------|
 | `/summary` | Generate accomplishments report from git history |
+| `/vibekanban` | Launch VibeKanban for AI agent task management |
 | `/how-to-use` | Display the human-editable guide |
 | `/list-tools` | List all commands, plugins, and tools |
 | `/get-feedback` | Process inbox and implement improvements |

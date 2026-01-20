@@ -63,6 +63,9 @@ Manage local development environment with friendly domains and trusted HTTPS. Su
 ### `/creator-feedback`
 Generate feedback to send back to the master agent. Analyzes the current session to identify knowledge gaps, setup issues, new patterns, and technical gotchas. Writes structured feedback to `outbox/creator-feedback-YYYY-MM-DD.md`. If file exists, offers append/replace/skip options.
 
+### `/vibekanban`
+Launch VibeKanban for AI agent task management. VibeKanban is a kanban board designed for orchestrating autonomous AI coding agents with isolated git worktrees. Auto-discovers recent git projects, supports GitHub CLI for PR creation, and runs agents with autonomous permissions. Accepts optional port argument (e.g., `/vibekanban 8080`).
+
 ## Available Content
 
 ### Templates (`templates/`)
@@ -78,6 +81,7 @@ Content that gets copied to new projects:
 - **Summary-Command.md** - Accomplishments summary from git history and session logs
 - **Local-Env-Command.md** - Local environment management (domains, HTTPS, proxy)
 - **Creator-Feedback-Command.md** - Generate feedback to send to master agent
+- **VibeKanban-Command.md** - AI agent task management with isolated worktrees
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **New-Idea-Workflow.md** - Consultative discovery process for new projects
 
@@ -331,6 +335,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-20:** Added VibeKanban integration - `/vibekanban` command for launching VibeKanban AI agent task management; added to `/new-idea` as optional tool for spawned projects; created VibeKanban-Command.md template; synced Start-Session template with "(spawned projects only)" clarification
 - **2026-01-20:** Gym Master feedback part 2 - Added .env.example template to developer profile; useSearchParams Suspense gotcha in Next.js guide; session helper pattern (getSessionWithOrg); MVP patterns (QR code as data URL); bidirectional agent communication (inbox/outbox); `/creator-feedback` command for generating feedback to master agent
 - **2026-01-20:** Processed Gym Master feedback - Next.js 16 proxy migration (middleware.ts→proxy.ts), Better Auth navigation gotcha (use window.location.href after auth changes), Turbopack default docs, browser automation known issues
 - **2026-01-20:** Enhanced `/new-idea` output - now generates README.md as comprehensive project specification; outputs to `outbox/[project-slug]/` instead of folder picker; auto-opens folder in Finder; updated New-Idea-Workflow.md template; generated gym-management project package as first example

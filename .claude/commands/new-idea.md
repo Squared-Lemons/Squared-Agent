@@ -149,6 +149,20 @@ Recommend skills based on the chosen stack:
 
 Explain that skills are automatically loaded by Claude Code and portable across other AI tools.
 
+### Task Management Tools
+
+Offer optional task management integration:
+
+**VibeKanban** - Kanban board for AI agent orchestration
+- Manages coding tasks with isolated git worktrees
+- Auto-discovers recent git projects
+- Creates PRs via GitHub CLI
+- Runs agents autonomously
+
+Ask: "Would you like to use VibeKanban for task management? It helps orchestrate AI agents with isolated worktrees for each task."
+
+If yes, note to include `/vibekanban` command and setup instructions.
+
 ### Custom Needs
 Note anything not covered by existing docs that should be in the project brief.
 
@@ -299,6 +313,7 @@ After setup, these slash commands are available:
 | \`/end-session\` | Update docs, capture learnings, generate feedback, commit |
 | \`/summary\` | Generate accomplishments report for time period |
 | \`/local-env\` | Manage local domains and trusted HTTPS |
+| \`/vibekanban\` | Launch VibeKanban for AI agent task management |
 
 ---
 
@@ -517,6 +532,37 @@ After opening in Claude Code, these commands are available:
 | `/end-session` | Update docs, capture learnings, commit |
 | `/summary` | Generate accomplishments report |
 | `/local-env` | Manage local domains and HTTPS (init, setup, start, stop) |
+| `/vibekanban` | Launch VibeKanban for AI agent task management |
+
+## VibeKanban Integration (Optional)
+
+If you want to use VibeKanban for AI agent task management:
+
+### Quick Start
+\`\`\`bash
+# Launch VibeKanban (auto-opens in browser)
+npx vibe-kanban
+
+# Or with specific port
+PORT=8080 npx vibe-kanban
+\`\`\`
+
+### What VibeKanban Does
+- **Task Management**: Kanban board for coding tasks
+- **Isolated Worktrees**: Each task runs in its own git worktree
+- **Auto-Discovery**: Finds your recent git projects automatically
+- **GitHub Integration**: Create PRs via `gh` CLI
+
+### First Time Setup
+1. Run `npx vibe-kanban`
+2. Configure your coding agent preferences
+3. Your project should appear (auto-discovered from recent git activity)
+4. If not visible, click "Create project" to add manually
+
+### Using with Claude Code
+- Use `/vibekanban` command to launch from Claude Code
+- Tasks created in VibeKanban can be worked on with isolated worktrees
+- Each worktree prevents agent interference during parallel work
 
 ## For the Target Agent
 
@@ -656,6 +702,9 @@ cp ".claude/commands/end-session.md" "$OUTPUT_DIR/.claude/commands/"
 cp ".claude/commands/commit.md" "$OUTPUT_DIR/.claude/commands/"
 cp ".claude/commands/summary.md" "$OUTPUT_DIR/.claude/commands/"
 cp ".claude/commands/local-env.md" "$OUTPUT_DIR/.claude/commands/"
+
+# Optional: VibeKanban (if user selected it)
+cp ".claude/commands/vibekanban.md" "$OUTPUT_DIR/.claude/commands/"
 ```
 
 **Important:** The start-session.md command contains Squared-Agent-specific content (Getting Started guide). After copying, edit `$OUTPUT_DIR/.claude/commands/start-session.md` to:

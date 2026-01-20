@@ -127,7 +127,7 @@ Do not display anything to the user - this runs silently.
 
 ---
 
-## Step 5: Check for Updates
+## Step 5: Check for Updates (spawned projects only)
 
 Check if there's an updates folder with pending updates from the master agent:
 
@@ -245,7 +245,7 @@ Welcome! This is your master agent for bootstrapping projects.
 3. Show git status (modified files, ahead/behind)
 4. Load tool intelligence silently if exists
 5. Run background template sync audit if sync-templates command exists (silently)
-6. Check for updates in `inbox/updates/` → offer to apply if found
+6. Check for updates in `inbox/updates/` → offer to apply if found (spawned projects only)
 7. Show session note or Getting Started guide
 8. Keep output concise and actionable
 ```

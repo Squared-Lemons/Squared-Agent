@@ -31,6 +31,7 @@ This command compares active commands vs templates and syncs changes.
 | `.claude/commands/new-feature.md` | `templates/commands/New-Feature-Command.md` |
 | `.claude/commands/complete-feature.md` | `templates/commands/Complete-Feature-Command.md` |
 | `.claude/commands/summary.md` | `templates/commands/Summary-Command.md` |
+| `.claude/commands/vibekanban.md` | `templates/commands/VibeKanban-Command.md` |
 | `.claude/commands/commit.md` | `templates/commands/END-SESSION-COMMAND.md` (section 2) |
 | `.claude/settings.json` (plugins) | `templates/profiles/developer/SETUP-INSTRUCTIONS.md` |
 
