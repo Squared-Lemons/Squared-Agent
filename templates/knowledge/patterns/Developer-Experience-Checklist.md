@@ -292,4 +292,69 @@ apps/web/components/onboarding-check.tsx  # Route protection
 
 ---
 
+## MVP Patterns
+
+### QR Code as Data URL
+
+For v1 prototypes, store QR codes directly as data URLs in the database to avoid file storage complexity:
+
+```typescript
+import QRCode from 'qrcode';
+
+// Generate and store as data URL
+const qrDataUrl = await QRCode.toDataURL(memberData.id, {
+  width: 200,
+  margin: 2,
+});
+
+// Store in database record
+await db.insert(member).values({
+  ...memberData,
+  qrCode: qrDataUrl, // text field storing data:image/png;base64,...
+});
+
+// Display directly in img tag
+<img src={member.qrCode} alt="Member QR Code" />
+```
+
+**Trade-offs:**
+- No file storage setup needed
+- Works immediately in dev and production
+- Increases database record size (~2KB per QR)
+- Not suitable for large images or many records
+
+**When to use:** MVP prototypes, < 1000 records, QR codes or small icons
+
+---
+
+## Agent Communication
+
+### Bidirectional Feedback Pattern
+
+For projects spawned from a master agent, use inbox/outbox folders for structured communication:
+
+```
+project/
+├── inbox/                 # Files FROM master agent
+│   ├── updates/          # Update packages to apply
+│   └── ...
+├── outbox/               # Files TO master agent
+│   └── creator-feedback-YYYY-MM-DD.md
+└── ...
+```
+
+**Inbox:** Receives updates, knowledge, commands from master agent
+**Outbox:** Sends feedback, learnings, pattern discoveries back to master agent
+
+**Workflow:**
+1. Spawned project generates feedback via `/creator-feedback` or `/end-session`
+2. Output goes to `outbox/creator-feedback-YYYY-MM-DD.md`
+3. User copies file to master agent's `inbox/from-projects/`
+4. Master agent processes with `/get-feedback`
+5. Improvements flow back via update packages to `inbox/updates/`
+
+This creates a continuous improvement loop between projects.
+
+---
+
 *See also: [Server Actions Patterns](Server-Actions-Patterns.md), [Better Auth Guide](../auth/better-auth/Better-Auth-Guide.md)*

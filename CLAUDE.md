@@ -60,6 +60,9 @@ Install a skill and catalogue it for spawned projects. Runs `npx add-skill [sour
 ### `/local-env`
 Manage local development environment with friendly domains and trusted HTTPS. Subcommands: `init` (first-time machine setup with mkcert, certs, proxy), `setup` (configure project domain and port range), `start`/`stop` (proxy control), `status` (show config), `list` (all registered projects). Uses mkcert for trusted certificates and Caddy or Node proxy for reverse proxying. Stores config in `~/.squared-agent/` with per-project settings in `.project/local-env.json`.
 
+### `/creator-feedback`
+Generate feedback to send back to the master agent. Analyzes the current session to identify knowledge gaps, setup issues, new patterns, and technical gotchas. Writes structured feedback to `outbox/creator-feedback-YYYY-MM-DD.md`. If file exists, offers append/replace/skip options.
+
 ## Available Content
 
 ### Templates (`templates/`)
@@ -74,6 +77,7 @@ Content that gets copied to new projects:
 - **END-SESSION-COMMAND.md** - End-session workflow with creator feedback loop
 - **Summary-Command.md** - Accomplishments summary from git history and session logs
 - **Local-Env-Command.md** - Local environment management (domains, HTTPS, proxy)
+- **Creator-Feedback-Command.md** - Generate feedback to send to master agent
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **New-Idea-Workflow.md** - Consultative discovery process for new projects
 
@@ -327,6 +331,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-20:** Gym Master feedback part 2 - Added .env.example template to developer profile; useSearchParams Suspense gotcha in Next.js guide; session helper pattern (getSessionWithOrg); MVP patterns (QR code as data URL); bidirectional agent communication (inbox/outbox); `/creator-feedback` command for generating feedback to master agent
 - **2026-01-20:** Processed Gym Master feedback - Next.js 16 proxy migration (middleware.ts→proxy.ts), Better Auth navigation gotcha (use window.location.href after auth changes), Turbopack default docs, browser automation known issues
 - **2026-01-20:** Enhanced `/new-idea` output - now generates README.md as comprehensive project specification; outputs to `outbox/[project-slug]/` instead of folder picker; auto-opens folder in Finder; updated New-Idea-Workflow.md template; generated gym-management project package as first example
 - **2026-01-20:** Integrated update propagation workflow - `/start-session` checks `inbox/updates/` for updates from master agent (spawned projects); `/end-session` exports update packages for spawned projects (master agent); fixed post-setup cleanup paths in `/new-idea`; added project structure diagrams to README Agent Packages section

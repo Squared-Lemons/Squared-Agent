@@ -325,6 +325,52 @@ export async function getItemWithRelations(id: string) {
 
 ---
 
+## Session Helpers
+
+### Get Session with Organization
+
+Combine session and organization lookup in one call for multi-tenant apps:
+
+```typescript
+// lib/session.ts
+import { auth } from "@app/auth";
+import { headers } from "next/headers";
+
+export async function getSessionWithOrg() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    return { user: null, organization: null };
+  }
+
+  const organization = await auth.api.getFullOrganization({
+    headers: await headers(),
+  });
+
+  return { user: session.user, organization };
+}
+```
+
+Usage in server actions:
+
+```typescript
+export async function myAction() {
+  const { user, organization } = await getSessionWithOrg();
+
+  if (!user || !organization) {
+    throw new Error("Unauthorized");
+  }
+
+  // ... action logic with user and org context
+}
+```
+
+This reduces boilerplate and ensures consistent auth checks across actions.
+
+---
+
 ## Tips
 
 1. **Always check auth first** - Return early if unauthorized
