@@ -25,7 +25,34 @@ Key changes in Next.js 16 that affect this stack:
 |--------|--------|
 | **Turbopack is default** | No `--turbo` flag needed for dev. Faster builds out of the box. |
 | **Middleware → Proxy** | `middleware.ts` renamed to `proxy.ts`, `middleware()` to `proxy()` |
+| **useSearchParams Suspense** | Components using `useSearchParams()` must be wrapped in `<Suspense>` |
 | **serverExternalPackages** | Still required for `better-sqlite3` (see [Better Auth Guide](../../auth/better-auth/Better-Auth-Guide.md#nextjs-configuration)) |
+
+### useSearchParams Suspense Boundary
+
+Components that call `useSearchParams()` must be wrapped in a Suspense boundary:
+
+```tsx
+// ❌ Error: useSearchParams must be wrapped in Suspense
+function MyPage() {
+  const searchParams = useSearchParams();
+  return <div>{searchParams.get('q')}</div>;
+}
+
+// ✅ Correct: Extract to separate component, wrap in Suspense
+function MyPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchContent />
+    </Suspense>
+  );
+}
+
+function SearchContent() {
+  const searchParams = useSearchParams();
+  return <div>{searchParams.get('q')}</div>;
+}
+```
 
 ---
 

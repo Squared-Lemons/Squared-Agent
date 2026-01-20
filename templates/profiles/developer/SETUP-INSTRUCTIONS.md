@@ -103,6 +103,12 @@ Read the command documentation files and create the corresponding commands in `.
 |--------------|---------|---------|
 | `Local-Env-Command.md` | `/local-env` | Manage local domains and trusted HTTPS |
 
+### Feedback Commands
+
+| Documentation | Creates | Purpose |
+|--------------|---------|---------|
+| `Creator-Feedback-Command.md` | `/creator-feedback` | Generate feedback to send to master agent |
+
 For each documentation file:
 1. Read the implementation guide
 2. Create the command in `.claude/commands/` following the guide
@@ -160,7 +166,20 @@ mkdir -p .claude/commands
 mkdir -p .claude/agents
 mkdir -p .project/sessions
 mkdir -p inbox/updates
+mkdir -p outbox
 ```
+
+### Environment File
+If a `.env.example` template was provided, copy it to `.env.local`:
+
+```bash
+cp .env.example .env.local
+```
+
+Then fill in the required values:
+- `BETTER_AUTH_SECRET` - Generate with `openssl rand -base64 32`
+- OAuth credentials if using Google/GitHub login
+- Adjust `DATABASE_URL` if using a different database location
 
 ### Gitignore
 Add to `.gitignore`:
@@ -267,6 +286,7 @@ After setup, these commands should be available:
 - `/commit` - Quick commit with approval
 - `/summary` - Generate accomplishments report
 - `/local-env` - Manage local domains and trusted HTTPS
+- `/creator-feedback` - Generate feedback to send to master agent
 - `/cancel-ralph` - Stop a running Ralph Loop (from plugin)
 
 Token tracking is automatic — `/end-session` captures usage data, `/summary` calculates costs
