@@ -17,6 +17,18 @@ A comprehensive stack for building Next.js applications with authentication, dat
 
 ---
 
+## Next.js 16 Changes
+
+Key changes in Next.js 16 that affect this stack:
+
+| Change | Impact |
+|--------|--------|
+| **Turbopack is default** | No `--turbo` flag needed for dev. Faster builds out of the box. |
+| **Middleware → Proxy** | `middleware.ts` renamed to `proxy.ts`, `middleware()` to `proxy()` |
+| **serverExternalPackages** | Still required for `better-sqlite3` (see [Better Auth Guide](../../auth/better-auth/Better-Auth-Guide.md#nextjs-configuration)) |
+
+---
+
 ## Performance Patterns (Critical)
 
 These patterns have the highest impact on application performance. Follow them from the start.

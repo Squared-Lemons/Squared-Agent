@@ -275,6 +275,29 @@ function CompleteStep({ onContinue }: { onContinue: () => void }) {
 
 ---
 
+## Navigation Gotcha
+
+> **Important:** After auth state changes (login, logout, organization switch), avoid using `router.push()` + `router.refresh()`. This pattern can cause a "regenerating" freeze in Next.js.
+
+**Problem:**
+```typescript
+// ❌ Can cause freeze
+await signIn.email({ email, password });
+router.push("/dashboard");
+router.refresh();
+```
+
+**Solution:**
+```typescript
+// ✅ Use full page navigation after auth changes
+await signIn.email({ email, password });
+window.location.href = "/dashboard";
+```
+
+Auth state changes require a full page reload to properly update session context. The `window.location.href` approach ensures the new session is correctly loaded.
+
+---
+
 ## Auth Route (Public)
 
 ```typescript
@@ -315,18 +338,20 @@ app/
 
 ---
 
-## Middleware Alternative
+## Proxy (Server-Side Protection)
+
+> **Next.js 16 Migration:** `middleware.ts` has been renamed to `proxy.ts` and the `middleware()` function is now `proxy()`. The client-side OnboardingCheck component above is the recommended approach for most apps.
 
 For server-side protection (optional, more complex):
 
 ```typescript
-// apps/web/middleware.ts
+// apps/web/proxy.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const publicRoutes = ["/login", "/signup", "/api/auth"];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow public routes

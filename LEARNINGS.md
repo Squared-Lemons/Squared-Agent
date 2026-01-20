@@ -392,7 +392,23 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Technical Gotchas
 
-*Library-specific issues and platform-specific issues will be captured here.*
+### Browser Automation (claude-in-chrome)
+
+**Issue:** Intermittent "Cannot access chrome-extension:// URL" errors during click and screenshot actions.
+
+**Reliable operations:**
+- Form inputs (`form_input` tool)
+- Navigation (`navigate` tool)
+- Page reading (`read_page`, `get_page_text`)
+
+**Less reliable:**
+- Click actions (`computer` with `left_click`)
+- Screenshots (`computer` with `screenshot`)
+
+**Workarounds:**
+1. Retry failed actions 1-2 times
+2. Use `form_input` instead of click + type when interacting with forms
+3. Fall back to `read_page` for content instead of screenshots when possible
 
 ---
 
