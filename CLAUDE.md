@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ### `/start-session`
-Begin session with branch awareness and context loading. Checks for protected branches (main/master/develop/release/*) and warns if on one. Shows git status, loads tool intelligence, and displays session note or getting started guide.
+Begin session with branch awareness and context loading. Checks for protected branches (main/master/develop/release/*) and warns if on one. Shows git status, loads tool intelligence, checks for updates from master agent (spawned projects), and displays session note or getting started guide.
 
 ### `/new-feature`
 Create feature branch (or worktree) for safe development. Accepts a description, generates a branch name, and offers regular branch or worktree mode for parallel work.
@@ -31,7 +31,7 @@ Remove merged or stale feature branches. Finds branches merged into main and bra
 Prepare a setup package for a new project. Asks for profile, commands, tasks, and knowledge to include, then creates a temp folder with all files and a SETUP.md guide.
 
 ### `/end-session`
-End coding session - updates docs, captures learnings, generates SETUP.md handoff document, auto-generates creator feedback for user to copy back to master agent, and commits changes with approval.
+End coding session - updates docs, captures learnings, generates SETUP.md handoff document, auto-generates creator feedback for user to copy back to master agent, exports update package for spawned projects (master agent only), and commits changes with approval.
 
 ### `/commit`
 Draft a commit message, get approval, then commit changes.
@@ -169,6 +169,49 @@ When adding a command that spawned projects should inherit, follow this checklis
 - `/new-idea` → copies `.claude/commands/*.md` files directly to spawned projects
 - `/prepare-setup` → copies `templates/commands/*.md` guides, target agent creates commands from guides
 
+### Update Propagation Workflow
+
+Updates to commands and knowledge can be pushed to spawned projects through the integrated session workflow:
+
+```
+MASTER AGENT                          SPAWNED PROJECT
+────────────                          ───────────────
+
+/start-session                        /start-session
+  └─ Shows git status                   └─ Checks inbox/updates/
+  └─ Loads context                      └─ Offers to apply updates
+                                        └─ Shows git status
+     │
+     ▼
+
+  WORK ON FEATURE
+  - Edit .claude/commands/
+  - Edit templates/knowledge/
+  - Test locally
+
+     │
+     ▼
+
+/end-session                          /end-session
+  └─ Update docs                        └─ Generate feedback
+  └─ Sync templates (auto)              └─ Commit
+  └─ Export update package
+  └─ Commit
+```
+
+**How it works:**
+
+1. **Master agent creates updates**: When `/end-session` detects changes to commands or knowledge, it offers to export an update package to `/tmp/squared-agent-update-YYYY-MM-DD.md`
+
+2. **User delivers updates**: Copy the update file to the spawned project's `inbox/updates/` folder
+
+3. **Spawned project applies updates**: When `/start-session` runs, it detects the update file and offers to apply it automatically
+
+**Update package contents:**
+- What's new (commands, knowledge, skills)
+- Full file contents in collapsible sections
+- Step-by-step application instructions
+
 ## Tool Intelligence
 
 The agent learns which tools work best for which tasks, evolving with each session.
@@ -278,6 +321,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-20:** Integrated update propagation workflow - `/start-session` checks `inbox/updates/` for updates from master agent (spawned projects); `/end-session` exports update packages for spawned projects (master agent); fixed post-setup cleanup paths in `/new-idea`; added project structure diagrams to README Agent Packages section
 - **2026-01-19:** Enhanced Next.js App Build Guide with performance patterns from installed skills - added Performance Patterns (Critical) section covering waterfalls, bundle size, server-side caching, Suspense boundaries; added UI/UX Checklist with accessibility, forms, performance, responsive checks; added Skills for Deeper Learning section referencing vercel-react-best-practices, web-design-guidelines, frontend-design
 - **2026-01-19:** Added `/local-env` command for local development environments - friendly domains (`*.local`), trusted HTTPS via mkcert, automatic port range allocation (50 ports per project), Caddy or Node reverse proxy; stores config in `~/.squared-agent/` (global registry, certs, Caddyfile) and `.project/local-env.json` (per-project); subcommands: init, setup, start, stop, status, list
 - **2026-01-19:** Added `/sync-docs` command for documentation consistency; created `docs/style-guide.md` (voice, terminology, formatting rules) and `docs/doc-patterns/` (templates for README, command, knowledge docs); enables systematic documentation maintenance across all files

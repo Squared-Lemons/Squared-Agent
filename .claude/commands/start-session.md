@@ -99,7 +99,61 @@ Do not display anything to the user - this runs silently.
 
 ---
 
-## Step 5: Load Session Note
+## Step 5: Check for Updates (spawned projects only)
+
+Check if there's an updates folder with pending updates from the master agent:
+
+```bash
+ls inbox/updates/*.md 2>/dev/null | head -1 || echo "NO_UPDATES"
+```
+
+### If no updates folder or no updates
+
+Continue to the next step.
+
+### If updates found
+
+Display the update(s):
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Updates Available from Squared Agent
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[N] update(s) found in inbox/updates/
+
+[For each update file, show: filename and brief summary from the ## What's New section]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Ask using AskUserQuestion:
+- **Apply now** - Review and apply the updates
+- **Skip** - Continue without applying (can apply later)
+
+### If user chooses to apply
+
+For each update file:
+
+1. Read the full update file
+2. Display the "What's New" section
+3. Follow the "To Apply" instructions:
+   - Copy new commands to `.claude/commands/`
+   - Copy knowledge files to `docs/knowledge/`
+   - Install recommended skills if any
+   - Update CLAUDE.md with new command documentation
+4. After applying, move the update file to `inbox/updates/applied/`:
+
+```bash
+mkdir -p inbox/updates/applied
+mv inbox/updates/[filename].md inbox/updates/applied/
+```
+
+5. Confirm: "Update applied. [summary of what was added]"
+
+---
+
+## Step 6: Load Session Note
 
 ```bash
 ls .project/session-note.md 2>/dev/null || echo "NO_NOTE"
@@ -163,5 +217,6 @@ Welcome! This is your master agent for bootstrapping projects.
 3. Show git status (modified files, ahead/behind)
 4. Load tool intelligence silently if exists
 5. Run background template sync audit if sync-templates command exists (silently)
-6. Show session note or Getting Started guide
-7. Keep output concise and actionable
+6. Check for updates in `inbox/updates/` → offer to apply if found (spawned projects only)
+7. Show session note or Getting Started guide
+8. Keep output concise and actionable

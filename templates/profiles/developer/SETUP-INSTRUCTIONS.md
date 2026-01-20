@@ -159,6 +159,7 @@ Agents are invoked via the Task tool and provide specialized workflows that can 
 mkdir -p .claude/commands
 mkdir -p .claude/agents
 mkdir -p .project/sessions
+mkdir -p inbox/updates
 ```
 
 ### Gitignore

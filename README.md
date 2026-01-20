@@ -20,7 +20,7 @@ Every new project starts with the same friction:
 
 | Problem | What Happens |
 |---------|--------------|
-| **Manual setup** | Spend 30+ minutes configuring Claude Code, plugins, permissions, and commands |
+| **Manual setup** | Wasting time configuring Claude Code, plugins, permissions, commands, and teaching the agent your project's patterns and common pitfalls |
 | **Messy main branches** | Accidental commits to main → merge conflicts → lost work |
 | **Credential leakage** | MCP API keys accidentally committed or shared between projects |
 | **Lost learnings** | Discover a great tool shortcut, forget it by next project |
@@ -99,6 +99,22 @@ The conversation covers:
 
 **Output:** `PROJECT-BRIEF.md`, `TECHNICAL-DECISIONS.md`, `SETUP.md`, plus relevant knowledge and commands.
 
+**After setup, the new project has:**
+```
+project/
+├── .claude/
+│   ├── commands/           # /start-session, /new-feature, /end-session, etc.
+│   ├── settings.json       # Plugins, permissions, hooks pre-configured
+│   └── skills/             # Installed agent skills
+├── docs/
+│   └── knowledge/          # Framework guides (Next.js, Better Auth, etc.)
+├── inbox/
+│   └── updates/            # Receive updates from master agent
+├── .project/               # Local data (gitignored)
+├── CLAUDE.md               # Project instructions
+└── SETUP.md                # Handoff document
+```
+
 ### `/prepare-setup` — Component Selection
 
 Best when you know what you need and want to pick specific components.
@@ -117,6 +133,25 @@ Select from:
 - **Tasks** — One-time setup activities (codebase investigation)
 
 **[Full templates reference →](templates/README.md)**
+
+**After setup, the new project has:**
+```
+project/
+├── .claude/
+│   ├── commands/           # Created from command guides
+│   ├── agents/             # Custom agents (optional)
+│   └── settings.json       # Plugins, permissions, hooks
+├── docs/
+│   ├── knowledge/          # Selected knowledge guides
+│   └── commands/           # Command documentation
+├── inbox/
+│   └── updates/            # Receive updates from master agent
+├── .project/               # Local data (gitignored)
+│   ├── sessions/           # Session logs
+│   └── token-usage.md      # Cost tracking
+├── CLAUDE.md               # Project instructions
+└── LEARNINGS.md            # Captured insights
+```
 
 ### Bringing the Agent into Existing Projects
 
