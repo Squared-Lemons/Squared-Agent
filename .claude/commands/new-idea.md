@@ -339,6 +339,8 @@ Then:
 3. Implement core features from the brief
 4. Set up development commands from commands/ guides
 5. Create CLAUDE.md documenting the project
+6. **Run build and fix any errors** until it passes
+7. **Run /end-session** to generate creator feedback for the master agent
 
 ## CLAUDE.md Requirements
 
@@ -374,6 +376,33 @@ After setup, verify:
 - [ ] CLAUDE.md created
 - [ ] Git repository initialized
 - [ ] Ready to start building features
+
+## Final Build & Feedback
+
+**IMPORTANT:** Before cleanup, run a full build to verify everything works:
+
+\`\`\`bash
+# Run build (adjust for your package manager)
+pnpm build || npm run build || bun run build
+\`\`\`
+
+### If build errors occur
+
+1. Read the error messages carefully
+2. Fix each error systematically
+3. Re-run the build until it passes
+4. Document any gotchas in CLAUDE.md
+
+### Once build passes
+
+Run `/end-session` to generate creator feedback. This feedback helps improve the master agent for future projects by capturing:
+
+- **Knowledge gaps** - What was missing from the guides?
+- **Setup issues** - What config was unclear or missing?
+- **New patterns** - What reusable code was created?
+- **Technical gotchas** - What library issues were discovered?
+
+The feedback will be displayed for you to copy back to the Squared-Agent repository's `inbox/from-projects/` folder.
 
 ## Post-Setup Cleanup
 
