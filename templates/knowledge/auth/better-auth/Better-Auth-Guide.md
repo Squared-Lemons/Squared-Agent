@@ -302,10 +302,13 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 ## Next.js Configuration
 
+> **Next.js 16:** Turbopack is now the default bundler. The configuration below remains compatible—`serverExternalPackages` is still required for better-sqlite3 to work correctly.
+
 ```javascript
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Required for better-sqlite3 with Turbopack (Next.js 16 default)
   serverExternalPackages: [
     "better-sqlite3",
     "better-auth",

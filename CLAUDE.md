@@ -250,6 +250,11 @@ This enables the agent to select appropriate tools automatically without explici
 2. Create new tab with `tabs_create_mcp` (don't reuse existing)
 3. Navigate and interact
 
+**Known Issues:**
+- Intermittent "Cannot access chrome-extension:// URL" errors during click/screenshot actions
+- Form inputs and navigation work reliably
+- Workaround: Retry failed actions or use alternative interaction methods (e.g., `form_input` instead of click + type)
+
 ## Token Usage Tracking
 
 Session-level token tracking for cost estimation and optimization.
@@ -322,6 +327,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-20:** Processed Gym Master feedback - Next.js 16 proxy migration (middleware.ts→proxy.ts), Better Auth navigation gotcha (use window.location.href after auth changes), Turbopack default docs, browser automation known issues
 - **2026-01-20:** Enhanced `/new-idea` output - now generates README.md as comprehensive project specification; outputs to `outbox/[project-slug]/` instead of folder picker; auto-opens folder in Finder; updated New-Idea-Workflow.md template; generated gym-management project package as first example
 - **2026-01-20:** Integrated update propagation workflow - `/start-session` checks `inbox/updates/` for updates from master agent (spawned projects); `/end-session` exports update packages for spawned projects (master agent); fixed post-setup cleanup paths in `/new-idea`; added project structure diagrams to README Agent Packages section
 - **2026-01-19:** Enhanced Next.js App Build Guide with performance patterns from installed skills - added Performance Patterns (Critical) section covering waterfalls, bundle size, server-side caching, Suspense boundaries; added UI/UX Checklist with accessibility, forms, performance, responsive checks; added Skills for Deeper Learning section referencing vercel-react-best-practices, web-design-guidelines, frontend-design
