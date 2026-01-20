@@ -22,6 +22,7 @@ The `/end-session` command provides a structured workflow for ending coding sess
 | 7b | Extracts token usage for cost tracking |
 | 8 | Creates session note for next session |
 | 9 | Generates/updates SETUP.md (handoff document) |
+| 9.5 | Exports update package (master agent only) |
 | 10 | Generates creator feedback (auto-analyzed from session) |
 | 11 | Shows summary to user |
 | 12 | Commits with approval (user signs off last) |
@@ -536,6 +537,106 @@ Also save to `docs/creator-feedback.md` for local reference.
 
 ---
 
+## Step 9.5: Export Update Package (master agent only)
+
+Check if this is the master agent (Squared-Agent) by looking for the templates folder:
+
+\```bash
+ls templates/commands/*.md 2>/dev/null | head -1 || echo "NO_TEMPLATES"
+\```
+
+### If not the master agent
+
+Skip this step.
+
+### If this is the master agent
+
+After syncing templates, check if commands or knowledge changed this session:
+
+\```bash
+# Check for changes in commands and knowledge
+git diff --name-only HEAD~5..HEAD | grep -E "^(\.claude/commands/|templates/knowledge/)" | head -5 || echo "NO_COMMAND_CHANGES"
+\```
+
+### If significant changes were made to commands or knowledge
+
+Ask using AskUserQuestion:
+- **Export update package** - Create update file for spawned projects
+- **Skip** - No export needed
+
+### If user chooses to export
+
+Generate an update package file:
+
+1. **Get today's date** for the filename
+2. **Analyze what changed** this session (commands, knowledge, skills)
+3. **Create the update file** at `/tmp/squared-agent-update-YYYY-MM-DD.md`
+
+### Update Package Format
+
+\```markdown
+# Squared Agent Update - YYYY-MM-DD
+
+## What's New
+
+### Commands
+- **NEW:** `/command-name` - Brief description
+- **UPDATED:** `/command-name` - What changed
+
+### Knowledge
+- **NEW:** `category/filename.md` - Brief description
+
+### Skills
+- **RECOMMENDED:** `skill-name` - Why it's useful
+
+---
+
+## To Apply
+
+1. Copy new commands to `.claude/commands/`
+2. Copy knowledge to `docs/knowledge/`
+3. Install skills: `npx add-skill anthropics/skills -s [name]`
+4. Update CLAUDE.md with new commands
+5. Delete this file when done
+
+---
+
+## Files Included
+
+<details>
+<summary>command-name.md</summary>
+
+[Full command content here - copy the actual file content]
+
+</details>
+
+<details>
+<summary>knowledge-file.md</summary>
+
+[Full knowledge content here - copy the actual file content]
+
+</details>
+\```
+
+4. **Display the file location**:
+
+\```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Update Package Created
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Saved to: /tmp/squared-agent-update-YYYY-MM-DD.md
+
+To deploy to a spawned project:
+1. Copy this file to the project's inbox/updates/ folder
+2. Run /start-session in that project
+3. The update will be detected and offered for application
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\```
+
+---
+
 ## Step 10: Summary Output
 
 Show the user what was done and what will be committed:
@@ -671,9 +772,10 @@ That's fine - the previous note (if any) will remain.
 11. **Update tool intelligence** in `.project/tool-intelligence.md` with tools used and patterns learned
 12. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
 13. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
-14. **Output summary** of what was done and what will be committed
-15. **Get user approval** and commit (do NOT push)
-16. **Ask about session note** - offer to save a note for next session (shown by /start-session)
+14. **Export update package** - if master agent and commands/knowledge changed, offer to export for spawned projects
+15. **Output summary** of what was done and what will be committed
+16. **Get user approval** and commit (do NOT push)
+17. **Ask about session note** - offer to save a note for next session (shown by /start-session)
 
 Be thorough but concise. Focus on changes that will help future sessions understand the current state of the project.
 
