@@ -71,7 +71,9 @@ The README is user-facing documentation. Keep it accurate:
 
 ## Step 3: Update CLAUDE.md
 
-Review and update each section:
+Invoke the `claude-md-management:revise-claude-md` skill to systematically update CLAUDE.md with learnings from this session.
+
+After the skill completes, verify the changes align with the session's work:
 
 ### Implementation Status Table
 - Check each component - has its status changed?
@@ -626,6 +628,14 @@ Show the user what was done and what will be committed:
 
 ---
 
+## Step 10.5: Pre-Commit Verification
+
+Invoke the `superpowers:verification-before-completion` skill to ensure all claimed work is actually complete before committing.
+
+This skill requires running verification commands and confirming output before making any success claims - evidence before assertions.
+
+---
+
 ## Step 11: Commit with Approval
 
 This is the final step. The user signs off on the commit message.
@@ -726,8 +736,8 @@ That's fine - the previous note (if any) will remain.
 1. **Read recent git history** to understand session scope
 2. **Read README.md** and check if user-facing docs need updates
 3. **Make updates** to README.md if commands, workflows, or setup changed
-4. **Read CLAUDE.md** and identify needed updates
-5. **Make updates** to CLAUDE.md (implementation status, recent changes, known issues)
+4. **Invoke `claude-md-management:revise-claude-md` skill** to update CLAUDE.md with session learnings
+5. **Verify CLAUDE.md updates** (implementation status, recent changes, known issues)
 6. **Check template sync** - if `.project/sync-report.md` exists, offer to run /sync-templates
 7. **Check agents/knowledge** for any that need updates based on session work
 8. **Create/update LEARNINGS.md** with session insights
@@ -738,8 +748,9 @@ That's fine - the previous note (if any) will remain.
 13. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
 14. **Export update package** - if master agent and commands/knowledge changed, offer to export for spawned projects
 15. **Output summary** of what was done and what will be committed
-16. **Get user approval** and commit (do NOT push)
-17. **Ask about session note** - offer to save a note for next session (shown by /start-session)
+16. **Invoke `superpowers:verification-before-completion` skill** to verify all work is complete
+17. **Get user approval** and commit (do NOT push)
+18. **Ask about session note** - offer to save a note for next session (shown by /start-session)
 
 Be thorough but concise. Focus on changes that will help future sessions understand the current state of the project.
 

@@ -96,6 +96,77 @@ packages:
 
 ---
 
+## Environment Variables
+
+Keep a single `.env` file at the root and symlink to each app:
+
+### Structure
+
+```
+project/
+├── .env                       # Single source of truth
+├── .env.example               # Template for setup
+├── apps/
+│   ├── web/.env → ../../.env     # Symlink
+│   └── admin/.env → ../../.env   # Symlink
+```
+
+### Setup Script
+
+Add to root `package.json`:
+
+```json
+{
+  "scripts": {
+    "env:link": "for app in apps/*/; do ln -sf ../../.env \"$app.env\"; done"
+  }
+}
+```
+
+Run once after cloning:
+
+```bash
+pnpm env:link
+```
+
+### turbo.json Configuration
+
+Declare which env vars Turborepo should watch for cache invalidation:
+
+```json
+{
+  "globalEnv": ["DATABASE_URL", "AUTH_SECRET"],
+  "tasks": {
+    "build": {
+      "env": ["NEXT_PUBLIC_*"]
+    }
+  }
+}
+```
+
+- **globalEnv** - Variables that affect all tasks (invalidates entire cache when changed)
+- **env** - Task-specific variables (only invalidates that task's cache)
+
+### .gitignore
+
+```gitignore
+# Environment files
+.env
+.env.local
+.env.*.local
+apps/*/.env
+```
+
+### Why Symlinks?
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **Symlinks** (recommended) | Single source, no sync issues | Requires setup step |
+| Duplicate .env per app | No setup needed | Easy to get out of sync |
+| dotenv-cli with --env-file | Explicit paths | Verbose commands |
+
+---
+
 ## Package Naming Convention
 
 Use a consistent namespace for internal packages:

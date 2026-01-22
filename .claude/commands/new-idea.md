@@ -48,7 +48,15 @@ Then follow up based on their response. Good follow-up questions:
 
 ## Step 2: Discovery Conversation
 
-Have a natural back-and-forth to understand:
+### Structure the Exploration
+
+Invoke the `superpowers:brainstorming` skill to establish a systematic exploration framework.
+
+The skill ensures user intent is fully explored, requirements are properly extracted, and design options are considered.
+
+Use the skill's structure to guide the discovery conversation below.
+
+### Have a natural back-and-forth to understand:
 
 ### The Idea
 - What does it do?

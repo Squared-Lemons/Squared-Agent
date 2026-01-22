@@ -60,6 +60,7 @@ To add feedback:
 Ask the user which feedback to work on:
 
 - Read the full content of selected feedback file(s)
+- Invoke the `superpowers:brainstorming` skill to systematically clarify the feedback - extract requirements, identify ambiguities, explore implications
 - Discuss the idea and clarify requirements
 - Identify what changes would be needed
 - Consider impact on existing functionality
@@ -74,6 +75,7 @@ Once feedback is selected:
    - If on protected branch, suggest: `/new-feature "implement [feedback-name]"`
 
 2. **Create implementation plan:**
+   - Invoke the `superpowers:writing-plans` skill to create a structured implementation plan with steps, dependencies, and testing approach
    - What files need to change
    - What new files are needed
    - How to test the changes

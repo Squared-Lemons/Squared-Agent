@@ -50,13 +50,13 @@ Branches that have been merged into the current branch:
 git branch --merged | grep -v "^\*" | grep -Ev "^\s*(main|master|develop|release)" | sed 's/^[[:space:]]*//'
 ```
 
-### Gone branches
+### Gone branches (use skill)
 
-Branches whose remote tracking branch was deleted:
+For branches whose remote tracking branch was deleted:
 
-```bash
-git branch -vv | grep ': gone]' | awk '{print $1}' | grep -Ev "^(main|master|develop|release)"
-```
+Invoke the `commit-commands:clean_gone` skill to detect and list gone branches.
+
+Capture the skill's output to combine with merged branches in the next step.
 
 ### Active worktree branches
 

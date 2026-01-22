@@ -139,7 +139,17 @@ If user chooses to sync, invoke `/sync-templates` and wait for completion.
 
 ### If no sync report
 
-Continue to Step 5.
+Continue to Step 4.75.
+
+---
+
+## Step 4.75: Completion Strategy Guidance
+
+Invoke the `superpowers:finishing-a-development-branch` skill.
+
+The skill provides structured options for merge, PR, or cleanup with review checkpoints.
+
+Use the skill's output to present informed completion options.
 
 ---
 
@@ -308,7 +318,8 @@ Want to update docs or wrap up the session?
 3. Show diff from merge-base to HEAD
 4. Offer to squash if many commits
 5. Check for template sync report - offer to sync if exists
-6. Ask: merge directly or create PR?
-7. If merge: checkout main, merge, push, cleanup branch
-8. If PR: push branch, create PR via `gh`, show cleanup instructions
-9. Suggest `/end-session` for docs updates
+6. Invoke `superpowers:finishing-a-development-branch` skill for guided options
+7. Ask: merge directly or create PR?
+8. If merge: checkout main, merge, push, cleanup branch
+9. If PR: push branch, create PR via `gh`, show cleanup instructions
+10. Suggest `/end-session` for docs updates

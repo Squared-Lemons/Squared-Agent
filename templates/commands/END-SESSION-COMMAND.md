@@ -14,7 +14,7 @@ The `/end-session` command provides a structured workflow for ending coding sess
 |------|--------|
 | 1 | Reviews git diff and commits from the session |
 | 2 | Updates README.md (user-facing documentation) |
-| 3 | Updates CLAUDE.md (technical docs, status tables) |
+| 3 | Invokes `claude-md-management:revise-claude-md` skill for CLAUDE.md |
 | 4 | Updates workflow docs (agents, knowledge, commands) |
 | 5 | Captures lessons → docs/LEARNINGS.md |
 | 6 | Syncs supporting files for consistency |
@@ -24,6 +24,7 @@ The `/end-session` command provides a structured workflow for ending coding sess
 | 9 | Generates/updates SETUP.md (handoff document) |
 | 9.5 | Exports update package (master agent only) |
 | 10 | Generates creator feedback (auto-analyzed from session) |
+| 10.5 | Invokes `superpowers:verification-before-completion` skill |
 | 11 | Shows summary to user |
 | 12 | Commits with approval (user signs off last) |
 
@@ -107,7 +108,9 @@ The README is user-facing documentation. Keep it accurate:
 
 ## Step 3: Update CLAUDE.md
 
-Review and update each section:
+Invoke the `claude-md-management:revise-claude-md` skill to systematically update CLAUDE.md with learnings from this session.
+
+After the skill completes, verify the changes align with the session's work:
 
 ### Implementation Status Table
 - Check each component - has its status changed?
@@ -662,6 +665,14 @@ Show the user what was done and what will be committed:
 
 ---
 
+## Step 10.5: Pre-Commit Verification
+
+Invoke the `superpowers:verification-before-completion` skill to ensure all claimed work is actually complete before committing.
+
+This skill requires running verification commands and confirming output before making any success claims - evidence before assertions.
+
+---
+
 ## Step 11: Commit with Approval
 
 This is the final step. The user signs off on the commit message.
@@ -762,8 +773,8 @@ That's fine - the previous note (if any) will remain.
 1. **Read recent git history** to understand session scope
 2. **Read README.md** and check if user-facing docs need updates
 3. **Make updates** to README.md if commands, workflows, or setup changed
-4. **Read CLAUDE.md** and identify needed updates
-5. **Make updates** to CLAUDE.md (implementation status, recent changes, known issues)
+4. **Invoke `claude-md-management:revise-claude-md` skill** to update CLAUDE.md with session learnings
+5. **Verify CLAUDE.md updates** (implementation status, recent changes, known issues)
 6. **Check template sync** - if `.project/sync-report.md` exists, offer to run /sync-templates
 7. **Check agents/knowledge** for any that need updates based on session work
 8. **Create/update LEARNINGS.md** with session insights
@@ -774,8 +785,9 @@ That's fine - the previous note (if any) will remain.
 13. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
 14. **Export update package** - if master agent and commands/knowledge changed, offer to export for spawned projects
 15. **Output summary** of what was done and what will be committed
-16. **Get user approval** and commit (do NOT push)
-17. **Ask about session note** - offer to save a note for next session (shown by /start-session)
+16. **Invoke `superpowers:verification-before-completion` skill** to verify all work is complete
+17. **Get user approval** and commit (do NOT push)
+18. **Ask about session note** - offer to save a note for next session (shown by /start-session)
 
 Be thorough but concise. Focus on changes that will help future sessions understand the current state of the project.
 
@@ -792,7 +804,7 @@ Begin the session-end process by gathering context about what was done this sess
 
 ### 2. Helper Command: `.claude/commands/commit.md`
 
-A standalone commit command for when you just want to commit without the full session-end workflow:
+A standalone commit command for when you just want to commit without the full session-end workflow. Uses the `commit-commands:commit` skill for the core workflow:
 
 ```markdown
 ---
@@ -801,120 +813,30 @@ description: Draft a commit message, get approval, then commit changes
 
 # Commit - Draft and Commit Changes
 
----
+## Step 1: Pre-flight Secret Check
 
-## Step 1: Gather Information
+Check for sensitive files before committing:
 
-Run these commands in parallel:
+\```bash
+git status --porcelain | grep -E "\.env|credentials|secret|\.pem|\.key" || echo "NO_SECRETS"
+\```
 
-```bash
-git status
-```
+If sensitive files detected, warn user and confirm before proceeding.
 
-```bash
-git diff
-```
+## Step 2: Invoke Commit Skill
 
-```bash
-git diff --staged
-```
+Invoke the `commit-commands:commit` skill to handle the git commit workflow.
 
-```bash
-git log --oneline -5
-```
-
-If there are no changes (nothing staged or unstaged), inform the user:
-```
-No changes to commit.
-```
-
----
-
-## Step 2: Draft Commit Message
-
-Analyze all changes (staged + unstaged) and draft a commit message:
-
-1. **First line**: Concise summary (50 chars or less ideally)
-   - Use imperative mood ("Add feature" not "Added feature")
-   - Capitalize first letter
-   - No period at end
-
-2. **Body** (if needed): Explain the "why" not the "what"
-
-3. **Match the repo's style** based on recent commits
-
----
-
-## Step 3: Show Message and Get Approval
-
-**IMPORTANT:** Show the commit message FIRST as a code block, THEN ask for approval.
-
-### 3a. Display the commit message clearly
-
-```
-Commit message:
-───────────────────────────────────────────────────────────────
-
-[full commit message here, including body and co-author line]
-
-───────────────────────────────────────────────────────────────
-
-Files to commit:
-- [file1] - [brief description]
-- [file2] - [brief description]
-```
-
-### 3b. Ask for approval
-
-AFTER showing the message, use AskUserQuestion with options:
-- **Commit** - Stage all and commit with this message
-- **Edit message** - Change the commit message
-- **Cancel** - Don't commit
-
-If user chooses to edit, ask what changes they want, revise, and show the new message again before asking.
-
----
-
-## Step 4: Commit
-
-Once approved:
-
-1. Stage all changes:
-```bash
-git add -A
-```
-
-2. Commit with the approved message:
-```bash
-git commit -m "$(cat <<'EOF'
-[approved commit message]
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-EOF
-)"
-```
-
-3. Verify:
-```bash
-git log --oneline -1
-```
-
----
-
-## Step 5: Report Success
-
-```
-Committed: [hash] [message]
-
-To push: git push
-```
-
----
+The skill will:
+- Gather git status, diff, and recent commits
+- Draft an appropriate commit message
+- Show the message and get user approval
+- Execute the commit with Co-Authored-By line
 
 ## Notes
 
-- Never commit files that look like secrets (.env, credentials, API keys)
-- If pre-commit hooks fail, show the error and offer to fix
+- Never commit files that look like secrets
+- If pre-commit hooks fail, show error and offer to fix
 - Never use --no-verify unless explicitly requested
 ```
 

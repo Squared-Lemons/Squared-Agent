@@ -335,6 +335,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-22:** Integrated community skills into 7 commands - `/new-feature` uses `superpowers:using-git-worktrees`; `/complete-feature` uses `superpowers:finishing-a-development-branch`; `/new-idea` uses `superpowers:brainstorming`; `/get-feedback` uses `superpowers:brainstorming` + `superpowers:writing-plans`; `/end-session` uses `claude-md-management:revise-claude-md` + `superpowers:verification-before-completion`; `/commit` simplified to use `commit-commands:commit`; `/clean-branches` uses `commit-commands:clean_gone` for gone branch detection
 - **2026-01-20:** Added VibeKanban integration - `/vibekanban` command for launching VibeKanban AI agent task management; added to `/new-idea` as optional tool for spawned projects; created VibeKanban-Command.md template; synced Start-Session template with "(spawned projects only)" clarification
 - **2026-01-20:** Gym Master feedback part 2 - Added .env.example template to developer profile; useSearchParams Suspense gotcha in Next.js guide; session helper pattern (getSessionWithOrg); MVP patterns (QR code as data URL); bidirectional agent communication (inbox/outbox); `/creator-feedback` command for generating feedback to master agent
 - **2026-01-20:** Processed Gym Master feedback - Next.js 16 proxy migration (middleware.ts→proxy.ts), Better Auth navigation gotcha (use window.location.href after auth changes), Turbopack default docs, browser automation known issues

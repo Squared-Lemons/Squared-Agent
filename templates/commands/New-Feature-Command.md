@@ -15,9 +15,10 @@ The `/new-feature` command creates a safe workspace for development by branching
 | 1 | Validates argument (feature description) |
 | 2 | Generates slugified branch name |
 | 3 | Checks for uncommitted changes |
-| 4 | Asks: regular branch or worktree? |
-| 5 | Creates branch/worktree |
-| 6 | Confirms setup |
+| 4 | Invokes `superpowers:using-git-worktrees` skill for guidance |
+| 5 | Asks: regular branch or worktree? |
+| 6 | Creates branch/worktree |
+| 7 | Confirms setup |
 
 ---
 
@@ -83,7 +84,17 @@ How would you like to proceed?
 
 ---
 
-## Step 4: Ask Branch Mode
+## Step 4: Informed Branch Mode Decision
+
+Before presenting options, invoke the `superpowers:using-git-worktrees` skill.
+
+The skill provides context on when worktrees are valuable (parallel work, isolation needs) and smart directory selection guidance.
+
+Use the skill's output to help the user make an informed choice.
+
+---
+
+## Step 5: Ask Branch Mode
 
 Present options to the user:
 
@@ -100,7 +111,7 @@ How would you like to set up the feature branch?
 
 ---
 
-## Step 5: Create Branch or Worktree
+## Step 6: Create Branch or Worktree
 
 ### For Regular Branch
 
@@ -129,7 +140,7 @@ Your current directory stays on the original branch.
 
 ---
 
-## Step 6: Confirm Setup
+## Step 7: Confirm Setup
 
 Display confirmation:
 
@@ -155,9 +166,10 @@ When you're done:
 1. Parse `$ARGUMENTS` for feature description
 2. Generate slugified branch name
 3. Check for uncommitted changes, handle appropriately
-4. Ask user: regular branch or worktree?
-5. Create branch/worktree based on choice
-6. Confirm setup and remind about `/complete-feature`
+4. Invoke `superpowers:using-git-worktrees` skill for informed guidance
+5. Ask user: regular branch or worktree?
+6. Create branch/worktree based on choice
+7. Confirm setup and remind about `/complete-feature`
 ```
 
 ---
