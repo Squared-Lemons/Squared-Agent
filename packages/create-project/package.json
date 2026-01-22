@@ -1,0 +1,39 @@
+{
+  "name": "create-squared-agent",
+  "version": "0.0.1",
+  "description": "Create a new project with Squared Agent - npm create squared-agent",
+  "type": "module",
+  "bin": {
+    "create-squared-agent": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@squared-agent/core": "workspace:*",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "inquirer": "^10.2.0",
+    "ora": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/squared-lemons/squared-agent.git",
+    "directory": "packages/create-project"
+  }
+}

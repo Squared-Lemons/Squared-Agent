@@ -76,6 +76,27 @@ The agent handles the rest — configures plugins, creates commands, sets up per
 
 ---
 
+## Installation
+
+### Via npm (Coming Soon)
+
+```bash
+# Create a new project
+npm create squared-agent my-project
+
+# Or use the CLI directly
+npx @squared-agent/cli init
+```
+
+### Via Git Clone
+
+```bash
+git clone https://github.com/squared-lemons/squared-agent.git
+cd squared-agent
+```
+
+---
+
 ## Agent Packages
 
 Two ways to create setup packages for new projects:
@@ -230,10 +251,10 @@ Spawned projects are told which skills to install based on their technology stac
 
 | Skill | Purpose | Source |
 |-------|---------|--------|
-| **create-auth** | Guide for adding Better Auth to TypeScript/JavaScript apps | better-auth/skills |
 | **better-auth-best-practices** | Integration guide for Better Auth framework | better-auth/skills |
 | **vercel-react-best-practices** | React/Next.js performance optimization (45 rules from Vercel) | vercel-labs/agent-skills |
 | **web-design-guidelines** | UI code review for accessibility, UX, design compliance | vercel-labs/agent-skills |
+| **agent-browser** | Browser automation patterns for testing and interaction | local |
 
 #### Recommended Skills
 
@@ -285,9 +306,14 @@ Pre-configured plugins that add specialized capabilities:
 | **feature-dev** | `/feature-dev` | Architecture-first feature planning with code-explorer, code-architect, and code-reviewer agents |
 | **ralph-loop** | `/ralph-loop` | Autonomous implement → test → iterate loop until task is complete |
 | **frontend-design** | `/frontend-design` | Production-grade UI that avoids generic AI aesthetics |
+| **superpowers** | — | Powers `/new-feature`, `/complete-feature`, `/new-idea`, `/get-feedback`, `/end-session` with brainstorming, git worktrees, and verification |
+| **commit-commands** | — | Powers `/commit` and `/clean-branches` with standardized git operations |
+| **claude-md-management** | — | Powers `/end-session` with CLAUDE.md revision capabilities |
+| **stripe** | `/stripe-*` | Stripe integration guides, test cards, error explanations |
 | **code-simplifier** | — | Refines code for clarity while preserving functionality |
 | **context7** | — | Fetches up-to-date library documentation |
-| **playwright** | — | Browser automation and visual testing |
+| **security-guidance** | — | Security best practices for code analysis |
+| **toolhive-mcp-optimizer** | — | Optimizes Toolhive MCP server configurations |
 
 ### Browser Automation
 
@@ -496,6 +522,8 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 |---------|-------------|
 | `/summary` | Generate accomplishments report from git history |
 | `/vibekanban` | Launch VibeKanban for AI agent task management |
+| `/local-env` | Manage local dev environment (domains, HTTPS, proxy) |
+| `/creator-feedback` | Generate feedback to send back to master agent |
 | `/how-to-use` | Display the human-editable guide |
 | `/list-tools` | List all commands, plugins, and tools |
 | `/get-feedback` | Process inbox and implement improvements |
@@ -508,10 +536,22 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 ## Project Structure
 
 ```
+apps/                   # Full applications
+  web/                  # Web apps (dashboards, docs sites)
+  api/                  # API services (REST, GraphQL, tRPC)
+  workers/              # Background workers (queues, cron)
+  ai/                   # AI apps (agents, pipelines)
+
+packages/               # Publishable npm packages
+  core/                 # @squared-agent/core - shared utilities
+  cli/                  # @squared-agent/cli - CLI tool
+  create-project/       # create-squared-agent - npm create
+
 templates/              # Content copied to new projects
+  workflows/            # Development processes (Session-Git-Workflow)
   commands/             # Command implementation guides
   knowledge/            # Framework guides (Next.js, etc.)
-  skills/               # Skills (Vercel agent-skills)
+  skills/               # Skills (Agent Skills spec)
   ux-guides/            # UI/UX patterns
   profiles/             # Setup profiles (developer/, etc.)
   tasks/                # One-time setup tasks
@@ -524,10 +564,13 @@ suggestions/            # Agent proposals (categorized)
   knowledge/            # Proposed new guides
   commands/             # Proposed command improvements
   workflow/             # Proposed workflow changes
+  other/                # Miscellaneous improvements
 
+outbox/                 # Generated project packages (from /new-idea)
 docs/                   # Documentation
 .claude/                # Claude Code configuration
   commands/             # Active commands
+  skills/               # Installed agent skills
 
 .project/               # Local data (gitignored)
   sessions/             # Session logs by date
@@ -588,6 +631,36 @@ flowchart TB
 | [docs/content.md](docs/content.md) | Available profiles, knowledge, and tasks |
 | [docs/feedback.md](docs/feedback.md) | Creator feedback loop |
 | [docs/how-to-use.md](docs/how-to-use.md) | Human-editable quick start guide |
+
+---
+
+## Development
+
+This repository is a hybrid documentation hub + development monorepo using pnpm and Turborepo.
+
+### Setup
+
+```bash
+pnpm install    # Install dependencies
+pnpm build      # Build all packages
+pnpm dev        # Watch mode
+```
+
+### Available Packages
+
+| Package | Description |
+|---------|-------------|
+| `@squared-agent/core` | Shared utilities, types, constants |
+| `@squared-agent/cli` | CLI for project bootstrapping |
+| `create-squared-agent` | `npm create squared-agent` scaffolding |
+
+### Publishing
+
+```bash
+pnpm changeset        # Create changeset
+pnpm version-packages # Bump versions
+pnpm publish-packages # Publish to npm
+```
 
 ---
 

@@ -12,6 +12,55 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Capture development patterns** in `templates/commands/` as implementation guides
 - **Build knowledge base** in `templates/knowledge/` for reference during development
 - **Improve continuously** through feedback in `inbox/` → proposals in `suggestions/`
+- **Build and publish tools** via npm packages in `packages/`
+
+## Monorepo Development
+
+This is a hybrid documentation hub + development monorepo. Publishable npm packages live in `packages/`, applications in `apps/`.
+
+### Quick Commands
+
+```bash
+pnpm install          # Install all dependencies
+pnpm build            # Build all packages
+pnpm dev              # Watch mode for all packages
+pnpm type-check       # Type check all packages
+pnpm changeset        # Create a changeset for publishing
+pnpm version-packages # Version based on changesets
+pnpm publish-packages # Publish to npm
+```
+
+### Working with Specific Packages
+
+```bash
+pnpm --filter @squared-agent/core build    # Build specific package
+pnpm --filter @squared-agent/cli dev       # Dev mode for CLI
+```
+
+### Packages
+
+| Package | npm Name | Purpose |
+|---------|----------|---------|
+| `packages/core/` | `@squared-agent/core` | Shared utilities, types, constants |
+| `packages/cli/` | `@squared-agent/cli` | CLI tool for project bootstrapping |
+| `packages/create-project/` | `create-squared-agent` | `npm create squared-agent` scaffolding |
+
+### App Categories
+
+| Folder | Purpose |
+|--------|---------|
+| `apps/web/` | Web applications (dashboards, admin panels, docs sites) |
+| `apps/api/` | API services (REST, GraphQL, tRPC) |
+| `apps/workers/` | Background workers (queues, cron, event handlers) |
+| `apps/ai/` | AI applications (agents, pipelines, model runners) |
+
+### Publishing Workflow
+
+1. Make changes to packages
+2. Run `pnpm changeset` to create a changeset describing changes
+3. Commit the changeset with your changes
+4. Run `pnpm version-packages` to bump versions
+5. Run `pnpm publish-packages` to publish to npm
 
 ## Commands
 
@@ -303,6 +352,15 @@ This enables users to:
 ## Project Structure
 
 ```
+apps/               # Full applications (NEW)
+  web/              # Web apps (dashboards, admin panels, docs)
+  api/              # API services (REST, GraphQL, tRPC)
+  workers/          # Background workers (queues, cron, events)
+  ai/               # AI apps (agents, pipelines, model runners)
+packages/           # Publishable npm packages (NEW)
+  core/             # @squared-agent/core - shared utilities
+  cli/              # @squared-agent/cli - CLI tool
+  create-project/   # create-squared-agent - npm create
 templates/          # Content copied to new projects
   workflows/        # Development processes (Session-Git-Workflow)
   commands/         # Command implementation guides
