@@ -28,6 +28,61 @@ async function loadRegistry(): Promise<ProjectRegistry> {
 
 export const statsRouter = new Hono();
 
+// Get sessions for a specific date
+statsRouter.get("/sessions", async (c) => {
+  const date = c.req.query("date");
+  if (!date) {
+    return c.json({ error: "date parameter required" }, 400);
+  }
+
+  const registry = await loadRegistry();
+  const sessions: {
+    projectId: string;
+    projectName: string;
+    date: string;
+    type: string;
+    input: number;
+    output: number;
+    cacheRead: number;
+    cacheCreate: number;
+    turns: number;
+    cost: number;
+  }[] = [];
+
+  for (const project of registry.projects) {
+    const projectSessions = await parseTokenUsage(project.path);
+
+    for (const session of projectSessions) {
+      // Match date (session.date is like "2026-01-23 04:00")
+      const sessionDate = session.date.split(" ")[0];
+      if (sessionDate === date) {
+        sessions.push({
+          projectId: project.id,
+          projectName: project.name,
+          date: session.date,
+          type: session.type,
+          input: session.input,
+          output: session.output,
+          cacheRead: session.cacheRead,
+          cacheCreate: session.cacheCreate,
+          turns: session.turns,
+          cost: calculateCost({
+            input: session.input,
+            output: session.output,
+            cacheRead: session.cacheRead,
+            cacheCreate: session.cacheCreate,
+          }),
+        });
+      }
+    }
+  }
+
+  // Sort by time (date field contains time)
+  sessions.sort((a, b) => a.date.localeCompare(b.date));
+
+  return c.json({ date, sessions });
+});
+
 // Get aggregated stats across all projects
 statsRouter.get("/", async (c) => {
   const registry = await loadRegistry();

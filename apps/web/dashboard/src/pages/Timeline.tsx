@@ -1,7 +1,20 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card, Title, Text, Badge } from "@tremor/react";
 import { useStats } from "@/hooks/useStats";
 import { cn } from "@/lib/utils";
+
+interface SessionDetail {
+  projectId: string;
+  projectName: string;
+  date: string;
+  type: string;
+  input: number;
+  output: number;
+  cacheRead: number;
+  cacheCreate: number;
+  turns: number;
+  cost: number;
+}
 
 // Generate calendar data for GitHub-style heatmap
 function generateCalendarData(
@@ -52,6 +65,8 @@ function getIntensityClass(sessions: number): string {
 export function Timeline() {
   const { stats, loading, error } = useStats();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [sessions, setSessions] = useState<SessionDetail[]>([]);
+  const [loadingSessions, setLoadingSessions] = useState(false);
 
   const calendarData = useMemo(() => {
     if (!stats?.byDay) return [];
@@ -62,6 +77,28 @@ export function Timeline() {
     if (!selectedDate || !stats?.byDay) return null;
     return stats.byDay.find((d) => d.date === selectedDate) || null;
   }, [selectedDate, stats?.byDay]);
+
+  // Fetch sessions when date is selected
+  useEffect(() => {
+    if (!selectedDate) {
+      setSessions([]);
+      return;
+    }
+
+    setLoadingSessions(true);
+    fetch(`/api/stats/sessions?date=${selectedDate}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSessions(data.sessions || []);
+      })
+      .catch((err) => {
+        console.error("Failed to load sessions:", err);
+        setSessions([]);
+      })
+      .finally(() => {
+        setLoadingSessions(false);
+      });
+  }, [selectedDate]);
 
   if (loading) {
     return (
@@ -200,18 +237,80 @@ export function Timeline() {
           </div>
 
           {selectedDayData ? (
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Text>Sessions</Text>
-                <p className="text-2xl font-bold">{selectedDayData.sessions}</p>
+            <>
+              {/* Summary */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                  <Text>Sessions</Text>
+                  <p className="text-2xl font-bold">{selectedDayData.sessions}</p>
+                </div>
+                <div>
+                  <Text>Cost</Text>
+                  <p className="text-2xl font-bold">
+                    ${selectedDayData.cost.toFixed(2)}
+                  </p>
+                </div>
               </div>
-              <div>
-                <Text>Cost</Text>
-                <p className="text-2xl font-bold">
-                  ${selectedDayData.cost.toFixed(2)}
-                </p>
+
+              {/* Session Details */}
+              <div className="border-t pt-4">
+                <Text className="font-semibold mb-3">Session Details</Text>
+                {loadingSessions ? (
+                  <Text className="text-muted-foreground">Loading sessions...</Text>
+                ) : sessions.length === 0 ? (
+                  <Text className="text-muted-foreground">No session details available</Text>
+                ) : (
+                  <div className="space-y-3">
+                    {sessions.map((session, idx) => (
+                      <div
+                        key={idx}
+                        className="p-4 bg-muted/50 rounded-lg"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">{session.projectName}</span>
+                            <Badge color={session.type === "subscription" ? "blue" : "amber"}>
+                              {session.type}
+                            </Badge>
+                          </div>
+                          <span className="text-sm text-muted-foreground">
+                            {session.date.split(" ")[1] || ""}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                          <div>
+                            <span className="text-muted-foreground">Turns</span>
+                            <p className="font-medium">{session.turns.toLocaleString()}</p>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Input</span>
+                            <p className="font-medium">{session.input.toLocaleString()}</p>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Output</span>
+                            <p className="font-medium">{session.output.toLocaleString()}</p>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Cost</span>
+                            <p className="font-medium">${session.cost.toFixed(4)}</p>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 mt-2 text-sm">
+                          <div>
+                            <span className="text-muted-foreground">Cache Read</span>
+                            <p className="font-medium">{session.cacheRead.toLocaleString()}</p>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Cache Create</span>
+                            <p className="font-medium">{session.cacheCreate.toLocaleString()}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
+            </>
           ) : (
             <Text className="text-muted-foreground">No activity on this day</Text>
           )}
