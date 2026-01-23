@@ -45,6 +45,14 @@ pnpm --filter @squared-agent/cli dev       # Dev mode for CLI
 | `packages/cli/` | `@squared-agent/cli` | CLI tool for project bootstrapping |
 | `packages/create-project/` | `create-squared-agent` | `npm create squared-agent` scaffolding |
 
+### Apps
+
+| App | Location | Purpose |
+|-----|----------|---------|
+| **Dashboard** | `apps/web/dashboard/` | View work summaries and session costs across projects |
+
+Run with: `pnpm --filter @squared-agent/dashboard dev`
+
 ### App Categories
 
 | Folder | Purpose |
@@ -352,12 +360,13 @@ This enables users to:
 ## Project Structure
 
 ```
-apps/               # Full applications (NEW)
-  web/              # Web apps (dashboards, admin panels, docs)
-  api/              # API services (REST, GraphQL, tRPC)
-  workers/          # Background workers (queues, cron, events)
-  ai/               # AI apps (agents, pipelines, model runners)
-packages/           # Publishable npm packages (NEW)
+apps/               # Full applications
+  web/
+    dashboard/      # Work summary & session costs viewer
+  api/              # API services (placeholder)
+  workers/          # Background workers (placeholder)
+  ai/               # AI apps (placeholder)
+packages/           # Publishable npm packages
   core/             # @squared-agent/core - shared utilities
   cli/              # @squared-agent/cli - CLI tool
   create-project/   # create-squared-agent - npm create
@@ -393,6 +402,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-23:** Added work summary dashboard - `apps/web/dashboard/` with Vite + React + Tremor for viewing session costs and work summaries across multiple projects; reads `.project/token-usage.md` and `.project/sessions/` files; local Hono API server for file parsing; added monorepo structure with pnpm + Turborepo + Changesets; created `packages/core`, `packages/cli`, `packages/create-project`; updated pnpm-workspace.yaml to support nested apps
 - **2026-01-22:** Integrated community skills into 7 commands - `/new-feature` uses `superpowers:using-git-worktrees`; `/complete-feature` uses `superpowers:finishing-a-development-branch`; `/new-idea` uses `superpowers:brainstorming`; `/get-feedback` uses `superpowers:brainstorming` + `superpowers:writing-plans`; `/end-session` uses `claude-md-management:revise-claude-md` + `superpowers:verification-before-completion`; `/commit` simplified to use `commit-commands:commit`; `/clean-branches` uses `commit-commands:clean_gone` for gone branch detection
 - **2026-01-20:** Added VibeKanban integration - `/vibekanban` command for launching VibeKanban AI agent task management; added to `/new-idea` as optional tool for spawned projects; created VibeKanban-Command.md template; synced Start-Session template with "(spawned projects only)" clarification
 - **2026-01-20:** Gym Master feedback part 2 - Added .env.example template to developer profile; useSearchParams Suspense gotcha in Next.js guide; session helper pattern (getSessionWithOrg); MVP patterns (QR code as data URL); bidirectional agent communication (inbox/outbox); `/creator-feedback` command for generating feedback to master agent

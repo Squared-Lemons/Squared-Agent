@@ -537,7 +537,8 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 
 ```
 apps/                   # Full applications
-  web/                  # Web apps (dashboards, docs sites)
+  web/
+    dashboard/          # Work summary & session costs viewer
   api/                  # API services (REST, GraphQL, tRPC)
   workers/              # Background workers (queues, cron)
   ai/                   # AI apps (agents, pipelines)
@@ -653,6 +654,15 @@ pnpm dev        # Watch mode
 | `@squared-agent/core` | Shared utilities, types, constants |
 | `@squared-agent/cli` | CLI for project bootstrapping |
 | `create-squared-agent` | `npm create squared-agent` scaffolding |
+| `@squared-agent/dashboard` | Work summary & session costs dashboard |
+
+### Running the Dashboard
+
+```bash
+pnpm --filter @squared-agent/dashboard dev
+```
+
+Opens at `http://localhost:5173`. Add projects by path to view their session logs and token costs.
 
 ### Publishing
 
