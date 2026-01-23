@@ -28,11 +28,13 @@ async function loadRegistry(): Promise<ProjectRegistry> {
 
 export const statsRouter = new Hono();
 
-// Get sessions for a specific date
+// Get sessions for a specific date or month
 statsRouter.get("/sessions", async (c) => {
   const date = c.req.query("date");
-  if (!date) {
-    return c.json({ error: "date parameter required" }, 400);
+  const month = c.req.query("month"); // Format: YYYY-MM
+
+  if (!date && !month) {
+    return c.json({ error: "date or month parameter required" }, 400);
   }
 
   const registry = await loadRegistry();
@@ -53,9 +55,17 @@ statsRouter.get("/sessions", async (c) => {
     const projectSessions = await parseTokenUsage(project.path);
 
     for (const session of projectSessions) {
-      // Match date (session.date is like "2026-01-23 04:00")
+      // session.date is like "2026-01-23 04:00"
       const sessionDate = session.date.split(" ")[0];
-      if (sessionDate === date) {
+      const sessionMonth = sessionDate.substring(0, 7); // YYYY-MM
+
+      const matches = date
+        ? sessionDate === date
+        : month
+        ? sessionMonth === month
+        : false;
+
+      if (matches) {
         sessions.push({
           projectId: project.id,
           projectName: project.name,
@@ -80,7 +90,7 @@ statsRouter.get("/sessions", async (c) => {
   // Sort by time (date field contains time)
   sessions.sort((a, b) => a.date.localeCompare(b.date));
 
-  return c.json({ date, sessions });
+  return c.json({ date: date || null, month: month || null, sessions });
 });
 
 // Get aggregated stats across all projects

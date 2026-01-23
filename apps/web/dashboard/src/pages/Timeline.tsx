@@ -65,6 +65,7 @@ function getIntensityClass(sessions: number): string {
 export function Timeline() {
   const { stats, loading, error } = useStats();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const [sessions, setSessions] = useState<SessionDetail[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(false);
 
@@ -78,15 +79,19 @@ export function Timeline() {
     return stats.byDay.find((d) => d.date === selectedDate) || null;
   }, [selectedDate, stats?.byDay]);
 
-  // Fetch sessions when date is selected
+  // Fetch sessions when date or month is selected
   useEffect(() => {
-    if (!selectedDate) {
+    if (!selectedDate && !selectedMonth) {
       setSessions([]);
       return;
     }
 
     setLoadingSessions(true);
-    fetch(`/api/stats/sessions?date=${selectedDate}`)
+    const params = selectedDate
+      ? `date=${selectedDate}`
+      : `month=${selectedMonth}`;
+
+    fetch(`/api/stats/sessions?${params}`)
       .then((res) => res.json())
       .then((data) => {
         setSessions(data.sessions || []);
@@ -98,7 +103,19 @@ export function Timeline() {
       .finally(() => {
         setLoadingSessions(false);
       });
-  }, [selectedDate]);
+  }, [selectedDate, selectedMonth]);
+
+  // Handle date selection (clears month)
+  const handleDateSelect = (date: string) => {
+    setSelectedMonth(null);
+    setSelectedDate(date);
+  };
+
+  // Handle month selection (clears date)
+  const handleMonthSelect = (month: string) => {
+    setSelectedDate(null);
+    setSelectedMonth(month);
+  };
 
   if (loading) {
     return (
@@ -186,7 +203,7 @@ export function Timeline() {
                     return (
                       <button
                         key={dayIdx}
-                        onClick={() => setSelectedDate(dateStr)}
+                        onClick={() => handleDateSelect(dateStr)}
                         className={cn(
                           "w-3 h-3 rounded-sm transition-all",
                           getIntensityClass(sessions),
@@ -216,104 +233,96 @@ export function Timeline() {
         </div>
       </Card>
 
-      {/* Selected Day Details */}
-      {selectedDate && (
+      {/* Selected Day/Month Details */}
+      {(selectedDate || selectedMonth) && (
         <Card>
           <div className="flex items-center justify-between mb-4">
             <Title>
-              {new Date(selectedDate).toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+              {selectedDate
+                ? new Date(selectedDate).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : new Date(selectedMonth + "-01").toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                  })}
             </Title>
             <button
-              onClick={() => setSelectedDate(null)}
+              onClick={() => {
+                setSelectedDate(null);
+                setSelectedMonth(null);
+              }}
               className="text-sm text-muted-foreground hover:text-foreground"
             >
               Clear
             </button>
           </div>
 
-          {selectedDayData ? (
-            <>
-              {/* Summary */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div>
-                  <Text>Sessions</Text>
-                  <p className="text-2xl font-bold">{selectedDayData.sessions}</p>
-                </div>
-                <div>
-                  <Text>Cost</Text>
-                  <p className="text-2xl font-bold">
-                    ${selectedDayData.cost.toFixed(2)}
-                  </p>
-                </div>
-              </div>
-
-              {/* Session Details */}
-              <div className="border-t pt-4">
-                <Text className="font-semibold mb-3">Session Details</Text>
-                {loadingSessions ? (
-                  <Text className="text-muted-foreground">Loading sessions...</Text>
-                ) : sessions.length === 0 ? (
-                  <Text className="text-muted-foreground">No session details available</Text>
-                ) : (
-                  <div className="space-y-3">
-                    {sessions.map((session, idx) => (
-                      <div
-                        key={idx}
-                        className="p-4 bg-muted/50 rounded-lg"
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">{session.projectName}</span>
-                            <Badge color={session.type === "subscription" ? "blue" : "amber"}>
-                              {session.type}
-                            </Badge>
-                          </div>
-                          <span className="text-sm text-muted-foreground">
-                            {session.date.split(" ")[1] || ""}
-                          </span>
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">Turns</span>
-                            <p className="font-medium">{session.turns.toLocaleString()}</p>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Input</span>
-                            <p className="font-medium">{session.input.toLocaleString()}</p>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Output</span>
-                            <p className="font-medium">{session.output.toLocaleString()}</p>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Cost</span>
-                            <p className="font-medium">${session.cost.toFixed(4)}</p>
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3 mt-2 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">Cache Read</span>
-                            <p className="font-medium">{session.cacheRead.toLocaleString()}</p>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Cache Create</span>
-                            <p className="font-medium">{session.cacheCreate.toLocaleString()}</p>
-                          </div>
-                        </div>
+          {/* Session Details */}
+          <div>
+            <Text className="font-semibold mb-3">
+              {loadingSessions
+                ? "Loading..."
+                : `${sessions.length} Session${sessions.length !== 1 ? "s" : ""}`}
+            </Text>
+            {loadingSessions ? (
+              <Text className="text-muted-foreground">Loading sessions...</Text>
+            ) : sessions.length === 0 ? (
+              <Text className="text-muted-foreground">No session details available</Text>
+            ) : (
+              <div className="space-y-3">
+                {sessions.map((session, idx) => (
+                  <div
+                    key={idx}
+                    className="p-4 bg-muted/50 rounded-lg"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{session.projectName}</span>
+                        <Badge color={session.type === "subscription" ? "blue" : "amber"}>
+                          {session.type}
+                        </Badge>
                       </div>
-                    ))}
+                      <span className="text-sm text-muted-foreground">
+                        {session.date}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Turns</span>
+                        <p className="font-medium">{session.turns.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Input</span>
+                        <p className="font-medium">{session.input.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Output</span>
+                        <p className="font-medium">{session.output.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Cost</span>
+                        <p className="font-medium">${session.cost.toFixed(4)}</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 mt-2 text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Cache Read</span>
+                        <p className="font-medium">{session.cacheRead.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Cache Create</span>
+                        <p className="font-medium">{session.cacheCreate.toLocaleString()}</p>
+                      </div>
+                    </div>
                   </div>
-                )}
+                ))}
               </div>
-            </>
-          ) : (
-            <Text className="text-muted-foreground">No activity on this day</Text>
-          )}
+            )}
+          </div>
         </Card>
       )}
 
@@ -340,9 +349,15 @@ export function Timeline() {
                 .sort((a, b) => b[0].localeCompare(a[0]))
                 .slice(0, 4)
                 .map(([month, data]) => (
-                  <div
+                  <button
                     key={month}
-                    className="p-3 bg-muted/50 rounded-lg"
+                    onClick={() => handleMonthSelect(month)}
+                    className={cn(
+                      "p-3 rounded-lg text-left transition-all hover:bg-muted",
+                      selectedMonth === month
+                        ? "bg-primary/10 ring-2 ring-primary"
+                        : "bg-muted/50"
+                    )}
                   >
                     <Badge color="blue" className="mb-2">
                       {new Date(month + "-01").toLocaleDateString("en-US", {
@@ -356,7 +371,7 @@ export function Timeline() {
                     <p className="text-sm text-muted-foreground">
                       ${data.cost.toFixed(2)}
                     </p>
-                  </div>
+                  </button>
                 ));
             })()}
           </div>
