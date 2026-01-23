@@ -46,6 +46,10 @@ File System
 | GET | `/api/projects/:id/sessions` | Session logs for project |
 | GET | `/api/projects/:id/tokens` | Token usage for project |
 | GET | `/api/stats` | Aggregated stats across all projects |
+| GET | `/api/stats/sessions` | Sessions for date or month |
+| GET | `/api/stats/logs` | Session logs for date or month |
+| GET | `/api/settings` | User subscription settings |
+| PUT | `/api/settings` | Update subscription settings |
 
 ## Data Models
 
@@ -119,7 +123,15 @@ interface Stats {
 ### 4. Timeline (`/timeline`)
 - Calendar heatmap (GitHub-style)
 - Click day to see sessions
+- Drill-down shows Changes, Insights, Commits
+- Click monthly cards to see month's sessions
 - Filter by project
+
+### 5. Settings (`/settings`)
+- Subscription plan selection (Free, Pro, Max 5x, Max 20x, Custom)
+- Monthly price configuration
+- Billing cycle start day
+- How costs are calculated explanation
 
 ## File Structure
 
@@ -140,7 +152,8 @@ apps/web/dashboard/
 │   │   ├── Overview.tsx
 │   │   ├── Projects.tsx
 │   │   ├── ProjectDetail.tsx
-│   │   └── Timeline.tsx
+│   │   ├── Timeline.tsx
+│   │   └── Settings.tsx
 │   ├── hooks/
 │   └── lib/
 ├── server/
