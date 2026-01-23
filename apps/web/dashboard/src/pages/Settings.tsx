@@ -175,32 +175,36 @@ export function Settings() {
         </div>
       </Card>
 
-      {/* How Savings Are Calculated */}
+      {/* How Costs Are Calculated */}
       <Card>
-        <Title>How Savings Are Calculated</Title>
+        <Title>How Costs Are Calculated</Title>
         <div className="mt-4 space-y-4 text-sm">
-          <div className="p-4 bg-muted/50 rounded-lg">
-            <Text className="font-semibold mb-2">API Cost (What you would have paid)</Text>
+          <div className="p-4 bg-blue-500/10 rounded-lg">
+            <Text className="font-semibold mb-2 text-blue-700">Projected API Cost</Text>
+            <Text className="mb-2">What you would pay if using the API directly:</Text>
             <code className="text-xs bg-muted px-2 py-1 rounded">
               (input × $15 + output × $75 + cache_read × $1.50 + cache_create × $18.75) / 1,000,000
             </code>
           </div>
 
           <div className="p-4 bg-muted/50 rounded-lg">
-            <Text className="font-semibold mb-2">Subscription Sessions</Text>
-            <Text>Sessions marked as "subscription" are covered by your monthly plan.</Text>
+            <Text className="font-semibold mb-2">Actual Cost</Text>
+            <Text>Your subscription cost + any API session charges:</Text>
+            <code className="text-xs bg-muted px-2 py-1 rounded mt-2 block">
+              Monthly Subscription + API Session Charges = Actual Cost
+            </code>
           </div>
 
           <div className="p-4 bg-emerald-500/10 rounded-lg">
             <Text className="font-semibold mb-2 text-emerald-700">Savings</Text>
             <code className="text-xs bg-muted px-2 py-1 rounded">
-              API Cost of Subscription Sessions - Monthly Plan Cost = Savings
+              Projected API Cost - Actual Cost = Savings
             </code>
           </div>
 
           <div className="p-4 bg-amber-500/10 rounded-lg">
             <Text className="font-semibold mb-2 text-amber-700">API Sessions</Text>
-            <Text>Sessions marked as "api" are charged separately and not covered by subscription.</Text>
+            <Text>Sessions marked as "api" are charged separately and added to your actual cost.</Text>
           </div>
         </div>
       </Card>

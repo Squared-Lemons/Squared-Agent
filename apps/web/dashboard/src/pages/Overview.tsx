@@ -81,7 +81,7 @@ export function Overview() {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
-              <Text>API Cost (if paid)</Text>
+              <Text>Projected API Cost</Text>
               <p className="text-2xl font-bold">${stats.subscriptionCost?.toFixed(2) || "0.00"}</p>
               <Text className="text-xs text-muted-foreground">
                 {stats.subscriptionSessions || 0} subscription sessions
@@ -89,9 +89,13 @@ export function Overview() {
             </div>
 
             <div>
-              <Text>Subscription Cost</Text>
-              <p className="text-2xl font-bold">${settings.monthlyPrice.toFixed(2)}</p>
-              <Text className="text-xs text-muted-foreground">per month</Text>
+              <Text>Actual Cost</Text>
+              <p className="text-2xl font-bold">
+                ${(settings.monthlyPrice + (stats.apiCost || 0)).toFixed(2)}
+              </p>
+              <Text className="text-xs text-muted-foreground">
+                subscription + API charges
+              </Text>
             </div>
 
             <div>
@@ -110,7 +114,7 @@ export function Overview() {
             </div>
 
             <div>
-              <Text>Additional API Cost</Text>
+              <Text>API Charges</Text>
               <p className={cn(
                 "text-2xl font-bold",
                 (stats.apiCost || 0) > 0 ? "text-amber-600" : "text-muted-foreground"
@@ -163,7 +167,7 @@ export function Overview() {
       {/* Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card decoration="top" decorationColor="blue">
-          <Text>Total API Value</Text>
+          <Text>Projected API Cost</Text>
           <Metric>${stats.totalCost.toFixed(2)}</Metric>
           <Text className="text-xs text-muted-foreground mt-1">if all sessions were API</Text>
         </Card>
@@ -218,7 +222,7 @@ export function Overview() {
       {/* Cost Chart */}
       {chartData.length > 0 && (
         <Card>
-          <Title>Daily Costs (Last 30 Days)</Title>
+          <Title>Daily Projected API Cost</Title>
           <AreaChart
             className="h-72 mt-4"
             data={chartData}
@@ -234,7 +238,7 @@ export function Overview() {
       {/* Project Breakdown */}
       {stats.byProject.length > 0 && (
         <Card>
-          <Title>Cost by Project</Title>
+          <Title>Projected API Cost by Project</Title>
           <div className="mt-4 space-y-3">
             {stats.byProject.map((project) => (
               <div

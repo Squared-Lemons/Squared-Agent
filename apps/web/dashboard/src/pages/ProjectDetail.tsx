@@ -75,7 +75,7 @@ export function ProjectDetail() {
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card decoration="top" decorationColor="blue">
-          <Text>Total Cost</Text>
+          <Text>Projected API Cost</Text>
           <p className="text-2xl font-bold">${stats.totalCost.toFixed(2)}</p>
         </Card>
         <Card decoration="top" decorationColor="emerald">

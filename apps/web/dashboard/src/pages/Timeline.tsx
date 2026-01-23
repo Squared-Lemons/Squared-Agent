@@ -406,7 +406,7 @@ export function Timeline() {
                                         </div>
                                         <div>
                                           <span className="text-muted-foreground">
-                                            Cost {entry.tokenData.type === "subscription" ? "(covered)" : "(API)"}
+                                            {entry.tokenData.type === "subscription" ? "Projected API Cost" : "Actual Cost"}
                                           </span>
                                           <p className={cn(
                                             "font-medium",
@@ -508,7 +508,7 @@ export function Timeline() {
                                       </div>
                                       <div>
                                         <span className="text-muted-foreground">
-                                          Cost {session.type === "subscription" ? "(covered)" : "(API)"}
+                                          {session.type === "subscription" ? "Projected API Cost" : "Actual Cost"}
                                         </span>
                                         <p className={cn(
                                           "font-medium",
