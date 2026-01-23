@@ -14,3 +14,18 @@
 .env
 .env.local
 .env.*.local
+.api-port
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.next/
+out/
+
+# Turborepo
+.turbo/
+
+# TypeScript
+*.tsbuildinfo
