@@ -7,8 +7,14 @@
 # IDE
 .idea/
 .vscode/
+.cursor/
+.codex/
 *.swp
 *.swo
+
+# Agent skill symlinks (machine-specific)
+.agents/
+.claude/skills/agent-browser
 
 # Environment
 .env
