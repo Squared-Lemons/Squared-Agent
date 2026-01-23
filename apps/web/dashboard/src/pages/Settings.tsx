@@ -3,7 +3,7 @@ import { Card, Title, Text, Badge } from "@tremor/react";
 import { cn } from "@/lib/utils";
 
 interface SubscriptionSettings {
-  plan: "free" | "pro" | "max" | "custom";
+  plan: "free" | "pro" | "max-5x" | "max-20x" | "custom";
   monthlyPrice: number;
   billingCycleStart?: number;
   notes?: string;
@@ -12,8 +12,9 @@ interface SubscriptionSettings {
 const PLAN_OPTIONS = [
   { id: "free", name: "Free", price: 0, description: "Limited usage" },
   { id: "pro", name: "Pro", price: 20, description: "$20/month" },
-  { id: "max", name: "Max", price: 100, description: "$100/month - 5x Pro usage" },
-  { id: "custom", name: "Custom", price: null, description: "Set your own values" },
+  { id: "max-5x", name: "Max 5x", price: 100, description: "$100/month - 5x Pro" },
+  { id: "max-20x", name: "Max 20x", price: 200, description: "$200/month - 20x Pro" },
+  { id: "custom", name: "Custom", price: null, description: "Set your own" },
 ];
 
 export function Settings() {

@@ -27,7 +27,8 @@ const DEFAULT_SETTINGS: SubscriptionSettings = {
 const PLAN_PRESETS: Record<string, Partial<SubscriptionSettings>> = {
   free: { monthlyPrice: 0 },
   pro: { monthlyPrice: 20 },
-  max: { monthlyPrice: 100 },
+  "max-5x": { monthlyPrice: 100 },
+  "max-20x": { monthlyPrice: 200 },
 };
 
 async function loadSettings(): Promise<SubscriptionSettings> {
@@ -72,7 +73,8 @@ settingsRouter.get("/presets", (c) => {
   return c.json({
     free: { name: "Free", monthlyPrice: 0, description: "Limited usage" },
     pro: { name: "Pro", monthlyPrice: 20, description: "$20/month" },
-    max: { name: "Max", monthlyPrice: 100, description: "$100/month - 5x Pro usage" },
+    "max-5x": { name: "Max 5x", monthlyPrice: 100, description: "$100/month - 5x Pro usage" },
+    "max-20x": { name: "Max 20x", monthlyPrice: 200, description: "$200/month - 20x Pro usage" },
     custom: { name: "Custom", monthlyPrice: null, description: "Set your own values" },
   });
 });
