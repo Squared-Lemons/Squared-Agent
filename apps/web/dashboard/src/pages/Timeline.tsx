@@ -90,11 +90,6 @@ export function Timeline() {
     return generateCalendarData(stats.byDay);
   }, [stats?.byDay]);
 
-  const selectedDayData = useMemo(() => {
-    if (!selectedDate || !stats?.byDay) return null;
-    return stats.byDay.find((d) => d.date === selectedDate) || null;
-  }, [selectedDate, stats?.byDay]);
-
   // Fetch sessions and logs when date or month is selected
   useEffect(() => {
     if (!selectedDate && !selectedMonth) {
@@ -334,8 +329,6 @@ export function Timeline() {
                       const hour = s.date.split(" ")[1]?.substring(0, 2);
                       return !coveredTimes.has(hour || "");
                     });
-
-                    const totalChanges = allEntries.reduce((sum, e) => sum + e.changes.length, 0);
 
                     return (
                       <div key={date} className="border rounded-lg overflow-hidden">

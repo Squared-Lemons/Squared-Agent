@@ -45,6 +45,11 @@ export interface AggregatedStats {
     cacheRead: number;
     cacheCreate: number;
   };
+  // Subscription tracking
+  subscriptionCost?: number;
+  apiCost?: number;
+  subscriptionSessions?: number;
+  apiSessions?: number;
   byProject: {
     projectId: string;
     projectName: string;
