@@ -1,9 +1,24 @@
-import { Card, Metric, Text, AreaChart, Title } from "@tremor/react";
+import { useState, useEffect } from "react";
+import { Card, Metric, Text, AreaChart, Title, Badge, ProgressBar } from "@tremor/react";
 import { useStats } from "@/hooks/useStats";
-import { formatNumber } from "@/lib/utils";
+import { formatNumber, cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
+
+interface SubscriptionSettings {
+  plan: string;
+  monthlyPrice: number;
+}
 
 export function Overview() {
   const { stats, loading, error } = useStats();
+  const [settings, setSettings] = useState<SubscriptionSettings | null>(null);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then(setSettings)
+      .catch(() => setSettings(null));
+  }, []);
 
   if (loading) {
     return (
@@ -56,11 +71,101 @@ export function Overview() {
         </p>
       </div>
 
+      {/* Subscription Summary Card */}
+      {settings && settings.monthlyPrice > 0 && (
+        <Card className="bg-gradient-to-r from-emerald-500/10 to-blue-500/10">
+          <div className="flex items-center justify-between mb-4">
+            <Title>Subscription Value</Title>
+            <Badge color="emerald">{settings.plan.toUpperCase()} Plan</Badge>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+              <Text>API Cost (if paid)</Text>
+              <p className="text-2xl font-bold">${stats.subscriptionCost?.toFixed(2) || "0.00"}</p>
+              <Text className="text-xs text-muted-foreground">
+                {stats.subscriptionSessions || 0} subscription sessions
+              </Text>
+            </div>
+
+            <div>
+              <Text>Subscription Cost</Text>
+              <p className="text-2xl font-bold">${settings.monthlyPrice.toFixed(2)}</p>
+              <Text className="text-xs text-muted-foreground">per month</Text>
+            </div>
+
+            <div>
+              <Text>You Saved</Text>
+              <p className={cn(
+                "text-2xl font-bold",
+                (stats.subscriptionCost || 0) - settings.monthlyPrice > 0
+                  ? "text-emerald-600"
+                  : "text-amber-600"
+              )}>
+                ${Math.max(0, (stats.subscriptionCost || 0) - settings.monthlyPrice).toFixed(2)}
+              </p>
+              <Text className="text-xs text-muted-foreground">
+                {(((stats.subscriptionCost || 0) / settings.monthlyPrice) * 100).toFixed(0)}% utilization
+              </Text>
+            </div>
+
+            <div>
+              <Text>Additional API Cost</Text>
+              <p className={cn(
+                "text-2xl font-bold",
+                (stats.apiCost || 0) > 0 ? "text-amber-600" : "text-muted-foreground"
+              )}>
+                ${stats.apiCost?.toFixed(2) || "0.00"}
+              </p>
+              <Text className="text-xs text-muted-foreground">
+                {stats.apiSessions || 0} API sessions
+              </Text>
+            </div>
+          </div>
+
+          {/* Utilization Bar */}
+          <div className="mt-6">
+            <div className="flex justify-between text-sm mb-1">
+              <Text>Subscription Utilization</Text>
+              <Text>{(((stats.subscriptionCost || 0) / settings.monthlyPrice) * 100).toFixed(0)}%</Text>
+            </div>
+            <ProgressBar
+              value={Math.min(100, ((stats.subscriptionCost || 0) / settings.monthlyPrice) * 100)}
+              color="emerald"
+            />
+            <Text className="text-xs text-muted-foreground mt-1">
+              {(stats.subscriptionCost || 0) >= settings.monthlyPrice
+                ? "You've gotten full value from your subscription!"
+                : `$${(settings.monthlyPrice - (stats.subscriptionCost || 0)).toFixed(2)} more value available`}
+            </Text>
+          </div>
+        </Card>
+      )}
+
+      {/* Setup prompt if no settings */}
+      {(!settings || settings.monthlyPrice === 0) && (
+        <Card className="bg-muted/50">
+          <div className="flex items-center justify-between">
+            <div>
+              <Title>Track Your Subscription Value</Title>
+              <Text>Configure your Claude subscription to see savings and utilization</Text>
+            </div>
+            <Link
+              to="/settings"
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90"
+            >
+              Configure Settings
+            </Link>
+          </div>
+        </Card>
+      )}
+
       {/* Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card decoration="top" decorationColor="blue">
-          <Text>Total Cost</Text>
+          <Text>Total API Value</Text>
           <Metric>${stats.totalCost.toFixed(2)}</Metric>
+          <Text className="text-xs text-muted-foreground mt-1">if all sessions were API</Text>
         </Card>
 
         <Card decoration="top" decorationColor="emerald">

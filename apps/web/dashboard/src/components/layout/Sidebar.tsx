@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, FolderKanban, CalendarDays } from "lucide-react";
+import { LayoutDashboard, FolderKanban, CalendarDays, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Overview" },
   { to: "/projects", icon: FolderKanban, label: "Projects" },
   { to: "/timeline", icon: CalendarDays, label: "Timeline" },
+  { to: "/settings", icon: Settings, label: "Settings" },
 ];
 
 export function Sidebar() {

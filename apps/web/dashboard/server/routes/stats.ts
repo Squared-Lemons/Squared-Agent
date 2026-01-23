@@ -221,11 +221,42 @@ statsRouter.get("/", async (c) => {
   const totalCost = calculateCost(totalTokens);
   const totalSessions = byProject.reduce((sum, p) => sum + p.sessions, 0);
 
+  // Calculate subscription vs API costs
+  let subscriptionCost = 0;
+  let apiCost = 0;
+  let subscriptionSessions = 0;
+  let apiSessions = 0;
+
+  for (const project of registry.projects) {
+    const sessions = await parseTokenUsage(project.path);
+    for (const session of sessions) {
+      const sessionCost = calculateCost({
+        input: session.input,
+        output: session.output,
+        cacheRead: session.cacheRead,
+        cacheCreate: session.cacheCreate,
+      });
+
+      if (session.type === "subscription") {
+        subscriptionCost += sessionCost;
+        subscriptionSessions++;
+      } else {
+        apiCost += sessionCost;
+        apiSessions++;
+      }
+    }
+  }
+
   return c.json({
     totalSessions,
     totalCost,
     totalTokens,
     byProject,
     byDay,
+    // Subscription breakdown
+    subscriptionCost, // API cost equivalent for subscription sessions
+    apiCost, // Actual API charges
+    subscriptionSessions,
+    apiSessions,
   });
 });
