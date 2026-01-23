@@ -56,11 +56,17 @@ export function Overview() {
         ).toFixed(1)
       : "0";
 
-  const chartData = stats.byDay.map((day) => ({
-    date: day.date,
-    Cost: Number(day.cost.toFixed(2)),
-    Sessions: day.sessions,
-  }));
+  const chartData = stats.byDay.map((day) => {
+    // Shorten date for chart display: "2026-01-19" -> "Jan 19"
+    const d = new Date(day.date);
+    const shortDate = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+    return {
+      date: shortDate,
+      Cost: Number(day.cost.toFixed(2)),
+      Sessions: day.sessions,
+    };
+  });
 
   return (
     <div className="space-y-8">

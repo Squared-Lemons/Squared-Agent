@@ -43,13 +43,21 @@ export function ProjectDetail() {
     );
   }
 
-  const costChartData = stats.tokenSessions.map((session) => ({
-    date: session.date,
-    Input: session.input,
-    Output: session.output,
-    "Cache Read": session.cacheRead,
-    "Cache Create": session.cacheCreate,
-  }));
+  const costChartData = stats.tokenSessions.map((session) => {
+    // Shorten date for chart display: "2026-01-19 05:45" -> "Jan 19"
+    const [datePart] = session.date.split(" ");
+    const d = new Date(datePart);
+    const shortDate = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+    return {
+      date: shortDate,
+      fullDate: session.date,
+      Input: session.input,
+      Output: session.output,
+      "Cache Read": session.cacheRead,
+      "Cache Create": session.cacheCreate,
+    };
+  });
 
   const tabs: { id: TabType; label: string }[] = [
     { id: "sessions", label: "Sessions" },
