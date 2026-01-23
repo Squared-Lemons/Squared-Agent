@@ -3,6 +3,7 @@ import { readFile } from "fs/promises";
 import { join } from "path";
 import { homedir } from "os";
 import { parseTokenUsage, calculateCost } from "../parsers/token-usage";
+import { getSessionLogsForDate, getSessionLogsForMonth, SessionLogEntry } from "../parsers/session-logs";
 
 interface Project {
   id: string;
@@ -91,6 +92,53 @@ statsRouter.get("/sessions", async (c) => {
   sessions.sort((a, b) => a.date.localeCompare(b.date));
 
   return c.json({ date: date || null, month: month || null, sessions });
+});
+
+// Get session logs (rich details: changes, insights, commits)
+statsRouter.get("/logs", async (c) => {
+  const date = c.req.query("date");
+  const month = c.req.query("month");
+
+  if (!date && !month) {
+    return c.json({ error: "date or month parameter required" }, 400);
+  }
+
+  const registry = await loadRegistry();
+  const logs: {
+    projectId: string;
+    projectName: string;
+    date: string;
+    entries: SessionLogEntry[];
+  }[] = [];
+
+  for (const project of registry.projects) {
+    if (date) {
+      const entries = await getSessionLogsForDate(project.path, date);
+      if (entries.length > 0) {
+        logs.push({
+          projectId: project.id,
+          projectName: project.name,
+          date,
+          entries,
+        });
+      }
+    } else if (month) {
+      const monthLogs = await getSessionLogsForMonth(project.path, month);
+      for (const log of monthLogs) {
+        logs.push({
+          projectId: project.id,
+          projectName: project.name,
+          date: log.date,
+          entries: log.entries,
+        });
+      }
+    }
+  }
+
+  // Sort by date
+  logs.sort((a, b) => a.date.localeCompare(b.date));
+
+  return c.json({ date: date || null, month: month || null, logs });
 });
 
 // Get aggregated stats across all projects

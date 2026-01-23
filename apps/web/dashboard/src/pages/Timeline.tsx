@@ -16,6 +16,20 @@ interface SessionDetail {
   cost: number;
 }
 
+interface SessionLogEntry {
+  time: string;
+  changes: string[];
+  insights: string[];
+  commits: string[];
+}
+
+interface SessionLog {
+  projectId: string;
+  projectName: string;
+  date: string;
+  entries: SessionLogEntry[];
+}
+
 // Generate calendar data for GitHub-style heatmap
 function generateCalendarData(
   byDay: { date: string; sessions: number; cost: number }[]
@@ -67,7 +81,9 @@ export function Timeline() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const [sessions, setSessions] = useState<SessionDetail[]>([]);
+  const [sessionLogs, setSessionLogs] = useState<SessionLog[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(false);
+  const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set());
 
   const calendarData = useMemo(() => {
     if (!stats?.byDay) return [];
@@ -79,10 +95,12 @@ export function Timeline() {
     return stats.byDay.find((d) => d.date === selectedDate) || null;
   }, [selectedDate, stats?.byDay]);
 
-  // Fetch sessions when date or month is selected
+  // Fetch sessions and logs when date or month is selected
   useEffect(() => {
     if (!selectedDate && !selectedMonth) {
       setSessions([]);
+      setSessionLogs([]);
+      setExpandedSessions(new Set());
       return;
     }
 
@@ -91,19 +109,37 @@ export function Timeline() {
       ? `date=${selectedDate}`
       : `month=${selectedMonth}`;
 
-    fetch(`/api/stats/sessions?${params}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSessions(data.sessions || []);
+    // Fetch both sessions (tokens) and logs (changes/insights) in parallel
+    Promise.all([
+      fetch(`/api/stats/sessions?${params}`).then((res) => res.json()),
+      fetch(`/api/stats/logs?${params}`).then((res) => res.json()),
+    ])
+      .then(([sessionsData, logsData]) => {
+        setSessions(sessionsData.sessions || []);
+        setSessionLogs(logsData.logs || []);
       })
       .catch((err) => {
         console.error("Failed to load sessions:", err);
         setSessions([]);
+        setSessionLogs([]);
       })
       .finally(() => {
         setLoadingSessions(false);
       });
   }, [selectedDate, selectedMonth]);
+
+  // Toggle session expansion
+  const toggleSession = (key: string) => {
+    setExpandedSessions((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  };
 
   // Handle date selection (clears month)
   const handleDateSelect = (date: string) => {
@@ -261,65 +297,237 @@ export function Timeline() {
             </button>
           </div>
 
-          {/* Session Details */}
+          {/* Session Details - Rich View */}
           <div>
-            <Text className="font-semibold mb-3">
-              {loadingSessions
-                ? "Loading..."
-                : `${sessions.length} Session${sessions.length !== 1 ? "s" : ""}`}
-            </Text>
             {loadingSessions ? (
               <Text className="text-muted-foreground">Loading sessions...</Text>
-            ) : sessions.length === 0 ? (
+            ) : sessionLogs.length === 0 && sessions.length === 0 ? (
               <Text className="text-muted-foreground">No session details available</Text>
             ) : (
-              <div className="space-y-3">
-                {sessions.map((session, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 bg-muted/50 rounded-lg"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">{session.projectName}</span>
-                        <Badge color={session.type === "subscription" ? "blue" : "amber"}>
-                          {session.type}
-                        </Badge>
+              <div className="space-y-6">
+                {/* Group by date for month view */}
+                {(() => {
+                  // Get unique dates from logs
+                  const dates = selectedMonth
+                    ? [...new Set(sessionLogs.map(l => l.date))].sort((a, b) => b.localeCompare(a))
+                    : [selectedDate!];
+
+                  return dates.map((date) => {
+                    const dateLogs = sessionLogs.filter(l => l.date === date);
+                    const dateSessions = sessions.filter(s => s.date.startsWith(date));
+
+                    // Merge logs and sessions by time
+                    const allEntries = dateLogs.flatMap(log =>
+                      log.entries.map(entry => ({
+                        ...entry,
+                        projectName: log.projectName,
+                        tokenData: dateSessions.find(s => {
+                          const sessionTime = s.date.split(" ")[1];
+                          return sessionTime?.startsWith(entry.time.substring(0, 2));
+                        }),
+                      }))
+                    );
+
+                    // Add sessions without log entries
+                    const coveredTimes = new Set(allEntries.map(e => e.time.substring(0, 2)));
+                    const orphanSessions = dateSessions.filter(s => {
+                      const hour = s.date.split(" ")[1]?.substring(0, 2);
+                      return !coveredTimes.has(hour || "");
+                    });
+
+                    const totalChanges = allEntries.reduce((sum, e) => sum + e.changes.length, 0);
+
+                    return (
+                      <div key={date} className="border rounded-lg overflow-hidden">
+                        {/* Date Header */}
+                        <div className="bg-muted/30 px-4 py-3 border-b">
+                          <Text className="font-semibold">
+                            {new Date(date).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}
+                          </Text>
+                        </div>
+
+                        {/* Session Entries */}
+                        <div className="divide-y">
+                          {allEntries.map((entry, idx) => {
+                            const key = `${date}-${entry.time}-${idx}`;
+                            const isExpanded = expandedSessions.has(key);
+                            const changeCount = entry.changes.length;
+
+                            return (
+                              <div key={key} className="bg-background">
+                                {/* Collapsible Header */}
+                                <button
+                                  onClick={() => toggleSession(key)}
+                                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-muted/50 transition-colors"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <span className={cn(
+                                      "transition-transform",
+                                      isExpanded && "rotate-90"
+                                    )}>
+                                      ▶
+                                    </span>
+                                    <span className="font-medium">{entry.time}</span>
+                                    {entry.tokenData && (
+                                      <Badge
+                                        color={entry.tokenData.type === "subscription" ? "blue" : "amber"}
+                                        size="xs"
+                                      >
+                                        {entry.tokenData.type}
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <Badge color="gray">
+                                    {changeCount} change{changeCount !== 1 ? "s" : ""}
+                                  </Badge>
+                                </button>
+
+                                {/* Expanded Content */}
+                                {isExpanded && (
+                                  <div className="px-4 pb-4 space-y-4">
+                                    {/* Token Stats */}
+                                    {entry.tokenData && (
+                                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm p-3 bg-muted/30 rounded-lg">
+                                        <div>
+                                          <span className="text-muted-foreground">Turns</span>
+                                          <p className="font-medium">{entry.tokenData.turns.toLocaleString()}</p>
+                                        </div>
+                                        <div>
+                                          <span className="text-muted-foreground">Input</span>
+                                          <p className="font-medium">{entry.tokenData.input.toLocaleString()}</p>
+                                        </div>
+                                        <div>
+                                          <span className="text-muted-foreground">Output</span>
+                                          <p className="font-medium">{entry.tokenData.output.toLocaleString()}</p>
+                                        </div>
+                                        <div>
+                                          <span className="text-muted-foreground">
+                                            Cost {entry.tokenData.type === "subscription" ? "(covered)" : "(API)"}
+                                          </span>
+                                          <p className={cn(
+                                            "font-medium",
+                                            entry.tokenData.type === "subscription" ? "text-muted-foreground" : "text-amber-600"
+                                          )}>
+                                            ${entry.tokenData.cost.toFixed(2)}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {/* Changes */}
+                                    {entry.changes.length > 0 && (
+                                      <div>
+                                        <Text className="font-semibold text-sm mb-2">Changes:</Text>
+                                        <ul className="list-disc list-inside space-y-1 text-sm">
+                                          {entry.changes.map((change, i) => (
+                                            <li key={i} className="text-muted-foreground">{change}</li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    )}
+
+                                    {/* Insights */}
+                                    {entry.insights.length > 0 && (
+                                      <div>
+                                        <Text className="font-semibold text-sm mb-2">Insights:</Text>
+                                        <ul className="list-disc list-inside space-y-1 text-sm">
+                                          {entry.insights.map((insight, i) => (
+                                            <li key={i} className="text-blue-600">{insight}</li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    )}
+
+                                    {/* Commits */}
+                                    {entry.commits.length > 0 && (
+                                      <div>
+                                        <Text className="font-semibold text-sm mb-2">Commits:</Text>
+                                        <div className="flex flex-wrap gap-2">
+                                          {entry.commits.map((commit, i) => (
+                                            <Badge key={i} color="gray" className="font-mono">
+                                              {commit}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+
+                          {/* Orphan sessions (token data without log entries) */}
+                          {orphanSessions.map((session, idx) => {
+                            const key = `orphan-${date}-${session.date}-${idx}`;
+                            const isExpanded = expandedSessions.has(key);
+                            const time = session.date.split(" ")[1] || "00:00";
+
+                            return (
+                              <div key={key} className="bg-background">
+                                <button
+                                  onClick={() => toggleSession(key)}
+                                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-muted/50 transition-colors"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <span className={cn(
+                                      "transition-transform",
+                                      isExpanded && "rotate-90"
+                                    )}>
+                                      ▶
+                                    </span>
+                                    <span className="font-medium">{time}</span>
+                                    <Badge
+                                      color={session.type === "subscription" ? "blue" : "amber"}
+                                      size="xs"
+                                    >
+                                      {session.type}
+                                    </Badge>
+                                  </div>
+                                  <Badge color="gray">tokens only</Badge>
+                                </button>
+
+                                {isExpanded && (
+                                  <div className="px-4 pb-4">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm p-3 bg-muted/30 rounded-lg">
+                                      <div>
+                                        <span className="text-muted-foreground">Turns</span>
+                                        <p className="font-medium">{session.turns.toLocaleString()}</p>
+                                      </div>
+                                      <div>
+                                        <span className="text-muted-foreground">Input</span>
+                                        <p className="font-medium">{session.input.toLocaleString()}</p>
+                                      </div>
+                                      <div>
+                                        <span className="text-muted-foreground">Output</span>
+                                        <p className="font-medium">{session.output.toLocaleString()}</p>
+                                      </div>
+                                      <div>
+                                        <span className="text-muted-foreground">
+                                          Cost {session.type === "subscription" ? "(covered)" : "(API)"}
+                                        </span>
+                                        <p className={cn(
+                                          "font-medium",
+                                          session.type === "subscription" ? "text-muted-foreground" : "text-amber-600"
+                                        )}>
+                                          ${session.cost.toFixed(2)}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
-                      <span className="text-sm text-muted-foreground">
-                        {session.date}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                      <div>
-                        <span className="text-muted-foreground">Turns</span>
-                        <p className="font-medium">{session.turns.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Input</span>
-                        <p className="font-medium">{session.input.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Output</span>
-                        <p className="font-medium">{session.output.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Cost</span>
-                        <p className="font-medium">${session.cost.toFixed(4)}</p>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 mt-2 text-sm">
-                      <div>
-                        <span className="text-muted-foreground">Cache Read</span>
-                        <p className="font-medium">{session.cacheRead.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Cache Create</span>
-                        <p className="font-medium">{session.cacheCreate.toLocaleString()}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    );
+                  });
+                })()}
               </div>
             )}
           </div>
