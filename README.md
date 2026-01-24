@@ -1,3 +1,5 @@
+> **⚠️ Highly Experimental** — Building in the open. Expect breaking changes.
+
 # Squared Agent
 
 **Your expertise, codified. Delivered as intelligent systems.**
