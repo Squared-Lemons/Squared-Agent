@@ -27,6 +27,11 @@
       "description": "Comprehensive Turborepo monorepo patterns, caching, CI/CD, and anti-patterns (900+ lines)",
       "categories": ["monorepo"],
       "installCommand": "npx skills add https://github.com/vercel/turborepo --skill turborepo"
+    },
+    "ai-sdk": {
+      "source": "vercel/ai",
+      "description": "Build AI-powered features with Vercel AI SDK - agents, chatbots, text generation, tool calling, streaming",
+      "categories": ["ai", "web", "patterns"]
     }
   },
   "recommended": {
@@ -112,9 +117,20 @@
         "description": "Comprehensive Turborepo patterns, caching, CI/CD, and anti-patterns",
         "install": "npx skills add https://github.com/vercel/turborepo --skill turborepo"
       }
+    ],
+    "ai": [
+      {
+        "name": "ai-sdk",
+        "description": "Build AI-powered features - agents, chatbots, streaming, tool calling",
+        "install": "npx add-skill vercel/ai"
+      }
     ]
   },
   "categories": {
+    "ai": {
+      "description": "AI applications (agents, LLMs, chatbots)",
+      "knowledgePath": "templates/knowledge/ai/"
+    },
     "web": {
       "description": "Web frameworks (Next.js, React, etc.)",
       "knowledgePath": "templates/knowledge/web/"
