@@ -5,7 +5,8 @@
   "description": "Master agent for bootstrapping new projects with Claude Code",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "node packages/dev-server/dist/index.js",
+    "dev:turbo": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "type-check": "turbo run type-check",

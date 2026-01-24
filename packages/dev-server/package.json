@@ -1,0 +1,35 @@
+{
+  "name": "@squared-agent/dev-server",
+  "version": "0.1.0",
+  "description": "Dev server wrapper with dynamic port allocation for monorepo worktrees",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "turbo-dev": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "monorepo",
+    "turborepo",
+    "dev-server",
+    "port-allocation"
+  ],
+  "license": "MIT"
+}

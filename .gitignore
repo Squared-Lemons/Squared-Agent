@@ -35,3 +35,6 @@ out/
 
 # TypeScript
 *.tsbuildinfo
+# Generated vite config files
+apps/web/dashboard/vite.config.d.ts
+apps/web/dashboard/vite.config.js

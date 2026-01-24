@@ -23,12 +23,14 @@ This is a hybrid documentation hub + development monorepo. Publishable npm packa
 ```bash
 pnpm install          # Install all dependencies
 pnpm build            # Build all packages
-pnpm dev              # Watch mode for all packages
+pnpm dev              # Watch mode for all packages (auto-assigns ports)
 pnpm type-check       # Type check all packages
 pnpm changeset        # Create a changeset for publishing
 pnpm version-packages # Version based on changesets
 pnpm publish-packages # Publish to npm
 ```
+
+**Port allocation:** `pnpm dev` uses `packages/dev-server` to find available ports dynamically. Each worktree gets its own port range automatically. Kill orphaned processes before running: `pkill -f "vite" 2>/dev/null; pkill -f "tsx.*dashboard" 2>/dev/null`
 
 ### Working with Specific Packages
 
@@ -44,6 +46,7 @@ pnpm --filter @squared-agent/cli dev       # Dev mode for CLI
 | `packages/core/` | `@squared-agent/core` | Shared utilities, types, constants |
 | `packages/cli/` | `@squared-agent/cli` | CLI tool for project bootstrapping |
 | `packages/create-project/` | `create-squared-agent` | `npm create squared-agent` scaffolding |
+| `packages/dev-server/` | `@squared-agent/dev-server` | Dynamic port allocation for monorepo dev |
 
 ### Apps
 
@@ -402,6 +405,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-24:** Added dev-server package for dynamic port allocation - `packages/dev-server/` scans for available ports at runtime, injects `PORT_*` and `*_URL` env vars via Turborepo's `globalPassThroughEnv`; enables multiple worktrees to run `pnpm dev` simultaneously without port conflicts; updated `turbo.json` with passthrough config; improved dashboard dev script with port verification and restart handling; created design doc at `docs/plans/2026-01-24-dev-server-dynamic-ports-design.md`
 - **2026-01-24:** Lean into community skills for spawned projects - added Turborepo skill to `skill-mapping.json` with monorepo category; slimmed `Turborepo-Monorepo-Setup.md` from 256→146 lines (quick-start format); fixed factual issues (turbo run, per-package .env instead of root symlinks); updated `/prepare-setup` and `/new-idea` to recommend turborepo skill for monorepo projects; added Step 4 (Install Recommended Skills) to developer profile SETUP-INSTRUCTIONS.md; aligned all documentation (README, CLAUDE.md, templates/README, knowledge/README, skills/README) with new skill structure; added "Release reporting pain" to README problem statement
 - **2026-01-23:** Added work summary dashboard - `apps/web/dashboard/` with Vite + React + Tremor for viewing session costs and work summaries across multiple projects; reads `.project/token-usage.md` and `.project/sessions/` files; local Hono API server for file parsing; added monorepo structure with pnpm + Turborepo + Changesets; created `packages/core`, `packages/cli`, `packages/create-project`; updated pnpm-workspace.yaml to support nested apps
 - **2026-01-22:** Integrated community skills into 7 commands - `/new-feature` uses `superpowers:using-git-worktrees`; `/complete-feature` uses `superpowers:finishing-a-development-branch`; `/new-idea` uses `superpowers:brainstorming`; `/get-feedback` uses `superpowers:brainstorming` + `superpowers:writing-plans`; `/end-session` uses `claude-md-management:revise-claude-md` + `superpowers:verification-before-completion`; `/commit` simplified to use `commit-commands:commit`; `/clean-branches` uses `commit-commands:clean_gone` for gone branch detection
