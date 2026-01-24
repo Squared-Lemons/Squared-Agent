@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Bash, Write, Task, Skill
 
 # Discuss - Exploratory Ideation
 
-An open-ended conversation to help users think through vague ideas. Unlike `/new-idea` which produces a full project package, `/discuss` is for exploring possibilities and capturing thoughts for later.
+An open-ended conversation to help users think through vague ideas using the agent's knowledge base. The output is a discussion document that can be used to start a `/new-feature` in the current project or continue into `/spawn-project` for a child project.
 
 **Arguments:** $ARGUMENTS
 
@@ -19,7 +19,9 @@ This is an exploratory conversation, not a structured discovery process. Use it 
 - They want to explore possibilities before making decisions
 - They need help thinking through options and tradeoffs
 
-The output is a discussion document that can later be picked up by `/new-idea`.
+The output is a discussion document that can:
+- Feed into `/new-feature` to build in the current project
+- Continue into `/spawn-project` to create a child project
 
 ---
 
@@ -91,13 +93,13 @@ Every few exchanges, offer a natural checkpoint:
 
 - "Want to keep exploring, or should we capture what we have so far?"
 - "This is shaping up. Should we save this discussion, or dig deeper?"
-- "Sounds like you're getting clearer. Ready to move to /new-idea, or still exploring?"
+- "Sounds like you're getting clearer. Ready to move to /spawn-project, or still exploring?"
 
 ### User Options
 
 1. **Keep exploring** - Continue the conversation
 2. **Save for later** - Write discussion document, end session
-3. **Move to /new-idea** - Save discussion, then the user can run `/new-idea` to continue
+3. **Move to /spawn-project** - Save discussion, then the user can run `/spawn-project` to continue
 
 ---
 
@@ -185,7 +187,7 @@ Write the document:
 
 ## Next Steps
 
-[What should happen next - "Ready for /new-idea" or "Needs more exploration on X, Y, Z"]
+[What should happen next - "Ready to build" or "Needs more exploration on X, Y, Z"]
 ```
 
 ### Report what was saved
@@ -193,11 +195,12 @@ Write the document:
 ```
 Discussion saved: outbox/discussions/[topic-slug]-YYYY-MM-DD.md
 
-Status: [Open | Ready for /new-idea]
+Status: [Open | Ready to build]
 
-To continue later:
-- Run /discuss and I'll find this discussion
-- Or run /new-idea to start building from where we left off
+What's next?
+- /new-feature "[description]" - Build this in the current project
+- /spawn-project - Create a new child project
+- /discuss - Continue exploring
 
 Open questions remaining:
 - [List any unresolved questions]
@@ -217,7 +220,7 @@ Even vague ideas have value. Capture the essence so nothing is lost.
 Periodically offer to save or continue. Don't let conversations go on forever without acknowledgment.
 
 ### Seamless Handoff
-The discussion document is designed to be picked up by `/new-idea`. Decisions made here become pre-filled choices there.
+The discussion document captures decisions that inform either `/new-feature` or `/spawn-project`. Decisions made here become context for building.
 
 ---
 
@@ -228,7 +231,7 @@ Discussion documents can have these statuses:
 | Status | Meaning |
 |--------|---------|
 | **Open** | Still exploring, not ready to build |
-| **Ready for /new-idea** | Core idea is clear, ready to specify |
+| **Ready to build** | Core idea is clear, ready for `/new-feature` or `/spawn-project` |
 | **Archived** | No longer pursuing this idea |
 
 ---
@@ -275,5 +278,8 @@ Claude: [saves discussion document]
         - What makes a habit "complete"?
         - Daily only, or flexible schedules?
 
-        When you're ready to continue, run /discuss or /new-idea.
+        What's next?
+        - /new-feature "habit tracker" - Build here
+        - /spawn-project - Create new project
+        - /discuss - Keep exploring
 ```

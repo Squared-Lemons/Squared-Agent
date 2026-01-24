@@ -4,7 +4,7 @@
 
 ---
 
-Everything in this folder gets copied to new projects via `/prepare-setup` or `/new-idea`. Each subfolder serves a specific purpose in bootstrapping Claude Code workflows.
+Everything in this folder gets copied to new projects via `/spawn-project`. Each subfolder serves a specific purpose in bootstrapping Claude Code workflows.
 
 ## Quick Reference
 
@@ -23,7 +23,7 @@ Everything in this folder gets copied to new projects via `/prepare-setup` or `/
 ## How It Works
 
 ```
-/new-idea or /prepare-setup
+/spawn-project
          │
          ▼
 ┌─────────────────────────────┐
@@ -116,7 +116,8 @@ Implementation guides for commands.
 | Complete-Feature-Command | `/complete-feature` | Merge or create PR |
 | Summary-Command | `/summary` | Generate accomplishments report |
 | New Feature Workflow | `/feature` | Multi-phase feature development |
-| New-Idea-Workflow | — | Documents `/new-idea` process |
+| Spawn-Project-Command | `/spawn-project` | Create new project (discovery or template) |
+| Spawn-Project-Workflow | — | Documents `/spawn-project` process |
 
 **[View all commands →](commands/README.md)**
 

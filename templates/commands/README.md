@@ -27,7 +27,8 @@ templates/commands/               .claude/commands/
 | [Clean-Branches-Command.md](Clean-Branches-Command.md) | `/clean-branches` | Remove merged or stale branches |
 | [Summary-Command.md](Summary-Command.md) | `/summary` | Generate accomplishments report |
 | [New Feature Workflow.md](New%20Feature%20Workflow.md) | `/feature` | Multi-phase feature development |
-| [New-Idea-Workflow.md](New-Idea-Workflow.md) | — | Documents the `/new-idea` process |
+| [Spawn-Project-Command.md](Spawn-Project-Command.md) | `/spawn-project` | Create new project (discovery or template) |
+| [Spawn-Project-Workflow.md](Spawn-Project-Workflow.md) | — | Documents the `/spawn-project` process |
 
 ---
 
@@ -35,7 +36,7 @@ templates/commands/               .claude/commands/
 
 **Location:** `templates/commands/END-SESSION-COMMAND.md`
 
-The complete end-session workflow with documentation updates and creator feedback.
+The complete end-session workflow with documentation updates and agent feedback.
 
 | Step | What Happens |
 |------|--------------|
@@ -46,7 +47,7 @@ The complete end-session workflow with documentation updates and creator feedbac
 | 5 | Extracts token usage for cost tracking |
 | 6 | Creates session note for next time |
 | 7 | Generates SETUP.md handoff |
-| 8 | Generates creator feedback |
+| 8 | Generates agent feedback |
 | 9 | Commits with user approval |
 
 **Creates:** `.claude/commands/end-session.md`, `.claude/commands/commit.md`
@@ -149,20 +150,33 @@ Feature development using Feature-Dev and Ralph Loop plugins.
 
 ---
 
-## New-Idea-Workflow
+## Spawn-Project-Command
 
-**Location:** `templates/commands/New-Idea-Workflow.md`
+**Location:** `templates/commands/Spawn-Project-Command.md`
 
-Documents the consultative discovery process behind `/new-idea`.
+Template for spawned projects to create their own children.
 
-| Phase | What Happens |
-|-------|--------------|
-| Discovery | Understand idea, users, problems |
-| Scope | Define v1 vs future |
-| Technical | Platform and stack decisions |
-| Output | PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, SETUP.md |
+| Mode | What Happens |
+|------|--------------|
+| MASTER | Full template selection (profiles, knowledge, skills) |
+| SPAWNED | Pass-through inheritance (copies parent's content) |
 
-**Best for:** Understanding or extending `/new-idea`.
+**Creates:** `.claude/commands/spawn-project.md`
+
+---
+
+## Spawn-Project-Workflow
+
+**Location:** `templates/commands/Spawn-Project-Workflow.md`
+
+Documents the unified project creation process behind `/spawn-project`.
+
+| Path | What Happens |
+|------|--------------|
+| Discuss & Design | Discovery conversation → comprehensive package |
+| Use Template | Component selection → setup package |
+
+**Best for:** Understanding or extending `/spawn-project`.
 
 ---
 

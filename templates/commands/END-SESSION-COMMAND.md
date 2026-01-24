@@ -23,7 +23,7 @@ The `/end-session` command provides a structured workflow for ending coding sess
 | 8 | Creates session note for next session |
 | 9 | Generates/updates SETUP.md (handoff document) |
 | 9.5 | Exports update package (master agent only) |
-| 10 | Generates creator feedback (auto-analyzed from session) |
+| 10 | Generates agent feedback (auto-analyzed from session) |
 | 10.5 | Invokes `superpowers:verification-before-completion` skill |
 | 11 | Shows summary to user |
 | 12 | Commits with approval (user signs off last) |
@@ -58,7 +58,7 @@ Wrap up this coding session by updating documentation and capturing lessons lear
 7. **Saves session log** - Archives summary to `.project/sessions/YYYY-MM-DD.md` (local, not in git)
 8. **Extracts token usage** - Parses Claude Code session for cost tracking and estimation
 9. **Generates SETUP.md** - Auto-creates/updates handoff document with env vars, OAuth setup, feature status
-10. **Generates creator feedback** - Auto-generates feedback from session for user to copy to master agent
+10. **Generates agent feedback** - Auto-generates feedback from session for user to copy to master agent
 11. **Shows summary** - Lists all changes ready to commit
 12. **Commits with approval** - User signs off on commit message (does NOT push)
 13. **Session note** - Optional note to yourself for next session (shown by /start-session)
@@ -528,13 +528,13 @@ CREATOR FEEDBACK - Copy to Squared-Agent
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 To send this feedback to the master agent:
-1. Save as: inbox/from-projects/YYYY-MM-DD-[project-name].md
-2. Copy to the Squared-Agent repository
+1. Save to: outbox/feedback/feedback-YYYY-MM-DD.md
+2. Copy to master agent's inbox/feedback/
 \```
 
 ### Save feedback locally
 
-Also save to `docs/creator-feedback.md` for local reference.
+Also save to `docs/agent-feedback.md` for local reference.
 
 **Important:** Only include feedback if there's something meaningful to report. If the session was routine with no issues or discoveries, skip this step.
 
@@ -768,6 +768,78 @@ That's fine - the previous note (if any) will remain.
 
 ---
 
+## Step 13: Handover Document (Feature Branches Only)
+
+If on a feature branch, offer to create a handover document for the next person (or yourself) picking up this work.
+
+### Check current branch
+
+\```bash
+git branch --show-current
+\```
+
+If on a protected branch (main, master, develop, release/*), skip this step.
+
+### Ask using AskUserQuestion
+
+- **Create handover** - Document context for whoever continues this work
+- **Skip** - No handover needed
+
+### If user wants to create a handover
+
+Ask: "Brief description of where you're at and what's next?"
+
+### Create the handover document
+
+\```bash
+mkdir -p outbox/handovers
+\```
+
+Save to `outbox/handovers/[branch-name]-YYYY-MM-DD.md`:
+
+\```markdown
+# Handover: [Branch Name]
+
+**Created:** YYYY-MM-DD HH:MM
+**Branch:** [branch-name]
+
+## Status
+
+[User's brief description]
+
+## Recent Changes
+
+[List recent commits on this branch]
+
+## Files Modified
+
+[Key files changed - from git status/diff]
+
+## Next Steps
+
+[Inferred from context or ask user]
+
+## Notes
+
+[Any additional context that would help]
+\```
+
+### Confirm
+
+\```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Handover Created
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Saved to: outbox/handovers/[branch-name]-YYYY-MM-DD.md
+
+Next session on this branch will show this handover automatically.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\```
+
+---
+
 ## Execution Instructions
 
 1. **Read recent git history** to understand session scope
@@ -782,12 +854,13 @@ That's fine - the previous note (if any) will remain.
 10. **Extract token usage** from Claude Code session JSONL, add to session log and `.project/token-usage.md`
 11. **Update tool intelligence** in `.project/tool-intelligence.md` with tools used and patterns learned
 12. **Generate/update SETUP.md** with env vars, OAuth setup, feature status, known issues
-13. **Generate creator feedback** - analyze session for gaps/issues/patterns, display for user to copy
+13. **Generate agent feedback** - analyze session for gaps/issues/patterns, display for user to copy
 14. **Export update package** - if master agent and commands/knowledge changed, offer to export for spawned projects
 15. **Output summary** of what was done and what will be committed
 16. **Invoke `superpowers:verification-before-completion` skill** to verify all work is complete
 17. **Get user approval** and commit (do NOT push)
 18. **Ask about session note** - offer to save a note for next session (shown by /start-session)
+19. **Offer handover document** - if on feature branch, offer to create handover in `outbox/handovers/`
 
 Be thorough but concise. Focus on changes that will help future sessions understand the current state of the project.
 

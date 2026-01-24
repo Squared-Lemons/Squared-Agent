@@ -31,9 +31,9 @@ flowchart TB
     end
 
     A -->|"/sync-templates"| B
-    B -->|"/prepare-setup"| C
-    B -->|"/new-idea"| D
-    B -->|"/new-idea"| E
+    B -->|"/spawn-project"| C
+    B -->|"/spawn-project"| D
+    B -->|"/spawn-project"| E
 ```
 
 **Key insight:** Changes in `.claude/commands/` don't affect templates until you explicitly sync. This gives you a safe space to experiment.
@@ -86,7 +86,7 @@ This updates `templates/commands/` to match `.claude/commands/`:
 
 ### 5. Future Projects Inherit
 
-The next time you run `/prepare-setup` or `/new-idea`, the new project receives your improved commands automatically.
+The next time you run `/spawn-project`, the new project receives your improved commands automatically.
 
 ---
 
@@ -142,7 +142,7 @@ Silent audit - writes report to `.project/sync-report.md` for later review. Used
 → Yes - templates updated
 
 # Next project gets your improvement
-/new-idea "my next project"
+/spawn-project "my next project"
 → Receives the improved /commit command
 ```
 

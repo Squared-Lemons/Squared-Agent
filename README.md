@@ -1,204 +1,322 @@
 # Squared Agent
 
-**Bootstrap new projects with Claude Code. Ship faster with built-in workflows.**
+**Your expertise, codified. Delivered as intelligent systems.**
 
-Stop spending the first hour of every project configuring tools, setting up git workflows, and remembering which commands work best. Squared Agent packages everything you need — session management, branch protection, tool intelligence, and platform-specific guides — into a single setup you copy to new or existing projects.
+The agent is the product. Not just code — a complete intelligent assistant that carries your business practices, technical guidance, and operational knowledge. Build once, deploy to every client engagement. Let them control as much or as little as they need.
 
 ```mermaid
 flowchart LR
-    A["You: 'I want to build X'"] --> B["Squared Agent"]
-    B --> C["📦 Setup Package"]
-    C --> D["New Project"]
-    D --> E["✅ Ready to build"]
+    subgraph You["YOUR PRACTICE"]
+        B["Business knowledge"]
+        C["Technical patterns"]
+        D["Workflows & skills"]
+        B <--> A["Master Agent"]
+        C <--> A
+        D <--> A
+    end
+
+    A --> E["Client Project"]
+    E --> F{Deliver}
+    F -->|"Full control"| G["Complete agent"]
+    F -->|"Scoped access"| H["Subset for client"]
+    E <-.->|"Learnings"| A
 ```
 
 ---
 
-## The Problem
+## The Model
 
-Every new project starts with the same friction:
+**Master Agent** — Your home base. Contains your accumulated expertise: how you structure projects, which tools you trust, patterns that work, gotchas to avoid. This is your competitive advantage, encoded.
 
-| Problem | What Happens |
-|---------|--------------|
-| **Manual setup** | Wasting time configuring Claude Code, plugins, permissions, commands, and teaching the agent your project's patterns and common pitfalls |
-| **Messy main branches** | Accidental commits to main → merge conflicts → lost work |
-| **Credential leakage** | MCP API keys accidentally committed or shared between projects |
-| **Lost learnings** | Discover a great tool shortcut, forget it by next project |
-| **No workflow** | Every session starts cold — no context, no plan |
-| **No cost visibility** | Token usage scattered across sessions → no idea what you're spending |
-| **Release reporting pain** | Scrambling to remember what you built when writing changelogs or status updates |
+**Client Projects** — Spawned from your master. Each inherits your baseline, then evolves with project-specific knowledge. You develop the product here, with full agent capabilities.
 
-Squared Agent solves all of these.
+**Client Delivery** — When the work is done, you choose what to hand over:
+- **Full project** — Client gets everything, including the agent's learned context
+- **Scoped subset** — Spawn a focused deliverable with only what they need to operate
+
+All lessons learned from client projects ship back to your master agent via [`/agent-feedback`](docs/feedback.md). Your expertise compounds with every engagement. (Everything is local files — you control what gets shared by copying files yourself.)
+
+The client receives an intelligent system, not just files. They can extend it, spawn their own children, or simply use what you've built.
+
+**The Process You Deliver** — Beyond the product, you hand over a deployment pipeline matched to their current needs with a clear path forward. Clients get total local freedom — they can experiment, prototype, and test ideas without risk. Git and pull requests protect production: ideas can be demonstrated but never deployed without review.
+
+```mermaid
+flowchart LR
+    subgraph Local["🔓 LOCAL FREEDOM"]
+        A["Experiment"]
+        B["Prototype"]
+        C["Test ideas"]
+        D["Demo to stakeholders"]
+    end
+
+    subgraph Safety["🛡️ SAFETY LAYER"]
+        E["Git branch"]
+        F["Pull request"]
+        G["Review & approve"]
+    end
+
+    subgraph Production["🔒 PROTECTED"]
+        H["Live system"]
+    end
+
+    A --> E
+    B --> E
+    C --> E
+    D --> E
+    E --> F
+    F --> G
+    G -->|"Approved"| H
+    G -.->|"Rejected"| E
+```
+
+This separation means clients can move fast locally while maintaining the safety rails that prevent accidents in production.
+
+---
+
+## Why This Matters
+
+| Traditional | With Squared Agent |
+|-------------|-------------------|
+| Deliver code, then onboard the client | Deliver an agent that already understands the system |
+| Knowledge lives in your head | Knowledge lives in the agent, transferable |
+| Each project starts from scratch | Each project builds on your accumulated expertise |
+| Handoff means losing context | Handoff means transferring an intelligent assistant |
+| Client asks "how does X work?" | Client asks the agent |
+| Client changes break production | Git + PRs protect production; local freedom to experiment |
+
+**The agent becomes documentation, onboarding, and institutional knowledge — all in one.**
 
 ---
 
 ## Quick Start
 
-### 1. Get the Agent
+### 1. Set Up Your Master Agent
+
+[Download the latest release](https://github.com/squared-lemons/squared-agent/archive/refs/heads/main.zip), unzip, and open:
 
 ```bash
-git clone https://github.com/squared-lemons/squared-agent.git
-cd squared-agent
-```
-
-### 2. Open with Claude Code
-
-```bash
+cd squared-agent-main
+git init
 claude .
 ```
 
-### 3. Start a New Idea
+Then run `/start-session`. On first run, it will guide you through setup:
+- Check prerequisites (Node.js, pnpm, git)
+- Install dependencies automatically
+- Create your local workspace (`.project/`)
+- Optionally set up local HTTPS with friendly domains
+
+This becomes your home base — completely yours. Customize it with your business practices, preferred tools, and technical patterns. No upstream connection to manage.
+
+### 2. Start a Client Project
 
 ```
-/new-idea
+/spawn-project
 ```
 
-Have a discovery conversation:
-- Describe what you want to build
-- Discuss requirements and platform options
-- Make technical decisions together
-- Claude generates a complete project package
+Choose your approach:
+- **Discuss & Design** — Discovery conversation to define the product
+- **Use Template** — Quick setup from your existing configurations
 
-### 4. Copy to Your Project
+### 3. Build the Product
 
-A folder opens with your setup package. Copy its contents to your new project folder.
+Work in the spawned project with full agent capabilities. The agent inherits your expertise and learns project-specific context as you build.
 
-### 5. Run the Setup
+### 4. Deliver to the Client
 
-In your new project folder:
+When ready, choose your delivery model:
+- **Full handoff** — Copy the complete project (agent knowledge included)
+- **Scoped delivery** — Run `/spawn-project` again to create a subset with only what the client needs
 
-```bash
-claude .
-```
-
-Tell Claude: "Read SETUP.md and help me set up this project"
-
-The agent handles the rest — configures plugins, creates commands, sets up permissions, and gets you ready to build.
+The client receives an intelligent system that can answer questions, extend itself, and maintain the work you've done.
 
 ---
 
 ## Installation
 
-### Via npm (Coming Soon)
+### Via Download (Recommended)
+
+[Download the latest release](https://github.com/squared-lemons/squared-agent/archive/refs/heads/main.zip), unzip, then initialize your own git repo:
 
 ```bash
-# Create a new project
-npm create squared-agent my-project
-
-# Or use the CLI directly
-npx @squared-agent/cli init
+cd squared-agent-main
+git init
+git add .
+git commit -m "Initial commit from Squared Agent template"
 ```
 
-### Via Git Clone
+This gives you a clean start with no upstream connection. Your master agent, your repo, your rules.
+
+### Via Git Clone (Contributors Only)
+
+Only clone if you're contributing back to Squared Agent:
 
 ```bash
 git clone https://github.com/squared-lemons/squared-agent.git
 cd squared-agent
 ```
 
+> **Note:** Agent feedback can also be submitted via [GitHub Issues](https://github.com/squared-lemons/squared-agent/issues). This is the best way to send skills, patterns, and learnings back up the chain.
+
+### Via npm (Coming Soon)
+
+```bash
+# Quick start for evaluation
+npm create squared-agent my-master-agent
+
+# Or use the CLI directly
+npx @squared-agent/cli init
+```
+
 ---
 
-## Agent Packages
+## Ideation
 
-Three ways to create setup packages for new projects:
+### `/discuss` — Exploratory Conversation
 
-### `/discuss` — Exploratory Ideation
-
-Best for vague ideas you want to think through before committing to build.
+Best for vague ideas you want to think through before committing to build anything.
 
 ```mermaid
 flowchart LR
-    A["Describe vague idea"] --> B["Explore possibilities"]
-    B --> C["Capture thoughts"]
+    A["Describe vague idea"] --> B["Explore with agent's\nknowledge base"]
+    B --> C["Capture decisions"]
     C --> D["📄 Discussion document"]
+    D --> E{What next?}
+    E -->|"Build here"| F["/new-feature"]
+    E -->|"New project"| G["/spawn-project"]
 ```
 
 The conversation covers:
 - What the idea is and why it matters
 - Who it's for and their situation
 - Scale and context (personal, startup, enterprise)
-- Platform direction and open questions
+- Technical direction and open questions
 
-**Output:** Discussion document saved to `outbox/discussions/` that `/new-idea` can pick up later.
+**Output:** Discussion document saved to `outbox/discussions/`. Use it to:
+- Start a `/new-feature` in the current project
+- Continue into `/spawn-project` for a child project
 
-### `/new-idea` — Discovery Conversation
+---
 
-Best for new projects where you know what you want to build.
+## Spawning & Delivery
+
+### `/spawn-project` — Create Projects or Deliverables
+
+The core mechanism for both development and delivery.
 
 ```mermaid
-flowchart LR
-    A["Describe your idea"] --> B["Discuss requirements"]
-    B --> C["Make technical decisions"]
-    C --> D["📦 Complete package"]
+flowchart TB
+    A["/spawn-project"] --> B{"Check for\ndiscussions"}
+    B -->|"Found"| C["Offer to continue"]
+    B -->|"None"| D{"Choose flow"}
+    C --> D
+    D -->|"Discuss & Design"| E["Discovery conversation"]
+    D -->|"Use Template"| F["Component selection"]
+    E --> G["📦 outbox/project-name/"]
+    F --> G
 ```
 
-The conversation covers:
+#### For Development (Discuss & Design)
+
+Start a client project with full discovery:
+
 - What you're building and who it's for
 - Platform options (web, mobile, desktop)
 - Technical decisions with tradeoffs explained
 - Scope for v1 vs future features
 
-**Output:** `PROJECT-BRIEF.md`, `TECHNICAL-DECISIONS.md`, `SETUP.md`, plus relevant knowledge and commands.
+#### For Delivery (Use Template)
 
-**After setup, the new project has:**
+Create a scoped deliverable for the client:
+
+- **Profiles** — What level of agent capability they need
+- **Knowledge** — Which guides they should have access to
+- **Commands** — Which workflows they can run
+- **Tasks** — Any setup activities for their environment
+
+**[Full templates reference →](templates/README.md)**
+
+#### Setting Up the New Project
+
+1. **Move the package** — Copy `outbox/[project-name]/` to your desired location
+2. **Open Claude** — `cd [project-name] && claude .`
+3. **Run `/start-session`** — Detects `SETUP.md` and offers to run setup
+4. **Complete setup** — Follow the guided flow
+5. **Documents archived** — Setup files move to `knowledge/` when complete
+
+```mermaid
+flowchart LR
+    A["outbox/project/"] -->|"Move"| B["~/projects/project/"]
+    B -->|"claude ."| C["/start-session"]
+    C -->|"Detects SETUP.md"| D["Run setup?"]
+    D -->|"Yes"| E["Guided setup"]
+    E --> F["SETUP.md → knowledge/"]
+```
+
+### What Gets Delivered
+
+Every spawned project includes:
+
 ```
 project/
 ├── .claude/
-│   ├── commands/           # /start-session, /new-feature, /end-session, etc.
+│   ├── commands/           # /start-session, /new-feature, /spawn-project, etc.
 │   ├── settings.json       # Plugins, permissions, hooks pre-configured
 │   └── skills/             # Installed agent skills
 ├── docs/
 │   └── knowledge/          # Framework guides (Next.js, Better Auth, etc.)
 ├── inbox/
-│   └── updates/            # Receive updates from master agent
-├── .project/               # Local data (gitignored)
-├── CLAUDE.md               # Project instructions
-└── SETUP.md                # Handoff document
-```
-
-### `/prepare-setup` — Component Selection
-
-Best when you know what you need and want to pick specific components.
-
-```mermaid
-flowchart LR
-    A["Select profile"] --> B["Choose knowledge"]
-    B --> C["Pick commands"]
-    C --> D["📦 Custom package"]
-```
-
-Select from:
-- **Profiles** — Base configurations (developer workflow, permissions, hooks)
-- **Knowledge** — Platform guides (Next.js, etc.)
-- **Commands** — Workflow guides (end-session, new-feature, etc.)
-- **Tasks** — One-time setup activities (codebase investigation)
-
-**[Full templates reference →](templates/README.md)**
-
-**After setup, the new project has:**
-```
-project/
-├── .claude/
-│   ├── commands/           # Created from command guides
-│   ├── agents/             # Custom agents (optional)
-│   └── settings.json       # Plugins, permissions, hooks
-├── docs/
-│   ├── knowledge/          # Selected knowledge guides
-│   └── commands/           # Command documentation
-├── inbox/
-│   └── updates/            # Receive updates from master agent
+│   └── updates/            # Receive updates from parent agent
 ├── .project/               # Local data (gitignored)
 │   ├── sessions/           # Session logs
 │   └── token-usage.md      # Cost tracking
 ├── CLAUDE.md               # Project instructions
-└── LEARNINGS.md            # Captured insights
+└── SETUP.md                # Handoff document
 ```
 
-### Bringing the Agent into Existing Projects
+**Plus a deployment workflow** — Git branch protection and PR-based deployment ensure clients have total local freedom while production stays safe. They can experiment, prototype, and demonstrate ideas without risk of accidental deployment.
 
-Already have a codebase? Tasks are included to guide the agent through discovery and documentation.
+**Spawned projects can spawn their own children** — clients can extend, customize, or create their own deliverables.
 
-The agent explores your project structure, identifies patterns, and documents what it finds — leaving you to fill in the blanks and teach it about your existing systems. You review its findings, correct assumptions, and add context only you know.
+### The Inheritance Model
+
+Projects inherit from their parent, then evolve independently:
+
+```mermaid
+flowchart LR
+    subgraph Master["Your Master Agent"]
+        A["Your expertise"]
+    end
+    subgraph Client["Client Project"]
+        B["Inherited + project-specific"]
+    end
+    subgraph Delivery["Client Deliverable"]
+        D["Scoped subset"]
+    end
+
+    Master -->|"Full spawn"| Client
+    Client -->|"Scoped spawn"| Delivery
+```
+
+| Mode | Detection | Source |
+|------|-----------|--------|
+| **MASTER** | Has `templates/` folder | Full template library |
+| **PROJECT** | No `templates/` folder | Inherits from parent's commands and knowledge |
+
+**Delivery scenarios:**
+
+| Scenario | Approach |
+|----------|----------|
+| Client needs full control | Deliver the complete project |
+| Client needs limited scope | Spawn a subset with specific capabilities |
+| Client is technical | Include `/spawn-project` so they can extend |
+| Client is non-technical | Scope down to essential commands only |
+
+Each level can add or modify content before spawning the next generation.
+
+### Onboarding Existing Projects
+
+Already have a codebase? Tasks guide the agent through discovery and documentation.
 
 ```mermaid
 flowchart LR
@@ -208,27 +326,37 @@ flowchart LR
     D --> E["Agent learns your system"]
 ```
 
-This collaborative onboarding means the agent gets productive faster, and your project knowledge lives in `CLAUDE.md` where it compounds over time.
+The agent explores structure, identifies patterns, and documents findings. You review, correct, and add context. Knowledge compounds in `CLAUDE.md` over time.
 
 ---
 
-# Projects That Follow Your Best Practices
+## Your Expertise, Continuously Improving
 
-Everything below defines the baseline every spawned project receives. Squared Agent runs this setup, then the new project evolves independently — building its own tool intelligence, capturing its own learnings, and feeding improvements back.
+Knowledge flows both ways. Learnings from client work improve your master agent. Improvements to your master agent flow down to active projects.
 
 ```mermaid
 flowchart LR
-    subgraph SA["SQUARED AGENT"]
-        A["templates/"]
+    subgraph Master["MASTER AGENT"]
+        A["Your expertise"]
     end
 
-    SA -->|"Copies baseline"| B["📦 New Project"]
-    B --> C["Project evolves"]
-    C --> D["Learnings & feedback"]
-    D -.->|"Improvements flow back"| SA
+    subgraph Projects["CLIENT PROJECTS"]
+        B["Project A"]
+        C["Project B"]
+        D["Project C"]
+    end
+
+    Master -->|"Spawns with baseline"| Projects
+    Projects -.->|"Learnings flow back"| Master
+    Master -.->|"Updates flow down"| Projects
 ```
 
-**Template sync** keeps your commands evolving safely. Improve commands in `.claude/commands/` (your staging area), test them in daily use, then run `/sync-templates` to propagate changes to `templates/`. Future spawned projects automatically inherit your tested improvements. **[Template Sync Workflow →](docs/template-sync-workflow.md)**
+| Direction | Mechanism | What Flows |
+|-----------|-----------|------------|
+| **Down** | `/start-session` checks `inbox/updates/` | New commands, improved knowledge, bug fixes |
+| **Up** | `/end-session` generates feedback | Patterns discovered, gotchas, new techniques |
+
+**Template sync** keeps your knowledge base current. Improve commands in `.claude/commands/` (your staging area), test them in real engagements, then run `/sync-templates` to propagate changes to `templates/`. Export updates to active client projects via `/end-session`. **[Template Sync Workflow →](docs/template-sync-workflow.md)**
 
 ---
 
@@ -239,19 +367,74 @@ Every coding session follows the same flow — and every spawned project inherit
 ```mermaid
 flowchart TD
     A["Open coding agent"] --> B["/start-session"]
-    B --> C{On feature branch?}
-    C -->|Yes| D["Continue working on feature"]
-    C -->|No| E["/new-feature 'description'"]
-    E --> D
-    D --> F{Feature complete?}
-    F -->|Yes| G["/complete-feature"]
-    F -->|No| D
-    G --> H{Done for the day?}
-    H -->|Yes| I["/end-session"]
-    H -->|No| B
+    B --> C{"SETUP.md exists?"}
+    C -->|"Yes"| D["Run setup or archive"]
+    C -->|"No"| E{"On protected branch?"}
+    D --> E
+    E -->|"Yes"| F["Check inbox"]
+    E -->|"No"| J{"Handover exists?"}
+    F --> G{"Feedback/updates?"}
+    G -->|"Yes"| H["Process or skip"]
+    G -->|"No"| I["⚠️ Create branch first"]
+    H --> I
+    I --> K["Show session note"]
+    J -->|"Yes"| L["Display handover"]
+    J -->|"No"| M["✓ Safe to work"]
+    L --> M
+    M --> K
+    K --> N["Ready to work"]
 ```
 
-Protected branches (`main`, `master`, `develop`, `release/*`) block direct changes and guide you to create a feature branch first.
+### The Work Loop
+
+```mermaid
+flowchart TD
+    A["Ready to work"] --> B{On feature branch?}
+    B -->|Yes| C["Continue working"]
+    B -->|No| D["/new-feature 'description'"]
+    D --> C
+    C --> E{Feature complete?}
+    E -->|Yes| F["/complete-feature"]
+    E -->|No| C
+    F --> G{Done for the day?}
+    G -->|Yes| H["/end-session"]
+    G -->|No| A
+```
+
+### Handover Documents
+
+When ending a session on a feature branch, `/end-session` offers to create a handover document in `outbox/handovers/`. Next time anyone starts a session on that branch, `/start-session` displays the handover automatically.
+
+```mermaid
+flowchart LR
+    A["/end-session"] -->|"Feature branch"| B["Create handover?"]
+    B -->|"Yes"| C["outbox/handovers/branch-YYYY-MM-DD.md"]
+    C --> D["Next session"]
+    D --> E["/start-session"]
+    E -->|"Same branch"| F["Display handover"]
+    F --> G["Delete or keep"]
+```
+
+Protected branches (`main`, `master`, `develop`, `release/*`) trigger feedback/update checks — you're about to start something new. Feature branches check for handovers first, then go straight to work.
+
+### What `/end-session` Captures
+
+When you finish working, `/end-session` wraps up your session and captures everything for next time:
+
+| Captured | Location | Purpose |
+|----------|----------|---------|
+| **Session log** | `.project/sessions/YYYY-MM-DD.md` | Timestamped work summary for `/summary` reports |
+| **Token usage** | `.project/token-usage.md` | Cost tracking (input, output, cache stats) |
+| **Learnings** | `LEARNINGS.md` | Patterns discovered, gotchas encountered |
+| **Tool intelligence** | `.project/tool-intelligence.md` | Which tools worked well for which tasks |
+| **Session note** | `.project/session-note.md` | Handoff context for next `/start-session` |
+
+The command also:
+- Updates `CLAUDE.md` with any new project patterns (via `claude-md-management` skill)
+- Generates agent feedback for sending back to master agent
+- Commits changes with your approval
+
+Each session compounds on the last — the agent gets smarter about your project over time.
 
 ### Extra Commands
 
@@ -259,9 +442,7 @@ Protected branches (`main`, `master`, `develop`, `release/*`) block direct chang
 |---------|---------|
 | `/commit` | Quick commit with approval during work |
 | `/clean-branches` | Remove merged or stale branches |
-| `/summary` | Generate accomplishments report |
-
-**Token tracking** is built in — `/end-session` captures usage, `/summary` calculates costs.
+| `/summary` | Generate accomplishments report from session logs |
 
 **[Full Workflow Details →](templates/workflows/Session-Git-Workflow.md)**
 
@@ -308,7 +489,7 @@ Spawned projects are told which skills to install based on their technology stac
 | Step | What Happens |
 |------|--------------|
 | **Catalogue** | `/add-skill [source]` runs `npx add-skill` and updates `templates/skills/skill-mapping.json` |
-| **Recommend** | `/prepare-setup` and `/new-idea` list recommended skills based on knowledge categories |
+| **Recommend** | `/spawn-project` lists recommended skills based on knowledge categories |
 | **Install** | Spawned agent runs `npx add-skill anthropics/skills -s [skill]` during setup |
 
 > **Note:** Skills are different from Claude Code plugins. Skills are portable across any agent that supports the [Agent Skills spec](https://agentskills.io/home) (Cursor, VS Code, Claude Code, Gemini CLI, etc.).
@@ -341,7 +522,7 @@ Pre-configured plugins that add specialized capabilities:
 | **feature-dev** | `/feature-dev` | Architecture-first feature planning with code-explorer, code-architect, and code-reviewer agents |
 | **ralph-loop** | `/ralph-loop` | Autonomous implement → test → iterate loop until task is complete |
 | **frontend-design** | `/frontend-design` | Production-grade UI that avoids generic AI aesthetics |
-| **superpowers** | — | Powers `/new-feature`, `/complete-feature`, `/new-idea`, `/get-feedback`, `/end-session` with brainstorming, git worktrees, and verification |
+| **superpowers** | — | Powers `/new-feature`, `/complete-feature`, `/spawn-project`, `/get-feedback`, `/end-session` with brainstorming, git worktrees, and verification |
 | **commit-commands** | — | Powers `/commit` and `/clean-branches` with standardized git operations |
 | **claude-md-management** | — | Powers `/end-session` with CLAUDE.md revision capabilities |
 | **stripe** | `/stripe-*` | Stripe integration guides, test cards, error explanations |
@@ -537,20 +718,24 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 
 | Command | Description |
 |---------|-------------|
-| `/start-session` | Begin session with branch awareness and context loading |
+| `/start-session` | Begin session with first-run setup, branch awareness, and context loading |
 | `/new-feature "desc"` | Create feature branch (or worktree) for safe development |
 | `/complete-feature` | Wrap up feature branch — merge or create PR |
 | `/clean-branches` | Remove merged or stale feature branches |
 | `/end-session` | End session, update docs, capture learnings, commit |
 | `/commit` | Draft commit message, get approval, commit |
 
+### Ideation
+
+| Command | Description |
+|---------|-------------|
+| `/discuss` | Exploratory conversation → discussion document for `/new-feature` or `/spawn-project` |
+
 ### Project Creation
 
 | Command | Description |
 |---------|-------------|
-| `/discuss` | Exploratory conversation → discussion document for later |
-| `/new-idea` | Discovery conversation → complete project package |
-| `/prepare-setup` | Create generic setup package with selected components |
+| `/spawn-project` | Create new project via discovery conversation or template selection |
 
 ### Utilities
 
@@ -559,7 +744,7 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 | `/summary` | Generate accomplishments report from git history |
 | `/vibekanban` | Launch VibeKanban for AI agent task management |
 | `/local-env` | Manage local dev environment (domains, HTTPS, proxy) |
-| `/creator-feedback` | Generate feedback to send back to master agent |
+| `/agent-feedback` | Generate feedback to send back to master agent — **[How feedback works →](docs/feedback.md)** |
 | `/how-to-use` | Display the human-editable guide |
 | `/list-tools` | List all commands, plugins, and tools |
 | `/get-feedback` | Process inbox and implement improvements |
@@ -595,7 +780,7 @@ templates/              # Content copied to new projects
 
 inbox/                  # Ideas and feedback for improvements
   ideas/                # Your ideas to discuss
-  from-projects/        # Feedback from spawned projects
+  feedback/             # Feedback from spawned projects
 
 suggestions/            # Agent proposals (categorized)
   knowledge/            # Proposed new guides
@@ -603,8 +788,13 @@ suggestions/            # Agent proposals (categorized)
   workflow/             # Proposed workflow changes
   other/                # Miscellaneous improvements
 
-outbox/                 # Generated project packages (from /new-idea)
+knowledge/              # Accumulated learnings
+  archive/              # Processed feedback files
+
+outbox/                 # Generated project packages (from /spawn-project)
+  feedback/             # Generated feedback files (from /agent-feedback)
   discussions/          # Discussion documents (from /discuss)
+  handovers/            # Handover documents for feature branches (from /end-session)
 docs/                   # Documentation
 .claude/                # Claude Code configuration
   commands/             # Active commands
@@ -620,41 +810,53 @@ docs/                   # Documentation
 
 ## Continuous Improvement
 
-Every project you spawn can teach Squared Agent something new.
+Knowledge cycles between your master agent and client projects — in both directions.
 
 ```mermaid
 flowchart TB
-    subgraph Input["FEEDBACK SOURCES"]
-        A["inbox/ideas/<br/>Your ideas"]
-        B["inbox/from-projects/<br/>Project feedback"]
+    subgraph Master["MASTER AGENT"]
+        direction TB
+        A["inbox/feedback/"]
+        B["/start-session"]
+        C["Process or /get-feedback"]
+        D["knowledge/archive/"]
     end
 
-    subgraph Process["PROCESSING"]
-        C["/get-feedback"]
-        D["Discuss & plan"]
-        E["Implement"]
+    subgraph Client["CLIENT PROJECTS"]
+        direction TB
+        E["inbox/updates/"]
+        F["/start-session"]
+        G["Work with improvements"]
+        H["/end-session"]
+        I["outbox/feedback/"]
     end
 
-    subgraph Output["RESULTS"]
-        F["templates/ improved"]
-        G["LEARNINGS.md patterns"]
-    end
-
-    A --> C
+    A --> B
     B --> C
     C --> D
-    D --> E
+    C -->|"Export update package"| E
     E --> F
-    E --> G
-    F -.->|"Better projects"| B
+    F --> G
+    G --> H
+    H --> I
+    I -->|"Copy feedback"| A
 ```
 
-### The Feedback Loop
+### Learnings Flow Up
 
-1. **During project work**: `/end-session` generates creator feedback
-2. **Save feedback**: Copy it to `inbox/from-projects/` in this repo
-3. **Process feedback**: Run `/get-feedback` to review and implement
-4. **Templates improve**: Future projects benefit from past learnings
+1. **During client work**: `/end-session` captures patterns, gotchas, new techniques
+2. **Generate feedback**: `/agent-feedback` packages learnings to `outbox/feedback/`
+3. **Copy to master**: Save in `inbox/feedback/`
+4. **Process & implement**: `/start-session` detects feedback and offers to process inline
+
+### Updates Flow Down
+
+1. **Improve master**: Fix bugs, add commands, enhance knowledge
+2. **Export updates**: `/end-session` offers to create update package
+3. **Deliver to projects**: Copy to client project's `inbox/updates/`
+4. **Apply on next session**: `/start-session` detects and offers to apply updates
+
+Active client projects stay current. Past learnings compound into future work.
 
 ---
 
@@ -667,7 +869,7 @@ flowchart TB
 | [docs/commands.md](docs/commands.md) | Full command documentation |
 | [docs/plugins.md](docs/plugins.md) | Plugin configuration details |
 | [docs/content.md](docs/content.md) | Available profiles, knowledge, and tasks |
-| [docs/feedback.md](docs/feedback.md) | Creator feedback loop |
+| [docs/feedback.md](docs/feedback.md) | Agent feedback system — how learnings flow back (all local files, nothing sent anywhere) |
 | [docs/how-to-use.md](docs/how-to-use.md) | Human-editable quick start guide |
 
 ---

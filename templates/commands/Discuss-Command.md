@@ -1,12 +1,12 @@
 # Discuss Command - Implementation Guide
 
-A Claude Code command for exploratory conversations about vague ideas. Saves discussion documents that can be picked up later by `/new-idea`.
+A Claude Code command for exploratory conversations about vague ideas. Saves discussion documents that can be picked up later by `/spawn-project`.
 
 ---
 
 ## Overview
 
-The `/discuss` command is for exploring ideas before committing to build something. Unlike `/new-idea` which produces a full project package, `/discuss` captures thoughts for later consideration.
+The `/discuss` command is for exploring ideas before committing to build something. Unlike `/spawn-project` which produces a full project package, `/discuss` captures thoughts for later consideration.
 
 ### What It Does
 
@@ -23,8 +23,8 @@ The `/discuss` command is for exploring ideas before committing to build somethi
 | Scenario | Command |
 |----------|---------|
 | Vague idea, still exploring | `/discuss` |
-| Clear concept, ready to specify | `/new-idea` |
-| Previous discussion exists, ready to build | `/new-idea` (auto-detects) |
+| Clear concept, ready to specify | `/spawn-project` |
+| Previous discussion exists, ready to build | `/spawn-project` (auto-detects) |
 
 ---
 
@@ -49,7 +49,7 @@ allowed-tools: Read, Glob, Bash, Write, Task, Skill
 
 # Discuss - Exploratory Ideation
 
-An open-ended conversation to help users think through vague ideas. Unlike `/new-idea` which produces a full project package, `/discuss` is for exploring possibilities and capturing thoughts for later.
+An open-ended conversation to help users think through vague ideas. Unlike `/spawn-project` which produces a full project package, `/discuss` is for exploring possibilities and capturing thoughts for later.
 
 **Arguments:** $ARGUMENTS
 
@@ -62,7 +62,7 @@ This is an exploratory conversation, not a structured discovery process. Use it 
 - They want to explore possibilities before making decisions
 - They need help thinking through options and tradeoffs
 
-The output is a discussion document that can later be picked up by `/new-idea`.
+The output is a discussion document that can later be picked up by `/spawn-project`.
 
 ---
 
@@ -119,7 +119,7 @@ As the conversation flows, cover these areas:
 Every few exchanges, offer a checkpoint:
 
 - "Want to keep exploring, or should we capture what we have?"
-- "Ready to move to /new-idea, or still exploring?"
+- "Ready to move to /spawn-project, or still exploring?"
 
 ---
 
@@ -186,7 +186,7 @@ Write the document with this structure:
 - **Notes:**
 
 ## Next Steps
-[Ready for /new-idea or needs more exploration]
+[Ready for /spawn-project or needs more exploration]
 \```
 ```
 
@@ -194,14 +194,14 @@ Write the document with this structure:
 
 ## Discussion Document Format
 
-Discussion documents use a structured format that `/new-idea` can parse:
+Discussion documents use a structured format that `/spawn-project` can parse:
 
 ### Status Values
 
 | Status | Meaning |
 |--------|---------|
 | **Open** | Still exploring |
-| **Ready for /new-idea** | Core idea clear, ready to specify |
+| **Ready for /spawn-project** | Core idea clear, ready to specify |
 | **Archived** | No longer pursuing |
 
 ### Explored Topics Section
@@ -212,16 +212,16 @@ The "Explored Topics" section tracks what was covered:
 - **partially** - Topic touched on, needs more work
 - **no** - Topic not discussed
 
-When `/new-idea` picks up a discussion:
+When `/spawn-project` picks up a discussion:
 - **yes** topics → Skip or quickly confirm
 - **partially** topics → Ask follow-up questions
 - **no** topics → Explore fully
 
 ---
 
-## Integration with /new-idea
+## Integration with /spawn-project
 
-The `/new-idea` command checks for existing discussions:
+The `/spawn-project` command checks for existing discussions:
 
 ```bash
 ls outbox/discussions/*.md 2>/dev/null | head -10
@@ -243,7 +243,7 @@ Even vague ideas have value. Capture the essence.
 Periodically offer to save or continue.
 
 ### Seamless Handoff
-Discussion documents are designed for `/new-idea` pickup.
+Discussion documents are designed for `/spawn-project` pickup.
 
 ---
 
@@ -275,5 +275,5 @@ Claude: [saves discussion]
 
         Discussion saved: outbox/discussions/simple-habit-tracker-2026-01-24.md
 
-        When ready, run /new-idea to continue building.
+        When ready, run /spawn-project to continue building.
 ```

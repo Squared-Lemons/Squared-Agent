@@ -44,7 +44,7 @@ Framework and platform guides organized by category. Select what you need for ea
 
 ---
 
-## Selection During /prepare-setup
+## Selection During /spawn-project
 
 Choose from each category independently:
 
@@ -86,7 +86,7 @@ Knowledge guides are complemented by [Agent Skills](https://agentskills.io/home)
 npx add-skill anthropics/skills
 ```
 
-Skills matching selected knowledge categories are automatically included when running `/prepare-setup` or `/new-idea`.
+Skills matching selected knowledge categories are automatically included when running `/spawn-project`.
 
 ---
 

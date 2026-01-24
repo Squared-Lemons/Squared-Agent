@@ -161,7 +161,7 @@ README Files:
 
 Command Guides:
 ✓ .claude/commands/add-skill.md - OK
-✓ .claude/commands/prepare-setup.md - OK
+✓ .claude/commands/spawn-project.md - OK
 
 Knowledge Guides:
 ✗ templates/knowledge/web/nextjs/README.md - 1 issue

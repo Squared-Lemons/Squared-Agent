@@ -16,7 +16,7 @@ Squared Agent bootstraps new projects with Claude Code. You describe what you wa
 
 1. **Open with Claude Code:** `claude .`
 2. **Start a session:** `/start-session`
-3. **Create something:** `/new-idea` (for new projects) or `/new-feature` (to work on this repo)
+3. **Create something:** `/spawn-project` (for new projects) or `/new-feature` (to work on this repo)
 
 ---
 

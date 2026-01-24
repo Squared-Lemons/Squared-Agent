@@ -51,7 +51,7 @@ Guides in `templates/commands/` explain how to implement commands.
 
 ### END-SESSION-COMMAND
 
-Full end-session workflow with creator feedback loop.
+Full end-session workflow with agent feedback loop.
 
 **Location:** `templates/commands/END-SESSION-COMMAND.md`
 
@@ -69,13 +69,23 @@ Feature development with Feature-Dev and Ralph Loop plugins.
 
 ---
 
-### New-Idea-Workflow
+### Spawn-Project-Command
 
-How the /new-idea command works and how to extend it.
+How the /spawn-project command works for creating new projects.
 
-**Location:** `templates/commands/New-Idea-Workflow.md`
+**Location:** `templates/commands/Spawn-Project-Command.md`
 
-**Documents:** The workflow for creating idea-focused setup packages.
+**Documents:** The unified workflow for project creation via discovery or template selection.
+
+---
+
+### Spawn-Project-Workflow
+
+Detailed workflow documentation for /spawn-project.
+
+**Location:** `templates/commands/Spawn-Project-Workflow.md`
+
+**Documents:** The full process flow with discovery conversation and template selection paths.
 
 ---
 
@@ -119,7 +129,7 @@ Analyze an existing codebase and generate documentation.
 
 1. Create `templates/knowledge/<category>/<technology>/<Technology>-Guide.md`
 2. Include: Overview, Project Structure, Key Patterns, Common Gotchas, Resources
-3. The knowledge will appear in `/prepare-setup` and `/new-idea` selection
+3. The knowledge will appear in `/spawn-project` selection
 
 ### Adding a Skill
 
@@ -139,10 +149,10 @@ Skills are installed via `npx add-skill` and mapped in `templates/skills/skill-m
 
 1. Create `templates/tasks/<Task-Name>.md`
 2. Document the one-time activity
-3. The task will appear in `/prepare-setup` selection
+3. The task will appear in `/spawn-project` selection
 
 ### Adding a Profile
 
 1. Create `templates/profiles/<profile-name>/SETUP-INSTRUCTIONS.md`
 2. Include all configuration steps
-3. The profile will appear in `/prepare-setup` selection
+3. The profile will appear in `/spawn-project` selection

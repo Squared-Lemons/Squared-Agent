@@ -153,7 +153,7 @@ Then use Edit to add each new skill to the `"skills"` object:
 }
 ```
 
-This tells `/prepare-setup` and `/new-idea` which skills to recommend for each category.
+This tells `/spawn-project` which skills to recommend for each category.
 
 ---
 
@@ -171,7 +171,7 @@ Added to skill-mapping.json:
 - [skill-name] → categories: web, patterns
 
 How spawned projects use this:
-1. /prepare-setup or /new-idea checks skill-mapping.json
+1. /spawn-project checks skill-mapping.json
 2. Recommends skills matching selected knowledge categories
 3. Spawned agent installs via: npx add-skill anthropics/skills -s [skill-name]
 
@@ -255,7 +255,7 @@ These skills are recommended for most projects:
 │       └──→ Updates templates/skills/skill-mapping.json      │
 │                    │                                        │
 │                    ▼                                        │
-│  /prepare-setup or /new-idea                                │
+│  /spawn-project                                             │
 │       │                                                     │
 │       └──→ Reads skill-mapping.json                         │
 │            Lists recommended skills in SETUP.md             │

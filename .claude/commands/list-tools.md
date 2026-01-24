@@ -21,8 +21,8 @@ Display available commands and template content.
 
 ## Project Commands
 
-  /new-idea         → Design a new project through guided discovery
-  /prepare-setup    → Package templates for an existing project idea
+  /spawn-project    → Create new project (discovery or template flow)
+  /discuss          → Exploratory conversation for vague ideas
   /summary          → Generate accomplishments report from git history
   /list-tools       → Show this list
   /how-to-use       → Quick start guide (human-editable)
@@ -70,7 +70,8 @@ Display available commands and template content.
 ## Folders
 
   inbox/ideas/         → Drop your improvement ideas here
-  inbox/from-projects/ → Feedback from spawned projects
+  inbox/feedback/      → Feedback from spawned projects
+  knowledge/archive/   → Processed feedback files
   suggestions/         → My proposals for improvements
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -476,7 +476,7 @@ Local URL: https://[domain].local
 \```
 ```
 
-### /prepare-setup
+### /spawn-project
 
 Include local-env command when packaging:
 

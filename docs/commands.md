@@ -4,43 +4,52 @@ Detailed documentation for all available commands in Squared Agent.
 
 ---
 
-## /new-idea
+## /spawn-project
 
-A consultative conversation to design your project and generate a comprehensive package.
+Create a new project via discovery conversation or template selection.
 
 ### What it does
 
-This is a **conversation**, not a form. Claude:
-1. Asks about your idea and explores requirements
-2. Helps you think through platform and technology choices
-3. Discusses authentication, data, UI/UX, integrations
-4. Recommends knowledge and commands based on your needs
-5. Generates a complete project package with full context
+This command offers two paths:
+
+**1. Discuss & Design (Recommended)**
+- Have a discovery conversation about your idea
+- Claude helps you think through platform and technology choices
+- Discusses authentication, data, UI/UX, integrations
+- Recommends knowledge and commands based on your needs
+- Generates a complete project package with full context
+
+**2. Use Template**
+- Select from existing profiles, knowledge, and commands
+- Full control over what gets included
+- Best when you know what you need
 
 ### Usage
 
 ```
-/new-idea
+/spawn-project
 ```
 
 Or with files:
 
 ```
-/new-idea /path/to/designs
+/spawn-project /path/to/designs
 ```
 
 ### Flow
 
 ```
-Conversation about your idea
+Check for previous /discuss sessions
     ↓
-Discuss requirements & platform
+Choose: Discuss & Design or Use Template
     ↓
-Make technical decisions together
+[Discovery conversation or component selection]
     ↓
-Recommendations (knowledge, commands)
+Recommendations (knowledge, commands, skills)
     ↓
-Generate package
+Generate package to outbox/[project-slug]/
+    ↓
+Open in Finder
     ↓
 Copy to new folder
     ↓
@@ -49,69 +58,30 @@ Target agent builds v1
 
 ### Output
 
-A folder containing:
+**Discovery flow:**
+- `README.md` - Comprehensive project specification
 - `PROJECT-BRIEF.md` - Full project context from conversation
 - `TECHNICAL-DECISIONS.md` - Technology choices with rationale
 - `SETUP.md` - Instructions for target agent
+- `.claude/commands/` - All workflow commands
 - `knowledge/` - Platform-specific guidance
-- `commands/` - Workflow guides
 - `provided-files/` - Any files you provided
 
-### When to use
-
-- You have an idea but haven't decided on specifics
-- You want help thinking through requirements
-- You want the target agent to understand WHY decisions were made
-- You have existing files (designs, specs) to include
-
----
-
-## /prepare-setup
-
-Create a generic setup package for a new project.
-
-### What it does
-
-1. Asks which setup profile to use
-2. Asks which setup files to include
-3. Asks which command guides to include
-4. Asks which tasks to run after setup
-5. Asks which knowledge to include
-6. Creates a setup package with SETUP.md guide
-7. Opens the folder for you to copy
-
-### Usage
-
-```
-/prepare-setup
-```
-
-Or with arguments:
-
-```
-/prepare-setup --profile developer --commands all --knowledge all
-```
-
-### Arguments
-
-| Argument | Description |
-|----------|-------------|
-| `--profile <name>` | Skip profile selection |
-| `--setup <files>` | Skip setup files selection (comma-separated or "all") |
-| `--commands <files>` | Skip commands selection (comma-separated, "all", or "none") |
-| `--tasks <files>` | Skip tasks selection (comma-separated, "all", or "none") |
-| `--knowledge <files>` | Skip knowledge selection (comma-separated, "all", or "none") |
-
-### Output
-
-A folder containing:
+**Template flow:**
 - `SETUP.md` - Step-by-step setup guide
-- `SETUP-INSTRUCTIONS.md` - Detailed setup instructions
+- Setup files from selected profile
 - `commands/` - Selected command guides
 - `knowledge/` - Selected knowledge docs
 
 ### When to use
 
+**Discovery flow:**
+- You have an idea but haven't decided on specifics
+- You want help thinking through requirements
+- You want the target agent to understand WHY decisions were made
+- You have existing files (designs, specs) to include
+
+**Template flow:**
 - Setting up a new project without a specific idea yet
 - You want full control over what gets included
 - You're creating a setup for someone else
@@ -130,7 +100,7 @@ End a coding session by updating documentation, capturing learnings, and committ
 4. Updates LEARNINGS.md with session insights
 5. Saves session log to `.project/sessions/`
 6. Generates/updates SETUP.md handoff document
-7. Generates creator feedback (if applicable)
+7. Generates agent feedback (if applicable)
 8. Shows summary of all changes
 9. Commits with your approval
 
@@ -229,10 +199,11 @@ The `templates/commands/` folder contains implementation guides for setting up t
 
 | File | Purpose |
 |------|---------|
-| `END-SESSION-COMMAND.md` | Full end-session workflow with creator feedback |
+| `END-SESSION-COMMAND.md` | Full end-session workflow with agent feedback |
 | `Summary-Command.md` | Accomplishments summary from git history |
 | `New Feature Workflow.md` | Feature development with Feature-Dev and Ralph Loop |
-| `New-Idea-Workflow.md` | How /new-idea works and how to extend it |
+| `Spawn-Project-Command.md` | How /spawn-project works with discovery and template flows |
+| `Spawn-Project-Workflow.md` | Detailed workflow documentation |
 
 These guides are copied to new projects during setup and used to create the corresponding commands.
 

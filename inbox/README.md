@@ -10,10 +10,10 @@ Your ideas for improving this agent. Create a markdown file with:
 - Why it matters
 - Any initial thoughts
 
-### from-projects/
-Feedback from projects created with this agent. When running `/end-session` in a spawned project, copy the generated feedback here.
+### feedback/
+Feedback from projects created with this agent. Copy feedback files from spawned project's `outbox/feedback/` here.
 
-File naming: `YYYY-MM-DD-[project-name].md`
+File naming: `feedback-YYYY-MM-DD.md`
 
 ## What Happens Next
 

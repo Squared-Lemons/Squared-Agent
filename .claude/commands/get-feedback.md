@@ -10,7 +10,7 @@ Check both feedback sources:
 
 ```bash
 ls -la inbox/ideas/ 2>/dev/null || echo "NO_IDEAS_FOLDER"
-ls -la inbox/from-projects/ 2>/dev/null || echo "NO_PROJECTS_FOLDER"
+ls -la inbox/feedback/ 2>/dev/null || echo "NO_FEEDBACK_FOLDER"
 ```
 
 ---
@@ -29,7 +29,7 @@ For each markdown file found, read and summarize:
 1. [filename] - [one-line summary]
 2. [filename] - [one-line summary]
 
-## Project Feedback (inbox/from-projects/)
+## Project Feedback (inbox/feedback/)
 
 1. [filename] - [one-line summary]
 2. [filename] - [one-line summary]
@@ -48,7 +48,7 @@ No feedback files found.
 
 To add feedback:
 • Drop ideas in inbox/ideas/
-• Save project feedback to inbox/from-projects/
+• Copy project feedback to inbox/feedback/
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -98,12 +98,14 @@ After plan approval:
 
 ## Step 6: Archive Processed Feedback
 
-After successful implementation, offer to archive the feedback:
+After successful implementation, archive the feedback to knowledge:
 
 ```bash
-# Move to processed folder (or delete if user prefers)
-mkdir -p inbox/processed/
-mv inbox/ideas/[filename] inbox/processed/
+# Archive to knowledge folder (learnings become knowledge)
+mkdir -p knowledge/archive/
+mv inbox/ideas/[filename] knowledge/archive/
+# For project feedback:
+mv inbox/feedback/[filename] knowledge/archive/
 ```
 
 ---

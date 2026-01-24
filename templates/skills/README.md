@@ -84,7 +84,7 @@ Skills are mapped to knowledge categories for automatic recommendation:
 | `monorepo` | `templates/knowledge/monorepo/` | turborepo |
 | `patterns` | `templates/knowledge/patterns/` | mcp-builder, docx, pptx, xlsx, pdf, skill-creator |
 
-When you select knowledge during `/prepare-setup` or `/new-idea`, skills from matching categories are recommended.
+When you select knowledge during `/spawn-project`, skills from matching categories are recommended.
 
 ---
 

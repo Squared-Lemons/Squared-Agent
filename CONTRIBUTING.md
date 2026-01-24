@@ -11,7 +11,7 @@ This guide explains how to extend and improve the Squared Agent master agent.
 | Setup profile | `templates/profiles/[name]/` | lowercase folder name |
 | Task | `templates/tasks/` | `[Action]-[Target].md` |
 | Idea | `inbox/ideas/` | `[topic].md` |
-| Project feedback | `inbox/from-projects/` | `YYYY-MM-DD-[project-name].md` |
+| Project feedback | `inbox/feedback/` | `feedback-YYYY-MM-DD.md` |
 
 ## Content Types
 
@@ -51,9 +51,9 @@ Drop ideas and feedback here for discussion.
 
 Your ideas for improving this agent. Create a markdown file describing what you want to change and why.
 
-#### Project Feedback (`inbox/from-projects/`)
+#### Project Feedback (`inbox/feedback/`)
 
-Feedback from projects created with this agent. When running `/end-session` in a spawned project, copy the generated feedback here.
+Feedback from projects created with this agent. Copy feedback from spawned project's `outbox/feedback/` here.
 
 ### Suggestions
 
@@ -78,7 +78,7 @@ I create proposals here based on inbox items and learnings. Each suggestion is a
 1. Create the content file in the appropriate `templates/` folder
 2. Update CLAUDE.md's Available Content section
 3. Update README.md if user-facing
-4. Test by running `/prepare-setup` to verify it appears
+4. Test by running `/spawn-project` to verify it appears
 
 ### Submitting Ideas
 
@@ -88,12 +88,13 @@ I create proposals here based on inbox items and learnings. Each suggestion is a
 
 ### Feedback from Projects
 
-When projects send feedback via `/end-session`:
+When projects send feedback via `/agent-feedback`:
 
-1. Save the feedback file to `inbox/from-projects/`
-2. I'll review and create proposals in `suggestions/`
+1. Copy feedback file from `outbox/feedback/` to `inbox/feedback/`
+2. Run `/start-session` which will detect and offer to process
 3. We discuss and implement approved improvements
-4. Document changes in CLAUDE.md's Recent Changes
+4. Processed feedback archives to `knowledge/archive/`
+5. Document changes in CLAUDE.md's Recent Changes
 
 ## File Updates Checklist
 
@@ -102,7 +103,7 @@ When adding content, update these files:
 - [ ] Create content file in correct `templates/` folder
 - [ ] Update CLAUDE.md Available Content section
 - [ ] Update README.md if it affects user-facing features
-- [ ] Update `/prepare-setup` command if needed (for new profiles)
+- [ ] Update `/spawn-project` command if needed (for new profiles)
 
 ## Quality Guidelines
 

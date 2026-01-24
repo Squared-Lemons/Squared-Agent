@@ -339,7 +339,8 @@ project/
 │   ├── updates/          # Update packages to apply
 │   └── ...
 ├── outbox/               # Files TO master agent
-│   └── creator-feedback-YYYY-MM-DD.md
+│   └── feedback/
+│       └── feedback-YYYY-MM-DD.md
 └── ...
 ```
 
@@ -347,10 +348,10 @@ project/
 **Outbox:** Sends feedback, learnings, pattern discoveries back to master agent
 
 **Workflow:**
-1. Spawned project generates feedback via `/creator-feedback` or `/end-session`
-2. Output goes to `outbox/creator-feedback-YYYY-MM-DD.md`
-3. User copies file to master agent's `inbox/from-projects/`
-4. Master agent processes with `/get-feedback`
+1. Spawned project generates feedback via `/agent-feedback`
+2. Output goes to `outbox/feedback/feedback-YYYY-MM-DD.md`
+3. User copies file to master agent's `inbox/feedback/`
+4. Master agent's `/start-session` detects and offers to process
 5. Improvements flow back via update packages to `inbox/updates/`
 
 This creates a continuous improvement loop between projects.

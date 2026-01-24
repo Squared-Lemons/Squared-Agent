@@ -107,7 +107,7 @@ Read the command documentation files and create the corresponding commands in `.
 
 | Documentation | Creates | Purpose |
 |--------------|---------|---------|
-| `Creator-Feedback-Command.md` | `/creator-feedback` | Generate feedback to send to master agent |
+| `Agent-Feedback-Command.md` | `/agent-feedback` | Generate feedback to send to parent agent |
 
 For each documentation file:
 1. Read the implementation guide
@@ -324,7 +324,7 @@ After setup, these commands should be available:
 - `/commit` - Quick commit with approval
 - `/summary` - Generate accomplishments report
 - `/local-env` - Manage local domains and trusted HTTPS
-- `/creator-feedback` - Generate feedback to send to master agent
+- `/agent-feedback` - Generate feedback to send to parent agent
 - `/cancel-ralph` - Stop a running Ralph Loop (from plugin)
 
 Token tracking is automatic — `/end-session` captures usage data, `/summary` calculates costs

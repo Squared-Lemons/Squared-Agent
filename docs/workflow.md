@@ -104,11 +104,11 @@ This offers two options:
 flowchart TB
     subgraph Input["Feedback Sources"]
         A["inbox/ideas/"]
-        B["inbox/from-projects/"]
+        B["inbox/feedback/"]
     end
 
     subgraph Process["Processing"]
-        C["/get-feedback"]
+        C["/start-session or /get-feedback"]
         D["Discuss & plan"]
         E["Implement"]
         F["Test"]
@@ -116,7 +116,7 @@ flowchart TB
 
     subgraph Output["Results"]
         G["templates/ improved"]
-        H["suggestions/ proposals"]
+        H["knowledge/archive/"]
         I["LEARNINGS.md patterns"]
     end
 
@@ -137,7 +137,7 @@ flowchart TB
 Drop markdown files in `inbox/ideas/` with your thoughts, suggestions, or feature requests.
 
 **Project feedback:**
-When you run `/end-session` in a spawned project, it generates feedback. Save that to `inbox/from-projects/`.
+When you run `/agent-feedback` in a spawned project, it generates feedback to `outbox/feedback/`. Copy that to `inbox/feedback/`.
 
 ### Processing Feedback
 

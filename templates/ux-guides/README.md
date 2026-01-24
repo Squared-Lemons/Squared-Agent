@@ -56,6 +56,6 @@ Be descriptive — `Canvas-Panel-Navigation-System.md` not `panels.md`
 
 ## How UX Guides Get Used
 
-1. **During `/new-idea`** — Included based on project requirements
+1. **During `/spawn-project`** — Included based on project requirements
 2. **During development** — Agents reference for consistent UI
 3. **As templates** — Code adapted for specific projects

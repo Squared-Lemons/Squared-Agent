@@ -33,10 +33,12 @@ This command compares active commands vs templates and syncs changes.
 | `.claude/commands/summary.md` | `templates/commands/Summary-Command.md` |
 | `.claude/commands/vibekanban.md` | `templates/commands/VibeKanban-Command.md` |
 | `.claude/commands/commit.md` | `templates/commands/END-SESSION-COMMAND.md` (section 2) |
+| `.claude/commands/spawn-project.md` | `templates/commands/Spawn-Project-Command.md` |
+| `.claude/commands/discuss.md` | `templates/commands/Discuss-Command.md` |
 | `.claude/settings.json` (plugins) | `templates/profiles/developer/SETUP-INSTRUCTIONS.md` |
 
 **NOT synced** (master-agent specific):
-- `prepare-setup.md`, `new-idea.md`, `how-to-use.md`, `get-feedback.md`, `list-tools.md`
+- `how-to-use.md`, `get-feedback.md`, `list-tools.md`, `add-skill.md`, `sync-templates.md`, `sync-docs.md`
 
 ---
 
@@ -62,6 +64,9 @@ stat -f "%m %N" .claude/commands/new-feature.md 2>/dev/null || stat -c "%Y %n" .
 stat -f "%m %N" .claude/commands/complete-feature.md 2>/dev/null || stat -c "%Y %n" .claude/commands/complete-feature.md 2>/dev/null
 stat -f "%m %N" .claude/commands/summary.md 2>/dev/null || stat -c "%Y %n" .claude/commands/summary.md 2>/dev/null
 stat -f "%m %N" .claude/commands/commit.md 2>/dev/null || stat -c "%Y %n" .claude/commands/commit.md 2>/dev/null
+stat -f "%m %N" .claude/commands/vibekanban.md 2>/dev/null || stat -c "%Y %n" .claude/commands/vibekanban.md 2>/dev/null
+stat -f "%m %N" .claude/commands/spawn-project.md 2>/dev/null || stat -c "%Y %n" .claude/commands/spawn-project.md 2>/dev/null
+stat -f "%m %N" .claude/commands/discuss.md 2>/dev/null || stat -c "%Y %n" .claude/commands/discuss.md 2>/dev/null
 stat -f "%m %N" .claude/settings.json 2>/dev/null || stat -c "%Y %n" .claude/settings.json 2>/dev/null
 ```
 
@@ -72,6 +77,9 @@ stat -f "%m %N" templates/commands/END-SESSION-COMMAND.md 2>/dev/null || stat -c
 stat -f "%m %N" templates/commands/New-Feature-Command.md 2>/dev/null || stat -c "%Y %n" templates/commands/New-Feature-Command.md 2>/dev/null
 stat -f "%m %N" templates/commands/Complete-Feature-Command.md 2>/dev/null || stat -c "%Y %n" templates/commands/Complete-Feature-Command.md 2>/dev/null
 stat -f "%m %N" templates/commands/Summary-Command.md 2>/dev/null || stat -c "%Y %n" templates/commands/Summary-Command.md 2>/dev/null
+stat -f "%m %N" templates/commands/VibeKanban-Command.md 2>/dev/null || stat -c "%Y %n" templates/commands/VibeKanban-Command.md 2>/dev/null
+stat -f "%m %N" templates/commands/Spawn-Project-Command.md 2>/dev/null || stat -c "%Y %n" templates/commands/Spawn-Project-Command.md 2>/dev/null
+stat -f "%m %N" templates/commands/Discuss-Command.md 2>/dev/null || stat -c "%Y %n" templates/commands/Discuss-Command.md 2>/dev/null
 stat -f "%m %N" templates/profiles/developer/SETUP-INSTRUCTIONS.md 2>/dev/null || stat -c "%Y %n" templates/profiles/developer/SETUP-INSTRUCTIONS.md 2>/dev/null
 ```
 

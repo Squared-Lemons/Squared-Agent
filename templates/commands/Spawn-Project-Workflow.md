@@ -1,10 +1,13 @@
-# New Idea Workflow
+# Spawn Project Workflow
 
-A consultative discovery process that helps users design their project and generates a comprehensive package for implementation.
+A unified project creation process that offers discovery conversation or template selection.
 
 ## Overview
 
-`/new-idea` is a conversation, not a form. You discuss the user's idea, help them think through requirements, guide technical decisions, and produce a complete project package.
+`/spawn-project` provides two paths to create new projects:
+
+1. **Discuss & Design** — Discovery conversation leading to a comprehensive project package
+2. **Use Template** — Select from existing profiles, knowledge, and commands
 
 The output is everything a target agent needs to build version 1.
 
@@ -15,16 +18,16 @@ For vague ideas, use the two-stage workflow:
 | Stage | Command | Purpose |
 |-------|---------|---------|
 | 1 | `/discuss` | Explore vague ideas, capture thoughts |
-| 2 | `/new-idea` | Specify and generate project package |
+| 2 | `/spawn-project` | Specify and generate project package |
 
-`/new-idea` automatically detects discussions in `outbox/discussions/` and offers to continue from them.
+`/spawn-project` automatically detects discussions in `outbox/discussions/` and offers to continue from them.
 
 ---
 
 ## The Process
 
 ```
-/new-idea [optional: path to files]
+/spawn-project [optional: path to files]
          │
          ▼
 ┌─────────────────────────────────────┐
@@ -36,6 +39,14 @@ For vague ideas, use the two-stage workflow:
 └─────────────────────────────────────┘
          │
          ▼
+┌─────────────────────────────────────┐
+│  CHOOSE FLOW                        │
+│                                     │
+│  1. Discuss & Design (discovery)    │
+│  2. Use Template (selection)        │
+└─────────────────────────────────────┘
+         │
+         ▼ (if Discuss & Design)
 ┌─────────────────────────────────────┐
 │  DISCOVERY CONVERSATION             │
 │  (skips topics from discussion)     │
@@ -52,7 +63,7 @@ For vague ideas, use the two-stage workflow:
 │  RECOMMENDATIONS                    │
 │                                     │
 │  • Suggest platform                 │
-│  • Recommend knowledge/commands        │
+│  • Recommend knowledge/commands     │
 │  • Note custom requirements         │
 │  • User confirms                    │
 └─────────────────────────────────────┘
@@ -203,7 +214,13 @@ Any files the user provided at the start (designs, specs, etc.).
 ## Example Conversation
 
 ```
-User: /new-idea
+User: /spawn-project
+
+Claude: How would you like to create this project?
+        1. Discuss & Design (Recommended)
+        2. Use Template
+
+User: [selects Discuss & Design]
 
 Claude: Tell me about what you want to build. What's the idea?
 
@@ -278,7 +295,7 @@ Packages are saved to `outbox/[project-slug]/` within Squared Agent. The folder 
 
 ### Discussion Integration
 
-`/new-idea` checks `outbox/discussions/` for previous `/discuss` sessions:
+`/spawn-project` checks `outbox/discussions/` for previous `/discuss` sessions:
 
 ```bash
 ls outbox/discussions/*.md 2>/dev/null | head -10

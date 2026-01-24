@@ -4,14 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Squared Agent** is a master agent for bootstrapping new projects with Claude Code. It contains reusable setup profiles, development patterns, and a knowledge base that improves through feedback from spawned projects.
+**Squared Agent** is a master agent system where the agent itself is the deliverable. It contains your business practices, technical patterns, and operational knowledge — everything needed to build products for clients and deliver intelligent systems they can control.
 
 ## Purpose
 
-- **Bootstrap new projects** via `/prepare-setup` and `/new-idea` commands
-- **Capture development patterns** in `templates/commands/` as implementation guides
-- **Build knowledge base** in `templates/knowledge/` for reference during development
-- **Improve continuously** through feedback in `inbox/` → proposals in `suggestions/`
+- **Codify your expertise** in `templates/` — workflows, knowledge, skills that define how you work
+- **Spawn client projects** via `/spawn-project` — inherit your baseline, evolve with project-specific context
+- **Deliver intelligent systems** — clients receive agents, not just code; they can extend or scope as needed
+- **Enable recursive spawning** — clients can spawn their own children for focused deliverables
+- **Improve continuously** — learnings from client work flow back to strengthen your master agent
 - **Build and publish tools** via npm packages in `packages/`
 
 ## Monorepo Development
@@ -76,7 +77,7 @@ Run with: `pnpm --filter @squared-agent/dashboard dev`
 ## Commands
 
 ### `/start-session`
-Begin session with branch awareness and context loading. Checks for protected branches (main/master/develop/release/*) and warns if on one. Shows git status, loads tool intelligence, checks for updates from master agent (spawned projects), and displays session note or getting started guide.
+Begin session with setup detection, branch awareness, and context loading. For spawned projects, detects `SETUP.md` in root and offers to run setup (archives to `knowledge/setup/` when complete). On fresh clones, runs guided setup (prerequisites check, `pnpm install`, create `.project/` workspace). Checks for protected branches (main/master/develop/release/*) — if on one, checks `inbox/feedback/` for pending feedback (master agent) or `inbox/updates/` for updates (spawned projects) before showing the warning; if on a feature branch, skips inbox checks and goes straight to work. Setup state tracked in `.project/config.json`.
 
 ### `/new-feature`
 Create feature branch (or worktree) for safe development. Accepts a description, generates a branch name, and offers regular branch or worktree mode for parallel work.
@@ -87,11 +88,11 @@ Wrap up feature branch - merge or create PR. Reviews changes, suggests squashing
 ### `/clean-branches`
 Remove merged or stale feature branches. Finds branches merged into main and branches whose remote tracking is gone, previews them, and safely deletes selected branches. Protects main, master, develop, release/*, current branch, and worktree branches.
 
-### `/prepare-setup`
-Prepare a setup package for a new project. Asks for profile, commands, tasks, and knowledge to include, then creates a temp folder with all files and a SETUP.md guide.
+### `/spawn-project`
+Create a new project via discovery conversation or template selection. Offers two flows: "Discuss & Design" (consultative discovery conversation leading to comprehensive project package) or "Use Template" (select from existing profiles, knowledge, and commands). Detects previous `/discuss` sessions and offers to continue from them. Works in MASTER mode (full template selection) or SPAWNED mode (pass-through inheritance). Outputs to `outbox/[project-slug]/` and opens in Finder.
 
 ### `/end-session`
-End coding session - updates docs, captures learnings, generates SETUP.md handoff document, auto-generates creator feedback for user to copy back to master agent, exports update package for spawned projects (master agent only), and commits changes with approval.
+End coding session - updates docs, captures learnings, generates SETUP.md handoff document, auto-generates agent feedback for user to copy to parent agent, exports update package for spawned projects (master agent only), commits changes with approval, and offers to create a handover document (feature branches only) in `outbox/handovers/` for the next session.
 
 ### `/commit`
 Draft a commit message, get approval, then commit changes.
@@ -99,17 +100,14 @@ Draft a commit message, get approval, then commit changes.
 ### `/summary`
 Generate an accomplishments summary for a time period. Analyzes git commits and session logs, categorizes by type (features, fixes, refactors, etc.), and produces a copy-paste ready report.
 
-### `/new-idea`
-Consultative discovery conversation to design a new project. Discuss requirements, platform, and technical decisions together, then generate a comprehensive package to `outbox/[project-slug]/` including README.md (project specification), PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, SETUP.md, and workflow commands. The folder opens automatically in Finder when complete. Detects previous `/discuss` sessions and offers to continue from them.
-
 ### `/discuss`
-Exploratory conversation to work through a vague idea. Covers the core concept, who it's for, scale, and platform direction without committing to build anything. Saves discussion document to `outbox/discussions/` for later pickup by `/new-idea`. Use when you have a vague idea; use `/new-idea` when ready to specify and generate a project package.
+Exploratory conversation to work through a vague idea using the agent's knowledge base. Covers the core concept, who it's for, scale, and technical direction without committing to build anything. Saves discussion document to `outbox/discussions/`. The output can be used to start a `/new-feature` in the current project or continue into `/spawn-project` for a child project.
 
 ### `/how-to-use`
 Display the human-editable guide for using this agent. Content lives at `docs/how-to-use.md` so users can add their own tips and notes.
 
 ### `/get-feedback`
-Process feedback from the inbox and implement improvements. Scans `inbox/ideas/` and `inbox/from-projects/`, presents summaries, helps discuss and plan implementation, then guides through making and testing changes.
+Process feedback from the inbox and implement improvements. Scans `inbox/ideas/` and `inbox/feedback/`, presents summaries, helps discuss and plan implementation, then guides through making and testing changes. Archives processed feedback to `knowledge/archive/`.
 
 ### `/sync-templates`
 Sync active commands to template files for spawned projects. Compares `.claude/commands/` with `templates/commands/`, detects drift, and updates template code blocks while preserving prose. Supports `--audit` (report only) and `--background` (silent) modes. Integrates with `/start-session`, `/end-session`, and `/complete-feature`. See [Template Sync Workflow](docs/template-sync-workflow.md) for the full "evolve then deploy" pattern.
@@ -123,8 +121,8 @@ Install a skill and catalogue it for spawned projects. Runs `npx add-skill [sour
 ### `/local-env`
 Manage local development environment with friendly domains and trusted HTTPS. Subcommands: `init` (first-time machine setup with mkcert, certs, proxy), `setup` (configure project domain and port range), `start`/`stop` (proxy control), `status` (show config), `list` (all registered projects). Uses mkcert for trusted certificates and Caddy or Node proxy for reverse proxying. Stores config in `~/.squared-agent/` with per-project settings in `.project/local-env.json`.
 
-### `/creator-feedback`
-Generate feedback to send back to the master agent. Analyzes the current session to identify knowledge gaps, setup issues, new patterns, and technical gotchas. Writes structured feedback to `outbox/creator-feedback-YYYY-MM-DD.md`. If file exists, offers append/replace/skip options.
+### `/agent-feedback`
+Generate feedback to send back to the parent agent. Analyzes the current session to identify knowledge gaps, setup issues, new patterns, and technical gotchas. Writes structured feedback to `outbox/feedback/feedback-YYYY-MM-DD.md`. If file exists, offers append/replace/skip options.
 
 ### `/vibekanban`
 Launch VibeKanban for AI agent task management. VibeKanban is a kanban board designed for orchestrating autonomous AI coding agents with isolated git worktrees. Auto-discovers recent git projects, supports GitHub CLI for PR creation, and runs agents with autonomous permissions. Accepts optional port argument (e.g., `/vibekanban 8080`).
@@ -136,17 +134,18 @@ Launch VibeKanban for AI agent task management. VibeKanban is a kanban board des
 Content that gets copied to new projects:
 
 #### Command Guides (`templates/commands/`)
-- **Start-Session-Command.md** - Branch-aware session entry with context loading
+- **Start-Session-Command.md** - First-run setup detection, branch awareness, outbox checking, context loading
 - **New-Feature-Command.md** - Safe feature branch or worktree creation
 - **Complete-Feature-Command.md** - Branch completion via merge or PR
 - **Clean-Branches-Command.md** - Remove merged or stale branches
-- **END-SESSION-COMMAND.md** - End-session workflow with creator feedback loop
+- **END-SESSION-COMMAND.md** - End-session workflow with agent feedback loop
 - **Summary-Command.md** - Accomplishments summary from git history and session logs
 - **Local-Env-Command.md** - Local environment management (domains, HTTPS, proxy)
-- **Creator-Feedback-Command.md** - Generate feedback to send to master agent
+- **Agent-Feedback-Command.md** - Generate feedback to send to parent agent
 - **VibeKanban-Command.md** - AI agent task management with isolated worktrees
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
-- **New-Idea-Workflow.md** - Consultative discovery process for new projects
+- **Spawn-Project-Command.md** - Project creation via discovery or template selection
+- **Spawn-Project-Workflow.md** - Project creation workflow documentation (reference)
 - **Discuss-Command.md** - Exploratory conversation for vague ideas
 
 #### Workflows (`templates/workflows/`)
@@ -176,7 +175,7 @@ Recommended skills (frontend-design, webapp-testing, turborepo, mcp-builder, doc
 
 Raw input for improvements:
 - **ideas/** - Your ideas to discuss
-- **from-projects/** - Feedback from spawned projects
+- **feedback/** - Feedback from spawned projects
 
 ### Suggestions (`suggestions/`)
 
@@ -192,7 +191,7 @@ When making changes to this project:
 
 1. **Make changes** - Edit files as needed
 2. **Verify** - Run any relevant checks (this is a docs-heavy project, so mainly review for consistency)
-3. **Test generated output** - If changing setup templates, test with `/prepare-setup`
+3. **Test generated output** - If changing setup templates, test with `/spawn-project`
 4. **Update docs** - Keep CLAUDE.md and README.md in sync with changes
 5. **Commit** - Use `/commit` or `/end-session` to commit with proper message
 
@@ -229,8 +228,8 @@ When adding a command that spawned projects should inherit, follow this checklis
 | Step | File(s) to Update | Purpose |
 |------|-------------------|---------|
 | 1. Create command | `.claude/commands/[name].md` | The actual executable command |
-| 2. Create template guide | `templates/commands/[Name]-Command.md` | Documentation for `/prepare-setup` |
-| 3. Update `/new-idea` | `.claude/commands/new-idea.md` | Add to copy list so spawned projects get it |
+| 2. Create template guide | `templates/commands/[Name]-Command.md` | Documentation for `/spawn-project` template flow |
+| 3. Update `/spawn-project` | `.claude/commands/spawn-project.md` | Add to copy list so spawned projects get it |
 | 4. Update setup instructions | `templates/profiles/developer/SETUP-INSTRUCTIONS.md` | List in commands table |
 | 5. Add knowledge (if relevant) | `templates/knowledge/[category]/` | Reference docs for the feature |
 | 6. Update CLAUDE.md | `CLAUDE.md` | Document the new command |
@@ -238,8 +237,8 @@ When adding a command that spawned projects should inherit, follow this checklis
 **Why this matters:** Commands created in this agent but not added to the propagation paths won't reach spawned projects. The `/local-env` command was missing from steps 3-4, causing it not to appear in new projects.
 
 **Propagation paths:**
-- `/new-idea` → copies `.claude/commands/*.md` files directly to spawned projects
-- `/prepare-setup` → copies `templates/commands/*.md` guides, target agent creates commands from guides
+- `/spawn-project` (discovery flow) → copies `.claude/commands/*.md` files directly to spawned projects
+- `/spawn-project` (template flow) → copies `templates/commands/*.md` guides, target agent creates commands from guides
 
 ### Update Propagation Workflow
 
@@ -386,15 +385,19 @@ templates/          # Content copied to new projects
   profiles/         # Setup profiles (developer/, etc.)
   tasks/            # One-time setup tasks
 inbox/              # Ideas and feedback for improvements
-  from-projects/    # Feedback from spawned projects
+  feedback/         # Feedback from spawned projects
   ideas/            # Your ideas to discuss
 suggestions/        # My proposals (categorized)
   knowledge/        # Proposed new knowledge guides
   commands/         # Proposed command improvements
   workflow/         # Proposed workflow changes
   other/            # Miscellaneous improvements
-outbox/             # Generated project packages (from /new-idea)
+knowledge/          # Accumulated learnings
+  archive/          # Processed feedback files
+outbox/             # Generated project packages (from /spawn-project)
+  feedback/         # Generated feedback files (from /agent-feedback)
   discussions/      # Discussion documents (from /discuss)
+  handovers/        # Handover documents for feature branches (from /end-session)
 docs/               # Internal documentation
   style-guide.md    # Writing voice, terminology, formatting rules
   doc-patterns/     # Templates for README, command, knowledge docs
@@ -410,6 +413,12 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-24:** Added handover documents for feature branches - `/end-session` offers to create handover in `outbox/handovers/[branch]-YYYY-MM-DD.md` with status, recent changes, files modified, and next steps; `/start-session` on feature branches checks for handover first and displays it, offers to delete or keep; handovers only apply to feature branches (not protected branches)
+- **2026-01-24:** Revised Code Session Workflow logic - protected branches (main, master, develop, release/*) now check inbox for feedback/updates FIRST (you're about to start something new); feature branches skip inbox checks and go straight to work (checking for handover first); updated README diagram, start-session command, and all templates to reflect new flow
+- **2026-01-24:** Refined feedback workflow - renamed `/creator-feedback` to `/agent-feedback`; renamed `inbox/from-projects/` to `inbox/feedback/`; `/agent-feedback` outputs to `outbox/feedback/feedback-YYYY-MM-DD.md`; `/start-session` checks `inbox/feedback/` and offers inline processing; `/get-feedback` archives to `knowledge/archive/` (learnings become knowledge); added `knowledge/` folder at root for accumulated operational learnings; updated all documentation with new paths
+- **2026-01-24:** Enhanced `/start-session` with first-run setup and outbox processing - detects fresh clones via `.project/config.json` and runs guided setup (prerequisites, `pnpm install`, workspace creation); master agent checks `outbox/` for feedback files and discussions with option to process or skip; migration logic for existing users (creates config without forcing full setup); added user preferences (`show_outbox_on_start`) stored in config; optional `/local-env init` prompt during setup; updated Start-Session-Command.md template with setup detection flow
+- **2026-01-24:** Combined `/new-idea` and `/prepare-setup` into unified `/spawn-project` command - single entry point with two flows: "Discuss & Design" (discovery conversation) and "Use Template" (component selection); checks for previous `/discuss` sessions; works in MASTER mode (full template selection) or SPAWNED mode (pass-through inheritance); deleted `new-idea.md`, `prepare-setup.md`, and `New-Idea-Command.md`; created `Spawn-Project-Command.md` template; updated sync-templates mapping; updated all documentation references
+- **2026-01-24:** Added recursive spawning with pass-through model - `/spawn-project` detects environment (MASTER vs SPAWNED mode); in pass-through mode, copies parent's own `.claude/commands/` and `knowledge/` to child instead of reading from `templates/`; spawned projects inherit `/spawn-project` and `/discuss` commands so they can spawn their own children; enables specialization chains (Master → Template → Project → Microsite)
 - **2026-01-24:** Added two-stage ideation workflow - `/discuss` command for exploratory conversations about vague ideas; saves discussion documents to `outbox/discussions/`; enhanced `/new-idea` to detect previous discussions and continue from them (pre-fills decisions, skips covered topics); created Discuss-Command.md template; updated README with new command
 - **2026-01-24:** Added dev-server package for dynamic port allocation - `packages/dev-server/` scans for available ports at runtime, injects `PORT_*` and `*_URL` env vars via Turborepo's `globalPassThroughEnv`; enables multiple worktrees to run `pnpm dev` simultaneously without port conflicts; updated `turbo.json` with passthrough config; improved dashboard dev script with port verification and restart handling; created design doc at `docs/plans/2026-01-24-dev-server-dynamic-ports-design.md`
 - **2026-01-24:** Lean into community skills for spawned projects - added Turborepo skill to `skill-mapping.json` with monorepo category; slimmed `Turborepo-Monorepo-Setup.md` from 256→146 lines (quick-start format); fixed factual issues (turbo run, per-package .env instead of root symlinks); updated `/prepare-setup` and `/new-idea` to recommend turborepo skill for monorepo projects; added Step 4 (Install Recommended Skills) to developer profile SETUP-INSTRUCTIONS.md; aligned all documentation (README, CLAUDE.md, templates/README, knowledge/README, skills/README) with new skill structure; added "Release reporting pain" to README problem statement

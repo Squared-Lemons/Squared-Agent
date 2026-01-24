@@ -6,6 +6,30 @@ Insights and lessons captured from coding sessions to improve future development
 
 ## Session Log
 
+### 2026-01-24: Handover Documents & Code Session Workflow Refinement
+
+**What Was Done**
+- Added handover document feature to `/end-session` and `/start-session`
+- Revised Code Session Workflow logic: protected branches check inbox first, feature branches skip to work
+- Rewrote `docs/feedback.md` with comprehensive explanation and Mermaid diagrams
+- Created `outbox/handovers/` directory for handover storage
+
+**What Worked Well**
+- Handover documents solve the "where was I?" problem across sessions on the same feature branch
+- Separating protected branch flow (check improvements) from feature branch flow (get to work) matches actual usage patterns
+- Mermaid diagrams in docs render much better than ASCII art
+
+**Key Insights**
+- **Protected branch = starting something new**: This is the right time to process feedback/updates, not in the middle of feature work
+- **Handovers are branch-specific**: Store as `[branch-name]-YYYY-MM-DD.md` so `/start-session` can find them automatically
+- **Transparency matters for feedback**: Users need to understand that the feedback system is entirely local files with manual copy steps - nothing automatic or network-based
+
+**Pattern Established**
+- Feature branch lifecycle: `/new-feature` → work → `/end-session` (create handover) → next session → `/start-session` (display handover) → work → `/complete-feature`
+- Handover format: Status, Recent Changes, Files Modified, Next Steps, Context
+
+---
+
 ### 2026-01-19: Knowledge Template Enhancement with Installed Skills
 
 **What Was Done**
@@ -156,7 +180,7 @@ Insights and lessons captured from coding sessions to improve future development
 
 **Key Insight**
 - **Clear separation enables autonomy** - With distinct folders for templates vs feedback vs proposals, the agent can proactively review inbox and create suggestions without needing to ask "where does this go?"
-- **File-based feedback > paste-and-tell** - Saving feedback as files in `inbox/from-projects/` creates a reviewable queue instead of ephemeral chat messages
+- **File-based feedback > paste-and-tell** - Saving feedback as files in `inbox/feedback/` creates a reviewable queue instead of ephemeral chat messages
 
 **Pattern Established**
 - Improvement workflow: `inbox/` → `LEARNINGS.md` → `suggestions/` → discuss → implement → `templates/`
@@ -322,7 +346,7 @@ Insights and lessons captured from coding sessions to improve future development
 
 **Process Improvement**
 - `/end-session` now asks for feedback to send back to master agent
-- Feedback saved to `docs/creator-feedback.md` in project
+- Feedback generated via `/agent-feedback` command to `outbox/feedback/`
 - User can bring feedback back to improve future setups
 
 ---

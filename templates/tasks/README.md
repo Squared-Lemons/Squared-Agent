@@ -65,7 +65,7 @@ Analyze an existing codebase and generate comprehensive documentation.
 
 ## How Tasks Get Used
 
-1. Run `/prepare-setup`
+1. Run `/spawn-project` (template flow)
 2. Select a profile
 3. Choose tasks to include
 4. Setup package includes task instructions
