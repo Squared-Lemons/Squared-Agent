@@ -100,11 +100,30 @@ cd squared-agent
 
 ## Agent Packages
 
-Two ways to create setup packages for new projects:
+Three ways to create setup packages for new projects:
+
+### `/discuss` — Exploratory Ideation
+
+Best for vague ideas you want to think through before committing to build.
+
+```mermaid
+flowchart LR
+    A["Describe vague idea"] --> B["Explore possibilities"]
+    B --> C["Capture thoughts"]
+    C --> D["📄 Discussion document"]
+```
+
+The conversation covers:
+- What the idea is and why it matters
+- Who it's for and their situation
+- Scale and context (personal, startup, enterprise)
+- Platform direction and open questions
+
+**Output:** Discussion document saved to `outbox/discussions/` that `/new-idea` can pick up later.
 
 ### `/new-idea` — Discovery Conversation
 
-Best for new projects where you're still figuring out requirements.
+Best for new projects where you know what you want to build.
 
 ```mermaid
 flowchart LR
@@ -515,6 +534,7 @@ All data stays local in `.project/` (gitignored). Personal to each user, compoun
 
 | Command | Description |
 |---------|-------------|
+| `/discuss` | Exploratory conversation → discussion document for later |
 | `/new-idea` | Discovery conversation → complete project package |
 | `/prepare-setup` | Create generic setup package with selected components |
 
@@ -570,6 +590,7 @@ suggestions/            # Agent proposals (categorized)
   other/                # Miscellaneous improvements
 
 outbox/                 # Generated project packages (from /new-idea)
+  discussions/          # Discussion documents (from /discuss)
 docs/                   # Documentation
 .claude/                # Claude Code configuration
   commands/             # Active commands

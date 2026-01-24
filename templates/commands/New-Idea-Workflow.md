@@ -8,6 +8,17 @@ A consultative discovery process that helps users design their project and gener
 
 The output is everything a target agent needs to build version 1.
 
+### Two-Stage Ideation
+
+For vague ideas, use the two-stage workflow:
+
+| Stage | Command | Purpose |
+|-------|---------|---------|
+| 1 | `/discuss` | Explore vague ideas, capture thoughts |
+| 2 | `/new-idea` | Specify and generate project package |
+
+`/new-idea` automatically detects discussions in `outbox/discussions/` and offers to continue from them.
+
 ---
 
 ## The Process
@@ -17,7 +28,17 @@ The output is everything a target agent needs to build version 1.
          │
          ▼
 ┌─────────────────────────────────────┐
+│  CHECK FOR DISCUSSIONS              │
+│                                     │
+│  • Scan outbox/discussions/         │
+│  • List available discussions       │
+│  • Offer to continue or start fresh │
+└─────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
 │  DISCOVERY CONVERSATION             │
+│  (skips topics from discussion)     │
 │                                     │
 │  • Understand the idea              │
 │  • Who is it for?                   │
@@ -254,6 +275,27 @@ If a project needs something not covered by existing knowledge/commands, note it
 ### Output Location
 
 Packages are saved to `outbox/[project-slug]/` within Squared Agent. The folder opens automatically in Finder when generation completes.
+
+### Discussion Integration
+
+`/new-idea` checks `outbox/discussions/` for previous `/discuss` sessions:
+
+```bash
+ls outbox/discussions/*.md 2>/dev/null | head -10
+```
+
+If discussions exist, the user can:
+1. **Continue from a discussion** - Pre-fills decisions, skips covered topics
+2. **Start fresh** - Ignore discussions, begin new discovery
+
+When continuing from a discussion:
+- **Key Decisions Made** → Pre-filled, skip those questions
+- **Explored Topics (yes)** → Quickly confirm or skip
+- **Explored Topics (partially)** → Ask follow-up questions
+- **Explored Topics (no)** → Explore fully
+- **Open Questions** → Address during discovery
+
+This creates a seamless handoff from exploratory ideation to project specification.
 
 ### Post-Setup Cleanup
 

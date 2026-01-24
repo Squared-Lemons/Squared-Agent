@@ -100,7 +100,10 @@ Draft a commit message, get approval, then commit changes.
 Generate an accomplishments summary for a time period. Analyzes git commits and session logs, categorizes by type (features, fixes, refactors, etc.), and produces a copy-paste ready report.
 
 ### `/new-idea`
-Consultative discovery conversation to design a new project. Discuss requirements, platform, and technical decisions together, then generate a comprehensive package to `outbox/[project-slug]/` including README.md (project specification), PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, SETUP.md, and workflow commands. The folder opens automatically in Finder when complete.
+Consultative discovery conversation to design a new project. Discuss requirements, platform, and technical decisions together, then generate a comprehensive package to `outbox/[project-slug]/` including README.md (project specification), PROJECT-BRIEF.md, TECHNICAL-DECISIONS.md, SETUP.md, and workflow commands. The folder opens automatically in Finder when complete. Detects previous `/discuss` sessions and offers to continue from them.
+
+### `/discuss`
+Exploratory conversation to work through a vague idea. Covers the core concept, who it's for, scale, and platform direction without committing to build anything. Saves discussion document to `outbox/discussions/` for later pickup by `/new-idea`. Use when you have a vague idea; use `/new-idea` when ready to specify and generate a project package.
 
 ### `/how-to-use`
 Display the human-editable guide for using this agent. Content lives at `docs/how-to-use.md` so users can add their own tips and notes.
@@ -144,6 +147,7 @@ Content that gets copied to new projects:
 - **VibeKanban-Command.md** - AI agent task management with isolated worktrees
 - **New Feature Workflow.md** - Feature development with Feature-Dev and Ralph Loop
 - **New-Idea-Workflow.md** - Consultative discovery process for new projects
+- **Discuss-Command.md** - Exploratory conversation for vague ideas
 
 #### Workflows (`templates/workflows/`)
 - **Session-Git-Workflow.md** - The core git workflow this agent uses and passes to spawned projects
@@ -390,6 +394,7 @@ suggestions/        # My proposals (categorized)
   workflow/         # Proposed workflow changes
   other/            # Miscellaneous improvements
 outbox/             # Generated project packages (from /new-idea)
+  discussions/      # Discussion documents (from /discuss)
 docs/               # Internal documentation
   style-guide.md    # Writing voice, terminology, formatting rules
   doc-patterns/     # Templates for README, command, knowledge docs
@@ -405,6 +410,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-24:** Added two-stage ideation workflow - `/discuss` command for exploratory conversations about vague ideas; saves discussion documents to `outbox/discussions/`; enhanced `/new-idea` to detect previous discussions and continue from them (pre-fills decisions, skips covered topics); created Discuss-Command.md template; updated README with new command
 - **2026-01-24:** Added dev-server package for dynamic port allocation - `packages/dev-server/` scans for available ports at runtime, injects `PORT_*` and `*_URL` env vars via Turborepo's `globalPassThroughEnv`; enables multiple worktrees to run `pnpm dev` simultaneously without port conflicts; updated `turbo.json` with passthrough config; improved dashboard dev script with port verification and restart handling; created design doc at `docs/plans/2026-01-24-dev-server-dynamic-ports-design.md`
 - **2026-01-24:** Lean into community skills for spawned projects - added Turborepo skill to `skill-mapping.json` with monorepo category; slimmed `Turborepo-Monorepo-Setup.md` from 256→146 lines (quick-start format); fixed factual issues (turbo run, per-package .env instead of root symlinks); updated `/prepare-setup` and `/new-idea` to recommend turborepo skill for monorepo projects; added Step 4 (Install Recommended Skills) to developer profile SETUP-INSTRUCTIONS.md; aligned all documentation (README, CLAUDE.md, templates/README, knowledge/README, skills/README) with new skill structure; added "Release reporting pain" to README problem statement
 - **2026-01-23:** Added work summary dashboard - `apps/web/dashboard/` with Vite + React + Tremor for viewing session costs and work summaries across multiple projects; reads `.project/token-usage.md` and `.project/sessions/` files; local Hono API server for file parsing; added monorepo structure with pnpm + Turborepo + Changesets; created `packages/core`, `packages/cli`, `packages/create-project`; updated pnpm-workspace.yaml to support nested apps

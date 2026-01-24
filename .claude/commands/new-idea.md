@@ -46,6 +46,72 @@ Then follow up based on their response. Good follow-up questions:
 
 ---
 
+## Step 1.5: Check for Previous Discussions
+
+Before starting fresh, check if any previous `/discuss` sessions exist:
+
+```bash
+ls outbox/discussions/*.md 2>/dev/null | head -10
+```
+
+### If discussions exist
+
+List them with a brief summary and status:
+
+```
+Found previous discussions:
+
+1. simple-habit-tracker-2026-01-24.md
+   Status: Ready for /new-idea
+   Summary: Simple habit tracker focused on streaks, mobile-first
+
+2. team-dashboard-2026-01-20.md
+   Status: Open
+   Summary: Internal dashboard for engineering metrics
+
+Continue from a discussion, or start fresh?
+```
+
+### If user selects a discussion
+
+1. Read the discussion document
+2. Parse the structure:
+   - **Key Decisions Made** → These become pre-filled choices, skip asking
+   - **Explored Topics (yes)** → Skip or quickly confirm ("You mentioned X, still good?")
+   - **Explored Topics (partially)** → Ask follow-up questions to complete
+   - **Explored Topics (no)** → Explore these fully in Step 2
+   - **Open Questions** → Address these during discovery
+
+3. Display what's decided vs what needs work:
+
+```
+Continuing from: simple-habit-tracker-2026-01-24.md
+
+Already decided:
+✓ Platform: Mobile-first (React Native)
+✓ Focus: Simplicity over features
+✓ No social features in v1
+
+Still need to discuss:
+• Authentication approach
+• Data storage
+• Specific features for v1
+
+Open questions to address:
+• What makes a habit "complete"?
+• Daily only, or flexible schedules?
+
+Let's pick up where you left off...
+```
+
+4. Continue to Step 2, but skip topics already covered
+
+### If no discussions or user wants fresh start
+
+Proceed to Step 2 normally.
+
+---
+
 ## Step 2: Discovery Conversation
 
 ### Structure the Exploration
