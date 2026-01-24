@@ -232,24 +232,38 @@ flowchart LR
 
 ---
 
-## Session Git Workflow
+## Code Session Workflow
 
-**This agent uses the [Session Git Workflow](templates/workflows/Session-Git-Workflow.md)** — and so does every project it spawns.
+Every coding session follows the same flow — and every spawned project inherits it.
 
-| Command | When to Use |
-|---------|-------------|
-| `/start-session` | Beginning of work — checks branch safety, loads context |
-| `/new-feature "desc"` | Starting new work — creates feature branch or worktree |
-| `/commit` | During work — quick commit with approval |
-| `/complete-feature` | Feature is done — merge to main or create PR |
-| `/clean-branches` | Periodic maintenance — remove merged or stale branches |
-| `/end-session` | Done for now — update docs, capture learnings, commit |
+```mermaid
+flowchart TD
+    A["Open coding agent"] --> B["/start-session"]
+    B --> C{On feature branch?}
+    C -->|Yes| D["Continue working on feature"]
+    C -->|No| E["/new-feature 'description'"]
+    E --> D
+    D --> F{Feature complete?}
+    F -->|Yes| G["/complete-feature"]
+    F -->|No| D
+    G --> H{Done for the day?}
+    H -->|Yes| I["/end-session"]
+    H -->|No| B
+```
 
 Protected branches (`main`, `master`, `develop`, `release/*`) block direct changes and guide you to create a feature branch first.
 
-**Token tracking** is built in — `/end-session` captures usage, `/summary` calculates costs. Track spending against subscription limits and know when to upgrade or optimize.
+### Extra Commands
 
-**[Full Session Git Workflow →](templates/workflows/Session-Git-Workflow.md)**
+| Command | Purpose |
+|---------|---------|
+| `/commit` | Quick commit with approval during work |
+| `/clean-branches` | Remove merged or stale branches |
+| `/summary` | Generate accomplishments report |
+
+**Token tracking** is built in — `/end-session` captures usage, `/summary` calculates costs.
+
+**[Full Workflow Details →](templates/workflows/Session-Git-Workflow.md)**
 
 ---
 
