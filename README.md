@@ -1,3 +1,5 @@
+> **⚠️ Highly Experimental** — Building in the open. Expect breaking changes.
+
 # Squared Agent: The Whole Story
 
 *A project where the deliverable isn't code—it's intelligence.*
