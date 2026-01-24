@@ -115,11 +115,19 @@ Analyze an existing codebase and generate documentation.
 
 ## Adding New Content
 
+### Adding Knowledge
+
+1. Create `templates/knowledge/<category>/<technology>/<Technology>-Guide.md`
+2. Include: Overview, Project Structure, Key Patterns, Common Gotchas, Resources
+3. The knowledge will appear in `/prepare-setup` and `/new-idea` selection
+
 ### Adding a Skill
 
-1. Create `templates/knowledge/<Technology>-App-Build-Guide.md`
-2. Include: Overview, Project Structure, Key Patterns, Common Gotchas, Resources
-3. The skill will appear in `/new-idea` platform selection
+Skills are installed via `npx add-skill` and mapped in `templates/skills/skill-mapping.json`.
+
+1. Run `/add-skill [source]` to install the skill
+2. The skill gets catalogued in `skill-mapping.json` by category
+3. Spawned projects are recommended skills based on their knowledge categories
 
 ### Adding a Command Guide
 

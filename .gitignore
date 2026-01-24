@@ -12,9 +12,9 @@
 *.swp
 *.swo
 
-# Agent skill symlinks (machine-specific)
+# Agent skills (installed per-machine via npx add-skill)
 .agents/
-.claude/skills/agent-browser
+.claude/skills/
 
 # Environment
 .env

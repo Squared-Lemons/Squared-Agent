@@ -151,6 +151,10 @@ Recommend skills based on the chosen stack:
 - **web-artifacts-builder** - Build interactive web components
 - **theme-factory** - Generate consistent design themes
 
+**For monorepo projects (Turborepo, pnpm workspaces):**
+- **turborepo** - Comprehensive patterns, caching, CI/CD, and anti-patterns (900+ lines)
+- Install: `npx skills add https://github.com/vercel/turborepo --skill turborepo`
+
 **For all projects:**
 - **mcp-builder** - Create MCP servers for tool integration
 - **docx/pptx/xlsx/pdf** - Document creation and editing

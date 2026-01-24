@@ -116,7 +116,45 @@ For each documentation file:
 
 ---
 
-## Step 4: Create Custom Agents (Optional)
+## Step 4: Install Recommended Skills (Optional)
+
+[Agent Skills](https://agentskills.io/home) are portable capabilities that work across Claude Code, Cursor, VS Code, and more.
+
+Install skills based on your project's technology stack:
+
+### For Web Projects (React, Next.js)
+
+```bash
+# React/Next.js performance optimization (45 rules from Vercel)
+npx add-skill vercel-labs/agent-skills
+
+# Production-grade UI design
+npx add-skill anthropics/skills -s frontend-design
+
+# Web application testing
+npx add-skill anthropics/skills -s webapp-testing
+```
+
+### For Monorepo Projects (Turborepo)
+
+```bash
+# Comprehensive Turborepo patterns, caching, CI/CD, anti-patterns
+npx skills add https://github.com/vercel/turborepo --skill turborepo
+```
+
+### For All Projects
+
+```bash
+# Document handling (if needed)
+npx add-skill anthropics/skills -s docx
+npx add-skill anthropics/skills -s pdf
+```
+
+Skills auto-activate when relevant - no manual invocation needed.
+
+---
+
+## Step 5: Create Custom Agents (Optional)
 
 Custom agents automate common workflows. Create `.claude/agents/` folder with agent definitions:
 
@@ -158,7 +196,7 @@ Agents are invoked via the Task tool and provide specialized workflows that can 
 
 ---
 
-## Step 5: Create Supporting Files
+## Step 6: Create Supporting Files
 
 ### Directory Structure
 ```bash
@@ -220,7 +258,7 @@ Create `LEARNINGS.md` in project root for capturing session insights.
 
 ---
 
-## Step 6: Organize Documentation
+## Step 7: Organize Documentation
 
 Move setup files into `docs/` folder to keep the project root clean. Only `CLAUDE.md` and `README.md` should remain at root.
 
@@ -259,7 +297,7 @@ rmdir knowledge 2>/dev/null || true
 
 ---
 
-## Step 7: Commit
+## Step 8: Commit
 
 ```bash
 git add .
@@ -293,7 +331,7 @@ Token tracking is automatic — `/end-session` captures usage data, `/summary` c
 
 ---
 
-## Step 8: Project Exploration (Optional)
+## Step 9: Project Exploration (Optional)
 
 **Ask the user:** "Would you like me to explore the codebase and document its structure?"
 

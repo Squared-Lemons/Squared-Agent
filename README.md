@@ -26,6 +26,7 @@ Every new project starts with the same friction:
 | **Lost learnings** | Discover a great tool shortcut, forget it by next project |
 | **No workflow** | Every session starts cold — no context, no plan |
 | **No cost visibility** | Token usage scattered across sessions → no idea what you're spending |
+| **Release reporting pain** | Scrambling to remember what you built when writing changelogs or status updates |
 
 Squared Agent solves all of these.
 
@@ -262,6 +263,7 @@ Spawned projects are told which skills to install based on their technology stac
 |-------|---------|----------|
 | **frontend-design** | Production-grade UI without generic AI aesthetics | web |
 | **webapp-testing** | End-to-end web application testing | web |
+| **turborepo** | Comprehensive patterns, caching, CI/CD, and anti-patterns | monorepo |
 | **mcp-builder** | Create MCP servers for tool integration | patterns |
 | **docx** | Word document creation and editing | patterns |
 | **pptx** | PowerPoint presentation creation | patterns |

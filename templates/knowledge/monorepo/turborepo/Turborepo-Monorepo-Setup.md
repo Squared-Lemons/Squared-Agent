@@ -1,6 +1,10 @@
-# Turborepo Monorepo Setup
+# Turborepo Quick Start
 
-A guide for setting up a Turborepo monorepo with pnpm workspaces.
+Get a pnpm + Turborepo monorepo running in 5 minutes.
+
+> **For depth**: The **Turborepo skill** auto-activates when you work on monorepo tasks. It covers anti-patterns (15+ common mistakes), caching strategies, CI/CD optimization, and environment variable handling.
+>
+> Install: `npx skills add https://github.com/vercel/turborepo --skill turborepo`
 
 ---
 
@@ -33,15 +37,11 @@ project/
   "name": "my-app",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "type-check": "turbo type-check",
-    "db:generate": "turbo db:generate",
-    "db:migrate": "turbo db:migrate",
-    "db:push": "turbo db:push",
-    "db:studio": "pnpm --filter @app/database db:studio",
-    "clean": "turbo clean && rm -rf node_modules"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
     "turbo": "^2.3.3",
@@ -80,16 +80,27 @@ packages:
     "lint": {},
     "type-check": {
       "dependsOn": ["^build"]
-    },
-    "db:generate": {
-      "cache": false
-    },
-    "db:migrate": {
-      "cache": false
-    },
-    "db:push": {
-      "cache": false
     }
+  }
+}
+```
+
+---
+
+## Package Naming Convention
+
+Use a consistent namespace for internal packages:
+
+```json
+// packages/database/package.json
+{ "name": "@app/database" }
+
+// apps/web/package.json - referencing internal packages
+{
+  "dependencies": {
+    "@app/database": "workspace:*",
+    "@app/auth": "workspace:*",
+    "@app/ui": "workspace:*"
   }
 }
 ```
@@ -98,40 +109,14 @@ packages:
 
 ## Environment Variables
 
-Keep a single `.env` file at the root and symlink to each app:
-
-### Structure
+**Recommended**: Keep `.env` files per-package, not at root.
 
 ```
-project/
-├── .env                       # Single source of truth
-├── .env.example               # Template for setup
-├── apps/
-│   ├── web/.env → ../../.env     # Symlink
-│   └── admin/.env → ../../.env   # Symlink
+apps/web/.env.local          # Web app env vars
+packages/database/.env       # Database connection
 ```
 
-### Setup Script
-
-Add to root `package.json`:
-
-```json
-{
-  "scripts": {
-    "env:link": "for app in apps/*/; do ln -sf ../../.env \"$app.env\"; done"
-  }
-}
-```
-
-Run once after cloning:
-
-```bash
-pnpm env:link
-```
-
-### turbo.json Configuration
-
-Declare which env vars Turborepo should watch for cache invalidation:
+Declare which env vars Turborepo should watch for cache invalidation in `turbo.json`:
 
 ```json
 {
@@ -144,102 +129,7 @@ Declare which env vars Turborepo should watch for cache invalidation:
 }
 ```
 
-- **globalEnv** - Variables that affect all tasks (invalidates entire cache when changed)
-- **env** - Task-specific variables (only invalidates that task's cache)
-
-### .gitignore
-
-```gitignore
-# Environment files
-.env
-.env.local
-.env.*.local
-apps/*/.env
-```
-
-### Why Symlinks?
-
-| Approach | Pros | Cons |
-|----------|------|------|
-| **Symlinks** (recommended) | Single source, no sync issues | Requires setup step |
-| Duplicate .env per app | No setup needed | Easy to get out of sync |
-| dotenv-cli with --env-file | Explicit paths | Verbose commands |
-
----
-
-## Package Naming Convention
-
-Use a consistent namespace for internal packages:
-
-```json
-// packages/database/package.json
-{
-  "name": "@app/database"
-}
-
-// packages/auth/package.json
-{
-  "name": "@app/auth"
-}
-
-// packages/ui/package.json
-{
-  "name": "@app/ui"
-}
-```
-
-Reference in apps:
-
-```json
-// apps/web/package.json
-{
-  "dependencies": {
-    "@app/database": "workspace:*",
-    "@app/auth": "workspace:*",
-    "@app/ui": "workspace:*"
-  }
-}
-```
-
----
-
-## UI Package with shadcn
-
-```json
-{
-  "name": "@app/ui",
-  "version": "0.0.1",
-  "exports": {
-    ".": "./src/index.ts",
-    "./globals.css": "./src/globals.css"
-  },
-  "dependencies": {
-    "@radix-ui/react-avatar": "^1.1.2",
-    "@radix-ui/react-dialog": "^1.1.4",
-    "@radix-ui/react-dropdown-menu": "^2.1.4",
-    "@radix-ui/react-label": "^2.1.1",
-    "@radix-ui/react-select": "^2.1.4",
-    "@radix-ui/react-slot": "^1.1.1",
-    "@radix-ui/react-tabs": "^1.1.2",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.469.0",
-    "tailwind-merge": "^2.6.0"
-  }
-}
-```
-
-### Re-export Pattern
-
-```typescript
-// packages/ui/src/index.ts
-export { cn } from "./lib/utils";
-export { Button, buttonVariants } from "./components/button";
-export { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/card";
-export { Input } from "./components/input";
-export { Label } from "./components/label";
-// ... etc
-```
+> **Why per-package?** Root `.env` with symlinks is a common anti-pattern. It creates sync issues and makes it unclear which package needs which variables. The Turborepo skill covers this in depth.
 
 ---
 
@@ -248,8 +138,8 @@ export { Label } from "./components/label";
 | Issue | Cause | Solution |
 |-------|-------|----------|
 | Package not found | Missing workspace dep | Add `@app/package: workspace:*` to package.json |
-| Types not resolving | Missing build step | Run `turbo build` or add tsup to package |
-| Dev server slow | Cache issues | Run `turbo clean` |
+| Types not resolving | Missing build step | Run `turbo run build` or add tsup to package |
+| Dev server slow | Cache issues | Run `turbo run clean` |
 
 ---
 

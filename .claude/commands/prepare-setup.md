@@ -160,6 +160,7 @@ cat templates/skills/skill-mapping.json 2>/dev/null
 
 **Recommended skills by category:**
 - **web**: frontend-design, webapp-testing, web-artifacts-builder, theme-factory
+- **monorepo**: turborepo (comprehensive patterns, caching, CI/CD, anti-patterns)
 - **patterns**: mcp-builder, docx, pptx, xlsx, pdf, skill-creator
 
 ---
@@ -324,8 +325,15 @@ These are not setup instructions - they are knowledge docs for the agent to cons
 Install the recommended skills:
 
 ```bash
-[For each skill, add:]
+[For each skill, add the appropriate install command:]
+# For anthropic skills:
 npx add-skill anthropics/skills -s [skill-name]
+
+# For monorepo (if Turborepo knowledge selected):
+npx skills add https://github.com/vercel/turborepo --skill turborepo
+
+# For React/Next.js performance:
+npx add-skill vercel-labs/agent-skills
 ```
 
 Skills provide specialized capabilities and are automatically loaded once installed.

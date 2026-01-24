@@ -21,6 +21,12 @@
       "source": "vercel-labs/agent-skills",
       "description": "Review UI code for Web Interface Guidelines compliance (accessibility, UX, design)",
       "categories": ["web", "patterns"]
+    },
+    "turborepo": {
+      "source": "vercel/turborepo",
+      "description": "Comprehensive Turborepo monorepo patterns, caching, CI/CD, and anti-patterns (900+ lines)",
+      "categories": ["monorepo"],
+      "installCommand": "npx skills add https://github.com/vercel/turborepo --skill turborepo"
     }
   },
   "recommended": {
@@ -98,6 +104,13 @@
         "name": "skill-creator",
         "description": "Create new agent skills",
         "install": "npx add-skill anthropics/skills -s skill-creator"
+      }
+    ],
+    "monorepo": [
+      {
+        "name": "turborepo",
+        "description": "Comprehensive Turborepo patterns, caching, CI/CD, and anti-patterns",
+        "install": "npx skills add https://github.com/vercel/turborepo --skill turborepo"
       }
     ]
   },

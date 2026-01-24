@@ -47,6 +47,12 @@ MASTER AGENT                          SPAWNED PROJECT
 | **xlsx** | Excel spreadsheet manipulation | `npx add-skill anthropics/skills -s xlsx` |
 | **pdf** | PDF document handling | `npx add-skill anthropics/skills -s pdf` |
 
+### Monorepo
+
+| Skill | Purpose | Install |
+|-------|---------|---------|
+| **turborepo** | Comprehensive patterns, caching, CI/CD, and anti-patterns | `npx skills add https://github.com/vercel/turborepo --skill turborepo` |
+
 ### Development Tools
 
 | Skill | Purpose | Install |
@@ -75,7 +81,7 @@ Skills are mapped to knowledge categories for automatic recommendation:
 | `web` | `templates/knowledge/web/` | frontend-design, webapp-testing, web-artifacts-builder, theme-factory |
 | `database` | `templates/knowledge/database/` | — |
 | `auth` | `templates/knowledge/auth/` | — |
-| `monorepo` | `templates/knowledge/monorepo/` | — |
+| `monorepo` | `templates/knowledge/monorepo/` | turborepo |
 | `patterns` | `templates/knowledge/patterns/` | mcp-builder, docx, pptx, xlsx, pdf, skill-creator |
 
 When you select knowledge during `/prepare-setup` or `/new-idea`, skills from matching categories are recommended.
@@ -140,14 +146,21 @@ Tracks which skills to recommend for each category:
       "categories": ["web"],
       "description": "Production-grade UI",
       "source": "anthropics/skills"
+    },
+    "turborepo": {
+      "categories": ["monorepo"],
+      "description": "Comprehensive Turborepo patterns",
+      "source": "vercel/turborepo"
     }
   },
   "recommended": {
     "web": ["frontend-design", "webapp-testing", ...],
+    "monorepo": ["turborepo"],
     "patterns": ["mcp-builder", "docx", ...]
   },
   "categories": {
     "web": { "description": "...", "knowledgePath": "..." },
+    "monorepo": { "description": "...", "knowledgePath": "..." },
     ...
   }
 }

@@ -78,6 +78,7 @@ Knowledge guides are complemented by [Agent Skills](https://agentskills.io/home)
 | Category | Skills |
 |----------|--------|
 | web | frontend-design, webapp-testing, web-artifacts-builder, theme-factory |
+| monorepo | turborepo |
 | patterns | mcp-builder, docx, pptx, xlsx, pdf, skill-creator |
 
 **Install recommended skills:**

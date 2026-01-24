@@ -98,7 +98,7 @@ Framework and platform guides with patterns and gotchas.
 | skill-mapping.json | Maps skills to knowledge categories + recommended skills |
 | [skill-name]/SKILL.md | Individual skill definitions |
 
-Recommended skills (frontend-design, webapp-testing, mcp-builder, docx, pptx, xlsx, pdf) are listed in spawned project SETUP.md based on selected knowledge categories.
+Recommended skills (frontend-design, webapp-testing, turborepo, mcp-builder, docx, pptx, xlsx, pdf) are listed in spawned project SETUP.md based on selected knowledge categories.
 
 **[View all skills →](skills/README.md)**
 
