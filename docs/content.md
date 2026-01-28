@@ -133,7 +133,7 @@ Analyze an existing codebase and generate documentation.
 
 ### Adding a Skill
 
-Skills are installed via `npx add-skill` and mapped in `templates/skills/skill-mapping.json`.
+Skills are installed via `npx skills add` and mapped in `templates/skills/skill-mapping.json`.
 
 1. Run `/add-skill [source]` to install the skill
 2. The skill gets catalogued in `skill-mapping.json` by category

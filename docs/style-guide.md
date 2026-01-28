@@ -13,10 +13,10 @@ This guide ensures consistent voice, tone, and formatting across all Squared Age
 
 ```markdown
 # Good
-Skills are installed during setup via `npx add-skill`.
+Skills are installed during setup via `npx skills add`.
 
 # Avoid
-The process of installing skills involves running the npx add-skill command during the setup phase.
+The process of installing skills involves running the npx skills add command during the setup phase.
 ```
 
 ### Be Concise
@@ -43,7 +43,7 @@ The frontend-design skill is a skill that helps you create production-grade UI c
 # Good
 Install a skill:
 \`\`\`bash
-npx add-skill anthropics/skills -s frontend-design
+npx skills add anthropics/skills -s frontend-design
 \`\`\`
 
 # Avoid
@@ -261,7 +261,7 @@ Step 1 ──→ Step 2 ──→ Step 3
 ### Install Commands
 
 ```bash
-npx add-skill anthropics/skills -s skill-name
+npx skills add anthropics/skills -s skill-name
 ```
 
 ---

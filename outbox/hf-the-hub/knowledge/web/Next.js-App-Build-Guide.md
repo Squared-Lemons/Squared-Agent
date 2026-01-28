@@ -297,7 +297,7 @@ These agent skills provide comprehensive guidance on specific topics:
 | **web-design-guidelines** | Complete UI/UX checklist: accessibility, forms, animations, dark mode, localization |
 | **frontend-design** | Production-grade interface design with high polish |
 
-To install skills: `npx skills add [source] -s [skill-name]`
+To install skills: `npx add-skill [source] -s [skill-name]`
 
 ---
 

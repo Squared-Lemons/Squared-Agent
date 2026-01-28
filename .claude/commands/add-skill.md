@@ -19,14 +19,14 @@ Agent Skills is an open standard (originally developed by Anthropic) for giving 
 **Key points:**
 - Skills install to `.claude/skills/` and are auto-loaded
 - Skills are different from Claude Code plugins — they're portable
-- Spawned projects install skills fresh via `npx add-skill`
+- Spawned projects install skills fresh via `npx skills add`
 
 ---
 
 ## Overview
 
 This command:
-1. Installs skills via `npx add-skill`
+1. Installs skills via `npx skills add`
 2. Detects newly installed skills
 3. Categorizes them by knowledge category
 4. Updates `templates/skills/skill-mapping.json` so spawned projects know what to install
@@ -67,13 +67,13 @@ cat /tmp/skills-before.txt
 
 ## Step 3: Install Skills
 
-The `npx add-skill` CLI requires interactive selection, so ask the user to run it in their terminal.
+The `npx skills add` CLI requires interactive selection, so ask the user to run it in their terminal.
 
 **Tell the user:**
 ```
 Please run this command in your terminal:
 
-npx add-skill [SOURCE]
+npx skills add [SOURCE]
 
 Let me know when it's done.
 ```
@@ -173,7 +173,7 @@ Added to skill-mapping.json:
 How spawned projects use this:
 1. /spawn-project checks skill-mapping.json
 2. Recommends skills matching selected knowledge categories
-3. Spawned agent installs via: npx add-skill anthropics/skills -s [skill-name]
+3. Spawned agent installs via: npx skills add anthropics/skills -s [skill-name]
 
 Skills are portable across Claude Code, Cursor, VS Code, Gemini CLI.
 ```
@@ -270,8 +270,8 @@ These skills are recommended for most projects:
 │  SETUP.md says:                                             │
 │  "Install recommended skills:"                              │
 │                                                             │
-│  npx add-skill anthropics/skills -s frontend-design         │
-│  npx add-skill anthropics/skills -s webapp-testing          │
+│  npx skills add anthropics/skills -s frontend-design         │
+│  npx skills add anthropics/skills -s webapp-testing          │
 │                                                             │
 │       │                                                     │
 │       └──→ Installs fresh to .claude/skills/                │

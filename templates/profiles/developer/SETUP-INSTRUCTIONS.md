@@ -125,13 +125,13 @@ Install skills based on your project's technology stack:
 
 ```bash
 # React/Next.js performance optimization (45 rules from Vercel)
-npx add-skill vercel-labs/agent-skills
+npx skills add vercel-labs/agent-skills
 
 # Production-grade UI design
-npx add-skill anthropics/skills -s frontend-design
+npx skills add anthropics/skills -s frontend-design
 
 # Web application testing
-npx add-skill anthropics/skills -s webapp-testing
+npx skills add anthropics/skills -s webapp-testing
 ```
 
 ### For Monorepo Projects (Turborepo)
@@ -145,8 +145,8 @@ npx skills add https://github.com/vercel/turborepo --skill turborepo
 
 ```bash
 # Document handling (if needed)
-npx add-skill anthropics/skills -s docx
-npx add-skill anthropics/skills -s pdf
+npx skills add anthropics/skills -s docx
+npx skills add anthropics/skills -s pdf
 ```
 
 Skills auto-activate when relevant - no manual invocation needed.

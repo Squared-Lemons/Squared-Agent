@@ -83,7 +83,7 @@ Knowledge guides are complemented by [Agent Skills](https://agentskills.io/home)
 
 **Install recommended skills:**
 ```bash
-npx add-skill anthropics/skills
+npx skills add anthropics/skills
 ```
 
 Skills matching selected knowledge categories are automatically included when running `/spawn-project`.

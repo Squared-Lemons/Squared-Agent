@@ -15,7 +15,7 @@ MASTER AGENT                          SPAWNED PROJECT
     │                                      │
     ├─→ Installs locally                   │
     │                                      ▼
-    └─→ Updates skill-mapping.json    npx add-skill anthropics/skills -s [skill]
+    └─→ Updates skill-mapping.json    npx skills add anthropics/skills -s [skill]
              │                             │
              ▼                             ▼
         Recommends skills ──────────→ Installs fresh
@@ -32,20 +32,20 @@ MASTER AGENT                          SPAWNED PROJECT
 
 | Skill | Purpose | Install |
 |-------|---------|---------|
-| **frontend-design** | Production-grade UI without generic AI aesthetics | `npx add-skill anthropics/skills -s frontend-design` |
-| **webapp-testing** | End-to-end web application testing | `npx add-skill anthropics/skills -s webapp-testing` |
-| **web-artifacts-builder** | Build interactive web components | `npx add-skill anthropics/skills -s web-artifacts-builder` |
-| **theme-factory** | Generate consistent design themes | `npx add-skill anthropics/skills -s theme-factory` |
-| **canvas-design** | Canvas-based designs and graphics | `npx add-skill anthropics/skills -s canvas-design` |
+| **frontend-design** | Production-grade UI without generic AI aesthetics | `npx skills add anthropics/skills -s frontend-design` |
+| **webapp-testing** | End-to-end web application testing | `npx skills add anthropics/skills -s webapp-testing` |
+| **web-artifacts-builder** | Build interactive web components | `npx skills add anthropics/skills -s web-artifacts-builder` |
+| **theme-factory** | Generate consistent design themes | `npx skills add anthropics/skills -s theme-factory` |
+| **canvas-design** | Canvas-based designs and graphics | `npx skills add anthropics/skills -s canvas-design` |
 
 ### Documents & Office
 
 | Skill | Purpose | Install |
 |-------|---------|---------|
-| **docx** | Word document creation and editing | `npx add-skill anthropics/skills -s docx` |
-| **pptx** | PowerPoint presentation creation | `npx add-skill anthropics/skills -s pptx` |
-| **xlsx** | Excel spreadsheet manipulation | `npx add-skill anthropics/skills -s xlsx` |
-| **pdf** | PDF document handling | `npx add-skill anthropics/skills -s pdf` |
+| **docx** | Word document creation and editing | `npx skills add anthropics/skills -s docx` |
+| **pptx** | PowerPoint presentation creation | `npx skills add anthropics/skills -s pptx` |
+| **xlsx** | Excel spreadsheet manipulation | `npx skills add anthropics/skills -s xlsx` |
+| **pdf** | PDF document handling | `npx skills add anthropics/skills -s pdf` |
 
 ### Monorepo
 
@@ -57,18 +57,18 @@ MASTER AGENT                          SPAWNED PROJECT
 
 | Skill | Purpose | Install |
 |-------|---------|---------|
-| **mcp-builder** | Create MCP servers for tool integration | `npx add-skill anthropics/skills -s mcp-builder` |
-| **skill-creator** | Create new skills | `npx add-skill anthropics/skills -s skill-creator` |
+| **mcp-builder** | Create MCP servers for tool integration | `npx skills add anthropics/skills -s mcp-builder` |
+| **skill-creator** | Create new skills | `npx skills add anthropics/skills -s skill-creator` |
 
 ### Creative & Communication
 
 | Skill | Purpose | Install |
 |-------|---------|---------|
-| **algorithmic-art** | Algorithmic and generative art | `npx add-skill anthropics/skills -s algorithmic-art` |
-| **brand-guidelines** | Brand guidelines creation | `npx add-skill anthropics/skills -s brand-guidelines` |
-| **internal-comms** | Internal communications | `npx add-skill anthropics/skills -s internal-comms` |
-| **doc-coauthoring** | Collaborative document editing | `npx add-skill anthropics/skills -s doc-coauthoring` |
-| **slack-gif-creator** | Create GIFs for Slack | `npx add-skill anthropics/skills -s slack-gif-creator` |
+| **algorithmic-art** | Algorithmic and generative art | `npx skills add anthropics/skills -s algorithmic-art` |
+| **brand-guidelines** | Brand guidelines creation | `npx skills add anthropics/skills -s brand-guidelines` |
+| **internal-comms** | Internal communications | `npx skills add anthropics/skills -s internal-comms` |
+| **doc-coauthoring** | Collaborative document editing | `npx skills add anthropics/skills -s doc-coauthoring` |
+| **slack-gif-creator** | Create GIFs for Slack | `npx skills add anthropics/skills -s slack-gif-creator` |
 
 ---
 
@@ -103,20 +103,20 @@ This installs skills locally and updates `skill-mapping.json` so they're recomme
 Follow the SETUP.md instructions:
 
 ```bash
-npx add-skill anthropics/skills -s frontend-design
-npx add-skill anthropics/skills -s webapp-testing
+npx skills add anthropics/skills -s frontend-design
+npx skills add anthropics/skills -s webapp-testing
 ```
 
 ### Install All Skills
 
 ```bash
-npx add-skill anthropics/skills
+npx skills add anthropics/skills
 ```
 
 ### Install Specific Skill
 
 ```bash
-npx add-skill anthropics/skills -s frontend-design
+npx skills add anthropics/skills -s frontend-design
 ```
 
 ---

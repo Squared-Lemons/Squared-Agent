@@ -247,7 +247,7 @@ To specialize before spawning a child:
 
 1. **Add knowledge** — Create files in `knowledge/` or `docs/knowledge/`
 2. **Modify commands** — Edit `.claude/commands/` files
-3. **Install skills** — Use `npx skills add` to add capabilities
+3. **Install skills** — Use `npx add-skill` to add capabilities
 4. **Run `/spawn-project`** — Child inherits all modifications
 
 ---

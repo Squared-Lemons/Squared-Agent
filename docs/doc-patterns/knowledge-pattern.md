@@ -107,7 +107,7 @@ Common issues and how to avoid them:
 |-------|---------|
 | **skill-name** | What it helps with |
 
-Install: `npx add-skill anthropics/skills -s skill-name`
+Install: `npx skills add anthropics/skills -s skill-name`
 ```
 
 ---

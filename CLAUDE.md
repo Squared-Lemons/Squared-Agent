@@ -116,7 +116,7 @@ Sync active commands to template files for spawned projects. Compares `.claude/c
 Synchronize documentation across related files for consistency. Checks docs against style guide patterns (`docs/style-guide.md`), identifies terminology/formatting issues, and propagates changes. Supports `--audit` (report only) and `--scope [area]` (readme, commands, knowledge, skills) modes.
 
 ### `/add-skill`
-Install a skill and catalogue it for spawned projects. Runs `npx add-skill [source]`, categorizes newly installed skills by knowledge category (web, database, auth, monorepo, patterns), copies to `templates/skills/`, and updates skill-mapping.json. Default source is `anthropics/skills`. See [agentskills.io](https://agentskills.io/home) for the open standard.
+Install a skill and catalogue it for spawned projects. Runs `npx skills add [source]`, categorizes newly installed skills by knowledge category (web, database, auth, monorepo, patterns), copies to `templates/skills/`, and updates skill-mapping.json. Default source is `anthropics/skills`. See [agentskills.io](https://agentskills.io/home) for the open standard.
 
 ### `/local-env`
 Manage local development environment with friendly domains and trusted HTTPS. Subcommands: `init` (first-time machine setup with mkcert, certs, proxy), `setup` (configure project domain and port range), `start`/`stop` (proxy control), `status` (show config), `list` (all registered projects). Uses mkcert for trusted certificates and Caddy or Node proxy for reverse proxying. Stores config in `~/.squared-agent/` with per-project settings in `.project/local-env.json`.
@@ -392,6 +392,8 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-28:** Created `canvas-panel-design` skill — horizontal multi-panel UI pattern for admin interfaces; integrates with `frontend-design`, `vercel-react-best-practices`, and `web-design-guidelines` skills for design, performance, and accessibility phases; includes full implementation checklist
+- **2026-01-28:** Updated Skills CLI references — `npx add-skill` → `npx skills add` across 13 files (CLI was renamed); spawned project template (`outbox/hf-the-hub/`) generated with all commands, knowledge, and updated install syntax
 - **2026-01-28:** Replaced playwright and claude-in-chrome with agent-browser skill as default browser automation — runs headless by default; updated CLAUDE.md, list-tools, end-session, plugins docs, developer profile, New Feature Workflow, and VibeKanban templates
 - **2026-01-25:** Rewrote README for clarity - concise overview targeting solo devs/small agencies managing multiple projects; moved detailed documentation to `docs/README-detailed.md`; added mermaid diagrams for `/start-session` and `/end-session` flows; changed from "clone" to "download or fork" for non-contributors; added feedback submission via GitHub Issues
 - **2026-01-24:** Added handover documents for feature branches - `/end-session` offers to create handover in `outbox/handovers/[branch]-YYYY-MM-DD.md` with status, recent changes, files modified, and next steps; `/start-session` on feature branches checks for handover first and displays it, offers to delete or keep; handovers only apply to feature branches (not protected branches)

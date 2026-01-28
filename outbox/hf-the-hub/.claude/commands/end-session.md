@@ -1,40 +1,3 @@
-# End-Session Command - Implementation Guide
-
-A Claude Code command for wrapping up coding sessions by updating documentation, capturing lessons learned, and committing changes with user approval.
-
----
-
-## Overview
-
-The `/end-session` command provides a structured workflow for ending coding sessions. It ensures documentation stays current, insights are captured, and changes are committed cleanly.
-
-### What It Does
-
-| Step | Action |
-|------|--------|
-| 1 | Reviews git diff and commits from the session |
-| 2 | Updates README.md (user-facing documentation) |
-| 3 | Invokes `claude-md-management:revise-claude-md` skill for CLAUDE.md |
-| 4 | Updates workflow docs (agents, knowledge, commands) |
-| 5 | Captures lessons → docs/LEARNINGS.md |
-| 6 | Syncs supporting files for consistency |
-| 7 | Saves session log (local, gitignored archive) |
-| 7b | Extracts token usage for cost tracking |
-| 8 | Creates session note for next session |
-| 9 | Generates/updates SETUP.md (handoff document) |
-| 9.5 | Exports update package (master agent only) |
-| 10 | Generates agent feedback (auto-analyzed from session) |
-| 10.5 | Invokes `superpowers:verification-before-completion` skill |
-| 11 | Shows summary to user |
-| 12 | Commits with approval (user signs off last) |
-
----
-
-## Files to Create
-
-### 1. Main Command: `.claude/commands/end-session.md`
-
-```markdown
 ---
 name: end-session
 description: End coding session - update docs, capture learnings, commit changes
@@ -69,7 +32,7 @@ Wrap up this coding session by updating documentation and capturing lessons lear
 
 First, understand what happened this session:
 
-\```bash
+```bash
 # Recent commits (likely this session)
 git log --oneline -10
 
@@ -78,7 +41,7 @@ git status
 
 # Full diff of recent work
 git diff HEAD~5..HEAD --stat
-\```
+```
 
 Read these to understand the session's scope.
 
@@ -133,15 +96,15 @@ After the skill completes, verify the changes align with the session's work:
 
 Check if templates are out of sync with active commands.
 
-\```bash
+```bash
 ls .project/sync-report.md 2>/dev/null || echo "NO_SYNC_REPORT"
-\```
+```
 
 ### If sync report exists
 
 Read `.project/sync-report.md` and display summary:
 
-\```
+```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚠️  Template Sync Check
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -152,7 +115,7 @@ Changes in your commands won't propagate to spawned projects
 until templates are updated.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-\```
+```
 
 Ask using AskUserQuestion:
 - **Sync now** - Run /sync-templates interactively
@@ -162,9 +125,9 @@ If user chooses to sync, invoke `/sync-templates` and wait for completion.
 
 After handling (sync or skip), delete the report:
 
-\```bash
+```bash
 rm -f .project/sync-report.md
-\```
+```
 
 ### If no sync report
 
@@ -241,7 +204,7 @@ Save the summary to a local (gitignored) session log file organised by date.
 If the file already exists (multiple sessions same day), append to it with a timestamp separator.
 
 ### Format
-\```markdown
+```markdown
 # Session Log: YYYY-MM-DD
 
 ## Session at HH:MM
@@ -256,13 +219,13 @@ If the file already exists (multiple sessions same day), append to it with a tim
 - [Lessons captured]
 
 ---
-\```
+```
 
 ### Create the file
-\```bash
+```bash
 # Ensure directory exists
 mkdir -p .project/sessions
-\```
+```
 
 Then write/append the session summary to `.project/sessions/YYYY-MM-DD.md`.
 
@@ -278,7 +241,7 @@ Extract token usage from the current Claude Code session for cost tracking.
 
 Claude Code stores session data in `~/.claude/projects/<project-path>/<session-id>.jsonl`
 
-\```bash
+```bash
 # Get project path (replace / with -)
 PROJECT_PATH=$(pwd | sed 's|^/||' | sed 's|/|-|g')
 SESSION_DIR=~/.claude/projects/$PROJECT_PATH
@@ -286,13 +249,13 @@ SESSION_DIR=~/.claude/projects/$PROJECT_PATH
 # Get most recent session file (likely current session)
 LATEST_SESSION=$(ls -t "$SESSION_DIR"/*.jsonl 2>/dev/null | head -1)
 echo "Session file: $LATEST_SESSION"
-\```
+```
 
 ### Parse token usage
 
 Extract token metrics from assistant messages:
 
-\```bash
+```bash
 cat "$LATEST_SESSION" | jq -s '
   [.[] | select(.type == "assistant") | .message.usage // empty] |
   {
@@ -303,7 +266,7 @@ cat "$LATEST_SESSION" | jq -s '
     turns: length
   }
 '
-\```
+```
 
 ### Determine billing type
 
@@ -316,7 +279,7 @@ For normal sessions, use `subscription`. When running as a background agent or v
 
 Include this section in the session log (raw tokens only, no cost):
 
-\```markdown
+```markdown
 ### Token Usage
 | Metric | Value |
 |--------|-------|
@@ -326,13 +289,13 @@ Include this section in the session log (raw tokens only, no cost):
 | Cache read | [cache_read_input_tokens] |
 | Cache creation | [cache_creation_input_tokens] |
 | Turns | [turns] |
-\```
+```
 
 ### Update cumulative token stats
 
 Also update `.project/token-usage.md` with raw token data (costs calculated at report time):
 
-\```markdown
+```markdown
 # Token Usage History
 
 Raw token data. Costs are calculated at report time using current pricing.
@@ -351,7 +314,7 @@ Configure your subscription tier limits here for usage tracking:
 |------|------|-------|--------|------------|--------------|-------|
 | YYYY-MM-DD HH:MM | subscription | [n] | [n] | [n] | [n] | [n] |
 | YYYY-MM-DD HH:MM | api | [n] | [n] | [n] | [n] | [n] |
-\```
+```
 
 If the file doesn't exist, create it with the first session's data and prompt user to configure their subscription limits.
 
@@ -365,9 +328,9 @@ Update `.project/tool-intelligence.md` to track tools used and patterns learned.
 
 ### If the file doesn't exist, create it
 
-\```bash
+```bash
 mkdir -p .project
-\```
+```
 
 Then create `.project/tool-intelligence.md` with the template structure (see the file for format).
 
@@ -415,7 +378,7 @@ If it doesn't exist, create it. If it does, update it with current information.
 
 ### Required sections
 
-\```markdown
+```markdown
 # Project Setup
 
 ## Environment Variables
@@ -435,12 +398,12 @@ Copy `.env.example` to `.env` and configure:
 
 ## Installation
 
-\\```bash
+\```bash
 pnpm install
 pnpm db:generate
 pnpm db:migrate
 pnpm dev
-\\```
+\```
 
 ## Feature Status
 
@@ -453,7 +416,7 @@ pnpm dev
 ## Known Issues
 
 - [Any known issues or limitations]
-\```
+```
 
 ### Gather information automatically
 
@@ -502,7 +465,7 @@ Review the session and identify:
 
 Create structured feedback and display it for easy copy-paste:
 
-\```
+```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CREATOR FEEDBACK - Copy to Squared-Agent
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -530,7 +493,7 @@ CREATOR FEEDBACK - Copy to Squared-Agent
 To send this feedback to the master agent:
 1. Save to: outbox/feedback/feedback-YYYY-MM-DD.md
 2. Copy to master agent's inbox/feedback/
-\```
+```
 
 ### Save feedback locally
 
@@ -544,9 +507,9 @@ Also save to `docs/agent-feedback.md` for local reference.
 
 Check if this is the master agent (Squared-Agent) by looking for the templates folder:
 
-\```bash
+```bash
 ls templates/commands/*.md 2>/dev/null | head -1 || echo "NO_TEMPLATES"
-\```
+```
 
 ### If not the master agent
 
@@ -556,10 +519,10 @@ Skip this step.
 
 After syncing templates, check if commands or knowledge changed this session:
 
-\```bash
+```bash
 # Check for changes in commands and knowledge
 git diff --name-only HEAD~5..HEAD | grep -E "^(\.claude/commands/|templates/knowledge/)" | head -5 || echo "NO_COMMAND_CHANGES"
-\```
+```
 
 ### If significant changes were made to commands or knowledge
 
@@ -577,7 +540,7 @@ Generate an update package file:
 
 ### Update Package Format
 
-\```markdown
+```markdown
 # Squared Agent Update - YYYY-MM-DD
 
 ## What's New
@@ -598,7 +561,7 @@ Generate an update package file:
 
 1. Copy new commands to `.claude/commands/`
 2. Copy knowledge to `docs/knowledge/`
-3. Install skills: `npx skills add anthropics/skills -s [name]`
+3. Install skills: `npx add-skill anthropics/skills -s [name]`
 4. Update CLAUDE.md with new commands
 5. Delete this file when done
 
@@ -619,11 +582,11 @@ Generate an update package file:
 [Full knowledge content here - copy the actual file content]
 
 </details>
-\```
+```
 
 4. **Display the file location**:
 
-\```
+```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📦 Update Package Created
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -636,7 +599,7 @@ To deploy to a spawned project:
 3. The update will be detected and offered for application
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-\```
+```
 
 ---
 
@@ -644,7 +607,7 @@ To deploy to a spawned project:
 
 Show the user what was done and what will be committed:
 
-\```
+```
 ## Session Summary
 
 ### Changes Made
@@ -661,7 +624,7 @@ Show the user what was done and what will be committed:
 
 ### Suggested Follow-ups
 - [Any tasks for next session]
-\```
+```
 
 ---
 
@@ -678,10 +641,10 @@ This skill requires running verification commands and confirming output before m
 This is the final step. The user signs off on the commit message.
 
 ### Check for uncommitted changes
-\```bash
+```bash
 git status
 git diff --stat
-\```
+```
 
 ### If no changes exist
 Inform the user: "All changes already committed. Nothing to do."
@@ -691,14 +654,14 @@ Inform the user: "All changes already committed. Nothing to do."
 1. **Draft a commit message** summarizing the session's work
 2. **Show the message clearly** as a code block BEFORE asking:
 
-\```
+```
 Commit message:
 ───────────────────────────────────────────────────────────────
 
 [full commit message here]
 
 ───────────────────────────────────────────────────────────────
-\```
+```
 
 3. **Ask for approval** using AskUserQuestion:
    - **Commit** - Stage all and commit with this message
@@ -706,37 +669,37 @@ Commit message:
    - **Skip** - Don't commit (user will handle manually)
 
 ### Commit message format
-\```
+```
 Session-end: [brief summary of session work]
 
 [Detailed bullet points of what was done]
 
 Co-Authored-By: Claude <noreply@anthropic.com>
-\```
+```
 
 ### Once approved
 
 1. Stage all changes:
-\```bash
+```bash
 git add -A
-\```
+```
 
 2. Commit:
-\```bash
+```bash
 git commit -m "$(cat <<'EOF'
 [approved commit message]
 
 Co-Authored-By: Claude <noreply@anthropic.com>
 EOF
 )"
-\```
+```
 
 3. Confirm:
-\```
+```
 Committed: [hash] [first line of message]
 
 To push: git push
-\```
+```
 
 **Important:** Do NOT push. The user will push when ready.
 
@@ -756,9 +719,9 @@ Ask the user if they want to leave a note for their next session.
 1. Ask: "What would you like to remember for next session?"
 2. Save their response to `.project/session-note.md`:
 
-\```bash
+```bash
 mkdir -p .project
-\```
+```
 
 Then write the note to `.project/session-note.md` (overwrites any existing note).
 
@@ -774,9 +737,9 @@ If on a feature branch, offer to create a handover document for the next person 
 
 ### Check current branch
 
-\```bash
+```bash
 git branch --show-current
-\```
+```
 
 If on a protected branch (main, master, develop, release/*), skip this step.
 
@@ -791,13 +754,13 @@ Ask: "Brief description of where you're at and what's next?"
 
 ### Create the handover document
 
-\```bash
+```bash
 mkdir -p outbox/handovers
-\```
+```
 
 Save to `outbox/handovers/[branch-name]-YYYY-MM-DD.md`:
 
-\```markdown
+```markdown
 # Handover: [Branch Name]
 
 **Created:** YYYY-MM-DD HH:MM
@@ -822,11 +785,11 @@ Save to `outbox/handovers/[branch-name]-YYYY-MM-DD.md`:
 ## Notes
 
 [Any additional context that would help]
-\```
+```
 
 ### Confirm
 
-\```
+```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 Handover Created
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -836,7 +799,7 @@ Saved to: outbox/handovers/[branch-name]-YYYY-MM-DD.md
 Next session on this branch will show this handover automatically.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-\```
+```
 
 ---
 
@@ -871,225 +834,3 @@ Be thorough but concise. Focus on changes that will help future sessions underst
 ## Starting Now
 
 Begin the session-end process by gathering context about what was done this session.
-```
-
----
-
-### 2. Helper Command: `.claude/commands/commit.md`
-
-A standalone commit command for when you just want to commit without the full session-end workflow. Uses the `commit-commands:commit` skill for the core workflow:
-
-```markdown
----
-description: Draft a commit message, get approval, then commit changes
----
-
-# Commit - Draft and Commit Changes
-
-## Step 1: Pre-flight Secret Check
-
-Check for sensitive files before committing:
-
-\```bash
-git status --porcelain | grep -E "\.env|credentials|secret|\.pem|\.key" || echo "NO_SECRETS"
-\```
-
-If sensitive files detected, warn user and confirm before proceeding.
-
-## Step 2: Invoke Commit Skill
-
-Invoke the `commit-commands:commit` skill to handle the git commit workflow.
-
-The skill will:
-- Gather git status, diff, and recent commits
-- Draft an appropriate commit message
-- Show the message and get user approval
-- Execute the commit with Co-Authored-By line
-
-## Notes
-
-- Never commit files that look like secrets
-- If pre-commit hooks fail, show error and offer to fix
-- Never use --no-verify unless explicitly requested
-```
-
----
-
-### 3. Learnings File: `docs/LEARNINGS.md`
-
-Create this in your project's docs folder:
-
-```markdown
-# Project Name - Learnings
-
-Insights and lessons captured from coding sessions to improve future development.
-
----
-
-## Session Log
-
-### YYYY-MM-DD: Session Title
-
-**What Was Done**
-- [List of changes made]
-
-**What Worked Well**
-- [Patterns that proved effective]
-- [Tools/approaches that saved time]
-
-**What Didn't Work**
-- [Approaches that failed or were abandoned]
-- [Antipatterns discovered]
-
-**Technical Insights**
-- [Library quirks or gotchas]
-- [Performance observations]
-
----
-
-## Patterns That Work
-
-### Documentation Structure
-- `CLAUDE.md` as single source of truth for project state
-- Command files (`.claude/commands/*.md`) are self-documenting
-- Recent Changes section at top of CLAUDE.md for quick context
-
-### Workflow Design
-- [Your effective patterns]
-
-### Testing Strategy
-- [Your testing patterns]
-
----
-
-## Antipatterns to Avoid
-
-### Documentation
-- Don't let CLAUDE.md get stale - update it as you work
-- Don't document features before they're working
-
-### Code Generation
-- [Your antipatterns]
-
----
-
-## Technical Gotchas
-
-- [Library-specific issues]
-- [Platform-specific issues]
-
----
-
-## Ideas for Future Sessions
-
-- [ ] [Future work item 1]
-- [ ] [Future work item 2]
-```
-
----
-
-## Setup Requirements
-
-### 1. Gitignore the session logs
-
-Add to `.gitignore`:
-
-```
-# Session logs (local archive)
-.project/sessions/
-```
-
-### 2. Create required directories
-
-```bash
-mkdir -p .project/sessions
-mkdir -p docs
-```
-
-### 3. Ensure CLAUDE.md exists
-
-Your project should have a `CLAUDE.md` file with at minimum:
-- Implementation Status table
-- Recent Changes section
-- Known Issues section
-
----
-
-## Key Design Patterns
-
-### Commit as Final Step
-
-The user signs off on the commit AFTER all documentation is updated:
-
-1. Do all documentation updates
-2. Save session log locally
-3. Show summary of what will be committed
-4. Ask for approval using AskUserQuestion
-5. Only then run `git add -A && git commit`
-
-This ensures the user reviews everything before the final commit.
-
-### Session Log Archive
-
-Session logs are saved locally but not committed to git:
-- Location: `.project/sessions/YYYY-MM-DD.md`
-- Multiple sessions same day: append with timestamp separator
-- Purpose: local archive for reference without cluttering git history
-
-### Commit Message Format
-
-```
-End-session: [brief summary]
-
-- [bullet point 1]
-- [bullet point 2]
-- [bullet point 3]
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-```
-
-Using HEREDOC ensures proper multi-line formatting:
-
-```bash
-git commit -m "$(cat <<'EOF'
-End-session: Add user authentication
-
-- Implemented JWT token generation
-- Added login/logout endpoints
-- Created user session middleware
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-EOF
-)"
-```
-
----
-
-## Customization Points
-
-When adapting for your project, modify these:
-
-| Element | Default | Your Project |
-|---------|---------|--------------|
-| Session log path | `.project/sessions/` | Your preferred location |
-| Co-author email | `noreply@anthropic.com` | Your preference |
-| Privacy rules | None | Add project-specific rules |
-| Status table format | Basic | Match your CLAUDE.md structure |
-
----
-
-## Usage
-
-```bash
-/end-session
-```
-
-The command will:
-1. Analyze what you did this session
-2. Update documentation as needed
-3. Capture lessons learned
-4. Show you a summary
-5. Ask for commit approval
-6. Commit (but not push)
-
-You push when ready: `git push`

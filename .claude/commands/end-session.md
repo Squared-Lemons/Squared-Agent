@@ -561,7 +561,7 @@ Generate an update package file:
 
 1. Copy new commands to `.claude/commands/`
 2. Copy knowledge to `docs/knowledge/`
-3. Install skills: `npx add-skill anthropics/skills -s [name]`
+3. Install skills: `npx skills add anthropics/skills -s [name]`
 4. Update CLAUDE.md with new commands
 5. Delete this file when done
 

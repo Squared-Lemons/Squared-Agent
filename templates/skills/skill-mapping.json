@@ -39,76 +39,76 @@
       {
         "name": "create-auth",
         "description": "Guide for adding Better Auth to TypeScript/JavaScript apps",
-        "install": "npx add-skill better-auth/skills"
+        "install": "npx skills add better-auth/skills"
       },
       {
         "name": "better-auth-best-practices",
         "description": "Integration guide for Better Auth framework",
-        "install": "npx add-skill better-auth/skills"
+        "install": "npx skills add better-auth/skills"
       }
     ],
     "web": [
       {
         "name": "frontend-design",
         "description": "Production-grade UI without generic AI aesthetics",
-        "install": "npx add-skill anthropics/skills -s frontend-design"
+        "install": "npx skills add anthropics/skills -s frontend-design"
       },
       {
         "name": "webapp-testing",
         "description": "End-to-end web application testing",
-        "install": "npx add-skill anthropics/skills -s webapp-testing"
+        "install": "npx skills add anthropics/skills -s webapp-testing"
       },
       {
         "name": "web-artifacts-builder",
         "description": "Build interactive web components",
-        "install": "npx add-skill anthropics/skills -s web-artifacts-builder"
+        "install": "npx skills add anthropics/skills -s web-artifacts-builder"
       },
       {
         "name": "theme-factory",
         "description": "Generate consistent design themes",
-        "install": "npx add-skill anthropics/skills -s theme-factory"
+        "install": "npx skills add anthropics/skills -s theme-factory"
       },
       {
         "name": "vercel-react-best-practices",
         "description": "React/Next.js performance optimization (45 rules from Vercel)",
-        "install": "npx add-skill vercel-labs/agent-skills"
+        "install": "npx skills add vercel-labs/agent-skills"
       },
       {
         "name": "web-design-guidelines",
         "description": "UI code review for accessibility, UX, design compliance",
-        "install": "npx add-skill vercel-labs/agent-skills"
+        "install": "npx skills add vercel-labs/agent-skills"
       }
     ],
     "patterns": [
       {
         "name": "mcp-builder",
         "description": "Create MCP servers for tool integration",
-        "install": "npx add-skill anthropics/skills -s mcp-builder"
+        "install": "npx skills add anthropics/skills -s mcp-builder"
       },
       {
         "name": "docx",
         "description": "Word document creation and editing",
-        "install": "npx add-skill anthropics/skills -s docx"
+        "install": "npx skills add anthropics/skills -s docx"
       },
       {
         "name": "pptx",
         "description": "PowerPoint presentation creation",
-        "install": "npx add-skill anthropics/skills -s pptx"
+        "install": "npx skills add anthropics/skills -s pptx"
       },
       {
         "name": "xlsx",
         "description": "Excel spreadsheet manipulation",
-        "install": "npx add-skill anthropics/skills -s xlsx"
+        "install": "npx skills add anthropics/skills -s xlsx"
       },
       {
         "name": "pdf",
         "description": "PDF document handling",
-        "install": "npx add-skill anthropics/skills -s pdf"
+        "install": "npx skills add anthropics/skills -s pdf"
       },
       {
         "name": "skill-creator",
         "description": "Create new agent skills",
-        "install": "npx add-skill anthropics/skills -s skill-creator"
+        "install": "npx skills add anthropics/skills -s skill-creator"
       }
     ],
     "monorepo": [
@@ -122,7 +122,7 @@
       {
         "name": "ai-sdk",
         "description": "Build AI-powered features - agents, chatbots, streaming, tool calling",
-        "install": "npx add-skill vercel/ai"
+        "install": "npx skills add vercel/ai"
       }
     ]
   },
