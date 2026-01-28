@@ -12,7 +12,8 @@
 *.swp
 *.swo
 
-# Agent skills (installed per-machine via npx add-skill)
+# Agent skills (installed per-machine via npx skills add)
+skills/
 .agents/
 .claude/skills/
 
