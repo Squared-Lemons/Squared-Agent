@@ -63,8 +63,8 @@ Autonomous implement → test → iterate loop. Feature-dev uses this where appr
 ### code-simplifier
 Refines code for clarity while preserving functionality.
 
-### playwright
-Browser automation and visual testing.
+### agent-browser
+Browser automation and testing (headless by default).
 
 ### context7
 Fetches up-to-date library documentation.
