@@ -195,9 +195,8 @@ Extend agent capabilities through Settings > MCP Servers:
 ```json
 {
   "mcpServers": {
-    "playwright": {
-      "command": "npx",
-      "args": ["@anthropic/mcp-server-playwright"]
+    "agent-browser": {
+      "description": "Browser automation skill (headless by default)"
     }
   }
 }

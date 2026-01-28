@@ -294,37 +294,16 @@ The agent learns which tools work best for which tasks, evolving with each sessi
 **What it tracks**:
 - Toolhive MCP shortcuts (GitHub, Perplexity, FireCrawl, ShadCN, etc.)
 - Plugin usage patterns (/feature-dev, /ralph-loop, /frontend-design)
-- Browser automation tips (claude-in-chrome patterns)
+- Browser automation tips (agent-browser patterns)
 - Core tool efficiency (Task agents vs direct tools)
 
 This enables the agent to select appropriate tools automatically without explicit instruction.
 
 ## Browser Automation
 
-**Default:** Use `claude-in-chrome` (mcp__claude-in-chrome__*) for all browser testing and automation.
+**Default:** Use the `/agent-browser` skill for all browser testing and automation. Runs in **headless mode** by default unless the user specifies otherwise.
 
-**Why chrome over Playwright:**
-- Real browser with user's actual session/cookies
-- Works with authenticated sites without re-login
-- Visual feedback in actual Chrome window
-- Better for testing against real user state
-
-**Key tools:**
-- `tabs_context_mcp` - Get current tabs (call first)
-- `tabs_create_mcp` - Create new tab
-- `read_page` - Get page structure with element refs
-- `computer` - Click, type, screenshot
-- `navigate` - Go to URL
-
-**Pattern:**
-1. Call `tabs_context_mcp` to see existing tabs
-2. Create new tab with `tabs_create_mcp` (don't reuse existing)
-3. Navigate and interact
-
-**Known Issues:**
-- Intermittent "Cannot access chrome-extension:// URL" errors during click/screenshot actions
-- Form inputs and navigation work reliably
-- Workaround: Retry failed actions or use alternative interaction methods (e.g., `form_input` instead of click + type)
+**Usage:** Invoke via the Skill tool (`skill: "agent-browser"`). Specify `--headed` or similar flags only when the user explicitly requests a visible browser.
 
 ## Token Usage Tracking
 
@@ -413,6 +392,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-28:** Replaced playwright and claude-in-chrome with agent-browser skill as default browser automation — runs headless by default; updated CLAUDE.md, list-tools, end-session, plugins docs, developer profile, New Feature Workflow, and VibeKanban templates
 - **2026-01-25:** Rewrote README for clarity - concise overview targeting solo devs/small agencies managing multiple projects; moved detailed documentation to `docs/README-detailed.md`; added mermaid diagrams for `/start-session` and `/end-session` flows; changed from "clone" to "download or fork" for non-contributors; added feedback submission via GitHub Issues
 - **2026-01-24:** Added handover documents for feature branches - `/end-session` offers to create handover in `outbox/handovers/[branch]-YYYY-MM-DD.md` with status, recent changes, files modified, and next steps; `/start-session` on feature branches checks for handover first and displays it, offers to delete or keep; handovers only apply to feature branches (not protected branches)
 - **2026-01-24:** Revised Code Session Workflow logic - protected branches (main, master, develop, release/*) now check inbox for feedback/updates FIRST (you're about to start something new); feature branches skip inbox checks and go straight to work (checking for handover first); updated README diagram, start-session command, and all templates to reflect new flow

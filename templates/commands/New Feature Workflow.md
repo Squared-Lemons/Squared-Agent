@@ -476,7 +476,7 @@ The following Claude Code plugins are recommended:
 | `feature-dev` | code-explorer, code-architect, code-reviewer agents | Explore, Architect, Review |
 | `frontend-design` | Design-focused UI component building | Build (UI features) |
 | `code-simplifier` | Code refinement and cleanup | Simplify |
-| `playwright` | Browser-based E2E testing (if applicable) | Review, Simplify |
+| `agent-browser` | Browser-based E2E testing (headless by default) | Review, Simplify |
 | `context7` | Up-to-date library documentation lookup | Build |
 
 **Enable in `.claude/settings.json`:**
@@ -487,7 +487,6 @@ The following Claude Code plugins are recommended:
     "feature-dev@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
-    "playwright@claude-plugins-official": true,
     "context7@claude-plugins-official": true
   }
 }

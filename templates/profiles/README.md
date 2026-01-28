@@ -22,7 +22,7 @@ The standard developer workflow. Start here unless you have specific needs.
 
 | Feature | What It Configures |
 |---------|-------------------|
-| **Plugins** | feature-dev, ralph-loop, code-simplifier, playwright, context7 |
+| **Plugins** | feature-dev, ralph-loop, code-simplifier, agent-browser, context7 |
 | **Permissions** | Pre-allow build, test, lint, format, typecheck |
 | **Hooks** | Auto-format after Write/Edit operations |
 | **Agents** | Optional build-validator, code-reviewer, verify-app |

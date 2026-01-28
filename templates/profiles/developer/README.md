@@ -10,7 +10,7 @@ The standard developer workflow for Claude Code projects. This profile sets up e
 
 | Component | What It Configures |
 |-----------|-------------------|
-| **Plugins** | feature-dev, ralph-loop, code-simplifier, playwright, context7 |
+| **Plugins** | feature-dev, ralph-loop, code-simplifier, agent-browser, context7 |
 | **Permissions** | Pre-allow build, test, lint, format, typecheck commands |
 | **Hooks** | Auto-format after Write/Edit operations |
 | **Commands** | /start-session, /new-feature, /complete-feature, /end-session, /commit |

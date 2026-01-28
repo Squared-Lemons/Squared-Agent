@@ -40,7 +40,7 @@ Display available commands and template content.
   context7           → Fetch up-to-date library documentation
   feature-dev        → Guided feature development workflow
   frontend-design    → Design-focused UI building
-  playwright         → Browser automation (headless)
+  agent-browser      → Browser automation (headless by default)
   ralph-loop         → Continuous iteration loop
 
 ## MCP Servers (via Toolhive)
@@ -52,13 +52,8 @@ Display available commands and template content.
   n8n                → Workflow automation (Hospitality-Finder)
   ShadCN             → UI component lookup
   Context7           → Library documentation
-  Playwright-Server  → Browser automation
+  agent-browser      → Browser automation (skill)
   HF-Data / PodMule  → Database analysis and SQL
-
-## Browser Automation
-
-  claude-in-chrome   → Control Chrome browser directly
-                       (screenshots, clicks, forms, navigation)
 
 ## Template Content (templates/)
 

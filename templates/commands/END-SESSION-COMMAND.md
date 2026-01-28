@@ -383,8 +383,8 @@ Then create `.project/tool-intelligence.md` with the template structure (see the
 **Plugins** - Check if plugin knowledge were invoked:
 - /feature-dev, /frontend-design, /ralph-loop
 
-**Browser Automation** - Check for claude-in-chrome usage:
-- read_page, computer, navigate, form_input, find
+**Browser Automation** - Check for agent-browser skill usage:
+- Headless browser interactions, page navigation, form filling, screenshots
 
 **Core Tool Patterns** - Note any efficient patterns discovered:
 - Task(Explore) instead of direct Glob/Grep

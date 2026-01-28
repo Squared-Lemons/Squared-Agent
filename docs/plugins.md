@@ -10,7 +10,7 @@ The developer profile sets up:
 
 | Feature | What It Does |
 |---------|--------------|
-| **Plugins** | feature-dev, ralph-loop, code-simplifier, playwright, context7, frontend-design |
+| **Plugins** | feature-dev, ralph-loop, code-simplifier, agent-browser, context7, frontend-design |
 | **Permissions** | Pre-allow safe commands (build, test, lint, format, typecheck) |
 | **Hooks** | Auto-format code after Write/Edit operations |
 | **Commands** | /end-session, /commit, /new-feature |
@@ -65,13 +65,13 @@ Up-to-date documentation lookup for libraries.
 
 ---
 
-### playwright
+### agent-browser
 
-Browser automation and testing.
+Browser automation and testing (headless by default).
 
-**What it does:** Controls browsers for testing, screenshots, and automation.
+**What it does:** Automates browser interactions for web testing, form filling, screenshots, and data extraction.
 
-**When to use:** E2E testing, visual verification, scraping.
+**When to use:** E2E testing, visual verification, web interaction, form filling. Runs headless unless user specifies otherwise.
 
 ---
 
