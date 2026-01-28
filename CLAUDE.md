@@ -392,6 +392,7 @@ LEARNINGS.md        # Session insights → feeds suggestions/
 
 ## Recent Changes
 
+- **2026-01-28:** Dashboard Canvas Panel Navigation redesign — replaced sidebar + routed pages with horizontal scrolling panels; simplified to single-project focus (reads from CWD's `.project/`); entity types: sessions-list, session, session-detail, stats, timeline, settings; sidebar navigation replaces view, panel drill-down adds panels; removed React Router dependency; deleted old pages (Overview, Projects, ProjectDetail, Settings, Timeline) and layout components
 - **2026-01-28:** Created `canvas-panel-design` skill — horizontal multi-panel UI pattern for admin interfaces; integrates with `frontend-design`, `vercel-react-best-practices`, and `web-design-guidelines` skills for design, performance, and accessibility phases; includes full implementation checklist
 - **2026-01-28:** Updated Skills CLI references — `npx add-skill` → `npx skills add` across 13 files (CLI was renamed); spawned project template (`outbox/hf-the-hub/`) generated with all commands, knowledge, and updated install syntax
 - **2026-01-28:** Replaced playwright and claude-in-chrome with agent-browser skill as default browser automation — runs headless by default; updated CLAUDE.md, list-tools, end-session, plugins docs, developer profile, New Feature Workflow, and VibeKanban templates

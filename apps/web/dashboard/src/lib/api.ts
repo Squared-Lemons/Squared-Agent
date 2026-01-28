@@ -1,10 +1,3 @@
-export interface Project {
-  id: string;
-  name: string;
-  path: string;
-  addedAt: string;
-}
-
 export interface TokenSession {
   date: string;
   type: "subscription" | "api";
@@ -13,6 +6,7 @@ export interface TokenSession {
   cacheRead: number;
   cacheCreate: number;
   turns: number;
+  cost: number;
 }
 
 export interface SessionEntry {
@@ -23,17 +17,10 @@ export interface SessionEntry {
   commits: string[];
 }
 
-export interface SessionLog {
-  date: string;
-  sessions: SessionEntry[];
-}
-
-export interface ProjectStats {
-  project: Project;
-  tokenSessions: TokenSession[];
-  sessionLogs: SessionLog[];
-  totalCost: number;
-  totalSessions: number;
+export interface SessionsResponse {
+  sessions: TokenSession[];
+  date: string | null;
+  month: string | null;
 }
 
 export interface AggregatedStats {
@@ -45,17 +32,10 @@ export interface AggregatedStats {
     cacheRead: number;
     cacheCreate: number;
   };
-  // Subscription tracking
   subscriptionCost?: number;
   apiCost?: number;
   subscriptionSessions?: number;
   apiSessions?: number;
-  byProject: {
-    projectId: string;
-    projectName: string;
-    sessions: number;
-    cost: number;
-  }[];
   byDay: {
     date: string;
     sessions: number;
@@ -65,32 +45,20 @@ export interface AggregatedStats {
 
 const API_BASE = "/api";
 
-export async function fetchProjects(): Promise<Project[]> {
-  const res = await fetch(`${API_BASE}/projects`);
-  if (!res.ok) throw new Error("Failed to fetch projects");
-  return res.json();
-}
+export async function fetchSessions(options?: {
+  date?: string;
+  month?: string;
+}): Promise<SessionsResponse> {
+  const params = new URLSearchParams();
+  if (options?.date) params.set("date", options.date);
+  if (options?.month) params.set("month", options.month);
 
-export async function addProject(path: string): Promise<Project> {
-  const res = await fetch(`${API_BASE}/projects`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ path }),
-  });
-  if (!res.ok) throw new Error("Failed to add project");
-  return res.json();
-}
+  const url = params.toString()
+    ? `${API_BASE}/sessions?${params}`
+    : `${API_BASE}/sessions`;
 
-export async function removeProject(id: string): Promise<void> {
-  const res = await fetch(`${API_BASE}/projects/${id}`, {
-    method: "DELETE",
-  });
-  if (!res.ok) throw new Error("Failed to remove project");
-}
-
-export async function fetchProjectStats(id: string): Promise<ProjectStats> {
-  const res = await fetch(`${API_BASE}/projects/${id}/stats`);
-  if (!res.ok) throw new Error("Failed to fetch project stats");
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch sessions");
   return res.json();
 }
 

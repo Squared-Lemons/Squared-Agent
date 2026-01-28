@@ -1,30 +1,41 @@
 import { Hono } from "hono";
-import { readFile } from "fs/promises";
 import { join } from "path";
-import { homedir } from "os";
+import { access } from "fs/promises";
 import { parseTokenUsage, calculateCost } from "../parsers/token-usage";
 import { getSessionLogsForDate, getSessionLogsForMonth, SessionLogEntry } from "../parsers/session-logs";
 
-interface Project {
-  id: string;
-  name: string;
-  path: string;
-  addedAt: string;
-}
-
-interface ProjectRegistry {
-  projects: Project[];
-}
-
-const REGISTRY_FILE = join(homedir(), ".squared-agent", "dashboard-projects.json");
-
-async function loadRegistry(): Promise<ProjectRegistry> {
-  try {
-    const content = await readFile(REGISTRY_FILE, "utf-8");
-    return JSON.parse(content);
-  } catch {
-    return { projects: [] };
+// Find the project root by looking for .project folder
+async function findProjectRoot(): Promise<string> {
+  // Check environment variable first
+  if (process.env.PROJECT_PATH) {
+    return process.env.PROJECT_PATH;
   }
+
+  // Walk up from CWD looking for .project folder
+  let current = process.cwd();
+  const root = "/";
+
+  while (current !== root) {
+    try {
+      await access(join(current, ".project"));
+      return current;
+    } catch {
+      current = join(current, "..");
+    }
+  }
+
+  // Fallback to CWD
+  return process.cwd();
+}
+
+let PROJECT_PATH: string | null = null;
+
+async function getProjectPath(): Promise<string> {
+  if (!PROJECT_PATH) {
+    PROJECT_PATH = await findProjectRoot();
+    console.log(`Using project path: ${PROJECT_PATH}`);
+  }
+  return PROJECT_PATH;
 }
 
 export const statsRouter = new Hono();
@@ -38,10 +49,9 @@ statsRouter.get("/sessions", async (c) => {
     return c.json({ error: "date or month parameter required" }, 400);
   }
 
-  const registry = await loadRegistry();
+  const projectPath = await getProjectPath();
+  const allSessions = await parseTokenUsage(projectPath);
   const sessions: {
-    projectId: string;
-    projectName: string;
     date: string;
     type: string;
     input: number;
@@ -52,39 +62,33 @@ statsRouter.get("/sessions", async (c) => {
     cost: number;
   }[] = [];
 
-  for (const project of registry.projects) {
-    const projectSessions = await parseTokenUsage(project.path);
+  for (const session of allSessions) {
+    // session.date is like "2026-01-23 04:00"
+    const sessionDate = session.date.split(" ")[0];
+    const sessionMonth = sessionDate.substring(0, 7); // YYYY-MM
 
-    for (const session of projectSessions) {
-      // session.date is like "2026-01-23 04:00"
-      const sessionDate = session.date.split(" ")[0];
-      const sessionMonth = sessionDate.substring(0, 7); // YYYY-MM
-
-      const matches = date
-        ? sessionDate === date
-        : month
+    const matches = date
+      ? sessionDate === date
+      : month
         ? sessionMonth === month
         : false;
 
-      if (matches) {
-        sessions.push({
-          projectId: project.id,
-          projectName: project.name,
-          date: session.date,
-          type: session.type,
+    if (matches) {
+      sessions.push({
+        date: session.date,
+        type: session.type,
+        input: session.input,
+        output: session.output,
+        cacheRead: session.cacheRead,
+        cacheCreate: session.cacheCreate,
+        turns: session.turns,
+        cost: calculateCost({
           input: session.input,
           output: session.output,
           cacheRead: session.cacheRead,
           cacheCreate: session.cacheCreate,
-          turns: session.turns,
-          cost: calculateCost({
-            input: session.input,
-            output: session.output,
-            cacheRead: session.cacheRead,
-            cacheCreate: session.cacheCreate,
-          }),
-        });
-      }
+        }),
+      });
     }
   }
 
@@ -103,35 +107,24 @@ statsRouter.get("/logs", async (c) => {
     return c.json({ error: "date or month parameter required" }, 400);
   }
 
-  const registry = await loadRegistry();
+  const projectPath = await getProjectPath();
   const logs: {
-    projectId: string;
-    projectName: string;
     date: string;
     entries: SessionLogEntry[];
   }[] = [];
 
-  for (const project of registry.projects) {
-    if (date) {
-      const entries = await getSessionLogsForDate(project.path, date);
-      if (entries.length > 0) {
-        logs.push({
-          projectId: project.id,
-          projectName: project.name,
-          date,
-          entries,
-        });
-      }
-    } else if (month) {
-      const monthLogs = await getSessionLogsForMonth(project.path, month);
-      for (const log of monthLogs) {
-        logs.push({
-          projectId: project.id,
-          projectName: project.name,
-          date: log.date,
-          entries: log.entries,
-        });
-      }
+  if (date) {
+    const entries = await getSessionLogsForDate(projectPath, date);
+    if (entries.length > 0) {
+      logs.push({ date, entries });
+    }
+  } else if (month) {
+    const monthLogs = await getSessionLogsForMonth(projectPath, month);
+    for (const log of monthLogs) {
+      logs.push({
+        date: log.date,
+        entries: log.entries,
+      });
     }
   }
 
@@ -141,9 +134,10 @@ statsRouter.get("/logs", async (c) => {
   return c.json({ date: date || null, month: month || null, logs });
 });
 
-// Get aggregated stats across all projects
+// Get aggregated stats for the project
 statsRouter.get("/", async (c) => {
-  const registry = await loadRegistry();
+  const projectPath = await getProjectPath();
+  const sessions = await parseTokenUsage(projectPath);
 
   const totalTokens = {
     input: 0,
@@ -152,61 +146,42 @@ statsRouter.get("/", async (c) => {
     cacheCreate: 0,
   };
 
-  const byProject: {
-    projectId: string;
-    projectName: string;
-    sessions: number;
-    cost: number;
-  }[] = [];
-
   const byDayMap = new Map<string, { sessions: number; cost: number }>();
 
-  for (const project of registry.projects) {
-    const sessions = await parseTokenUsage(project.path);
+  let subscriptionCost = 0;
+  let apiCost = 0;
+  let subscriptionSessions = 0;
+  let apiSessions = 0;
 
-    let projectCost = 0;
-    const projectTokens = {
-      input: 0,
-      output: 0,
-      cacheRead: 0,
-      cacheCreate: 0,
-    };
+  for (const session of sessions) {
+    totalTokens.input += session.input;
+    totalTokens.output += session.output;
+    totalTokens.cacheRead += session.cacheRead;
+    totalTokens.cacheCreate += session.cacheCreate;
 
-    for (const session of sessions) {
-      projectTokens.input += session.input;
-      projectTokens.output += session.output;
-      projectTokens.cacheRead += session.cacheRead;
-      projectTokens.cacheCreate += session.cacheCreate;
-
-      // Aggregate by day (extract date part only)
-      const dateOnly = session.date.split(" ")[0];
-      const sessionCost = calculateCost({
-        input: session.input,
-        output: session.output,
-        cacheRead: session.cacheRead,
-        cacheCreate: session.cacheCreate,
-      });
-
-      const existing = byDayMap.get(dateOnly) || { sessions: 0, cost: 0 };
-      byDayMap.set(dateOnly, {
-        sessions: existing.sessions + 1,
-        cost: existing.cost + sessionCost,
-      });
-    }
-
-    projectCost = calculateCost(projectTokens);
-
-    totalTokens.input += projectTokens.input;
-    totalTokens.output += projectTokens.output;
-    totalTokens.cacheRead += projectTokens.cacheRead;
-    totalTokens.cacheCreate += projectTokens.cacheCreate;
-
-    byProject.push({
-      projectId: project.id,
-      projectName: project.name,
-      sessions: sessions.length,
-      cost: projectCost,
+    // Aggregate by day (extract date part only)
+    const dateOnly = session.date.split(" ")[0];
+    const sessionCost = calculateCost({
+      input: session.input,
+      output: session.output,
+      cacheRead: session.cacheRead,
+      cacheCreate: session.cacheCreate,
     });
+
+    const existing = byDayMap.get(dateOnly) || { sessions: 0, cost: 0 };
+    byDayMap.set(dateOnly, {
+      sessions: existing.sessions + 1,
+      cost: existing.cost + sessionCost,
+    });
+
+    // Track subscription vs API costs
+    if (session.type === "subscription") {
+      subscriptionCost += sessionCost;
+      subscriptionSessions++;
+    } else {
+      apiCost += sessionCost;
+      apiSessions++;
+    }
   }
 
   // Convert byDay map to sorted array
@@ -219,43 +194,16 @@ statsRouter.get("/", async (c) => {
     .sort((a, b) => a.date.localeCompare(b.date));
 
   const totalCost = calculateCost(totalTokens);
-  const totalSessions = byProject.reduce((sum, p) => sum + p.sessions, 0);
-
-  // Calculate subscription vs API costs
-  let subscriptionCost = 0;
-  let apiCost = 0;
-  let subscriptionSessions = 0;
-  let apiSessions = 0;
-
-  for (const project of registry.projects) {
-    const sessions = await parseTokenUsage(project.path);
-    for (const session of sessions) {
-      const sessionCost = calculateCost({
-        input: session.input,
-        output: session.output,
-        cacheRead: session.cacheRead,
-        cacheCreate: session.cacheCreate,
-      });
-
-      if (session.type === "subscription") {
-        subscriptionCost += sessionCost;
-        subscriptionSessions++;
-      } else {
-        apiCost += sessionCost;
-        apiSessions++;
-      }
-    }
-  }
+  const totalSessions = sessions.length;
 
   return c.json({
     totalSessions,
     totalCost,
     totalTokens,
-    byProject,
     byDay,
     // Subscription breakdown
-    subscriptionCost, // API cost equivalent for subscription sessions
-    apiCost, // Actual API charges
+    subscriptionCost,
+    apiCost,
     subscriptionSessions,
     apiSessions,
   });
