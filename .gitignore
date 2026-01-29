@@ -17,6 +17,9 @@ skills/
 .agents/
 .claude/skills/
 
+# External tools
+.superset/
+
 # Environment
 .env
 .env.local
