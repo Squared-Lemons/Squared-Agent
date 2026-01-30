@@ -237,6 +237,56 @@ The `outbox/gym-management/` folder contains:
 
 ---
 
+## Building the Project
+
+The project package isn't just documentation — it's a complete handoff to another Claude Code session. When I opened the spawned project and ran `/start-session`, the agent detected the SETUP.md and offered to run the guided build:
+
+![Start Session in Spawned Project](images/23-start-session-spawned.png)
+
+The agent found the setup documents and presented options: run the setup, skip it, or archive it if I'd already built manually:
+
+![Setup Documents Detected](images/24-setup-detected.png)
+
+Once I chose "Run Setup", the agent loaded the project context — all the technical decisions, the data model, the architecture — and presented the implementation phases:
+
+![Implementation Phases](images/25-implementation-phases.png)
+
+The build ran through foundation, then polish. Background agents handled parallel work: one creating the Drizzle schema, another setting up Better Auth, another building the Hono API. The final summary showed everything that was built:
+
+![Build Complete](images/26-build-complete.png)
+
+**57 files, 4,800 lines of TypeScript** — a complete monorepo with member portal, admin dashboard, and API, all type-safe and ready to run.
+
+---
+
+## Tracking Usage Across Sessions
+
+Every project that inherits the session workflow gets automatic usage tracking. The `/start-session` and `/end-session` commands bookend your work, and `/end-session` extracts token data from Claude Code's session files.
+
+This data accumulates in `.project/token-usage.md` and `.project/sessions/` — local to each repo, gitignored so it stays personal.
+
+The master agent includes a dashboard app to visualize this data:
+
+![Running the Dashboard](images/27-pnpm-dev.png)
+
+![Usage Summary Dashboard](images/28-usage-dashboard.png)
+
+The dashboard shows:
+- **Sessions list** — Every session by date, with turn count and cost
+- **Token breakdown** — Input, output, cache reads, cache creation
+- **Changes made** — What was accomplished in each session (pulled from session notes)
+- **Key insights** — Patterns the agent learned (like "PlanetScale now offers Postgres")
+
+**Why this matters:**
+- **Cost visibility** — See exactly what each feature cost to build
+- **Pattern discovery** — Which sessions were expensive? What made them expensive?
+- **Subscription tracking** — Are you hitting your daily limits? Is your tier appropriate?
+- **API vs subscription** — Background agents use API billing; track them separately
+
+The gym-management build session shown above: **145 turns, $23.87** in API costs (background agents building in parallel). That's the cost of going from feature list to working monorepo.
+
+---
+
 ## Why This Process Works
 
 ### 1. One Question at a Time
@@ -275,3 +325,9 @@ Compare this to the traditional approach: write a PRD, have meetings to discuss 
 ## Try It Yourself
 
 The `/spawn-project` command is part of the [Squared Agent](https://github.com/squared-lemons/squared-agent) system. Pass it a feature list, a rough idea, or even just a problem statement — and let the discovery conversation shape it into a buildable design.
+
+Spawned projects inherit the session workflow automatically:
+- `/start-session` — Detects setup docs, loads context, checks for handovers
+- `/end-session` — Captures learnings, extracts token usage, offers to commit
+
+Run `pnpm dev` in the master agent to launch the dashboard and see your usage across all projects.
