@@ -4,7 +4,7 @@
 
 Clone your expertise across every project.
 
-Squared Agent is a master agent system that captures your development practices, patterns, and workflows — then deploys copies to new projects. Instead of repeating yourself, your knowledge propagates automatically.
+Squared Agent is a master agent system that captures your development practices, patterns, and workflows — then deploys copies to new projects. Spawned projects can feed learnings back to the master, which propagates improvements to all other spawned agents. Your knowledge flows down, insights bubble up, and every project benefits.
 
 **For:** Solo devs, small agencies, freelancers managing multiple projects.
 
