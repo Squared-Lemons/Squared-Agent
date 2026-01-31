@@ -1,6 +1,10 @@
 # Local data (personal to each user)
 .project/
 
+# Private by default (user can remove these lines to track)
+inbox/
+outbox/
+
 # macOS
 .DS_Store
 

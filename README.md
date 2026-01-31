@@ -35,7 +35,7 @@ Think franchise model: headquarters has the playbook, each location adapts to lo
 
 **Pass-Through Inheritance** — Spawned projects inherit your commands and can spawn their own children with their own additions.
 
-<p align="center">
+<p>
   <img src="docs/images/dashboard-session-details.png" alt="Dashboard showing session details with token usage, changes made, and key insights" width="700">
   <br>
   <em>The dashboard tracks every session: token usage, costs, changes made, and insights learned.</em>
@@ -88,8 +88,9 @@ Then in Claude Code:
 templates/           # Knowledge copied to spawned projects
 packages/            # Publishable npm packages
 apps/web/dashboard/  # Cost tracking UI
-inbox/               # Ideas and feedback
-outbox/              # Generated project packages
+docs/build_walkthrough/  # Example walkthroughs
+inbox/               # Ideas and feedback (gitignored)
+outbox/              # Generated project packages (gitignored)
 ```
 
 ## Learn More
