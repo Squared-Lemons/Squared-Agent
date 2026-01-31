@@ -390,8 +390,26 @@ CLAUDE.md           # My instructions
 LEARNINGS.md        # Session insights → feeds suggestions/
 ```
 
+## Documentation Structure
+
+The `docs/` folder contains reference documentation:
+
+| File | Purpose |
+|------|---------|
+| `README-detailed.md` | Main detailed docs - core concepts, features, configuration |
+| `workflow.md` | Session lifecycle, branch workflow, command reference |
+| `commands.md` | Detailed command documentation |
+| `skills-and-mcp.md` | Agent Skills installation and Toolhive MCP servers |
+| `feedback.md` | Feedback system between spawned projects and master |
+| `plugins.md` | Claude Code plugins configured in spawned projects |
+| `template-sync-workflow.md` | How commands evolve and propagate |
+| `content.md` | Profiles, knowledge guides, command guides, tasks |
+
+**Principle:** Detailed docs should be structured reference documents with clear sections, tables, and links - not narrative essays. Users coming from README.md want to find specific information quickly.
+
 ## Recent Changes
 
+- **2026-01-31:** Documentation restructuring — rewrote `docs/README-detailed.md` as structured reference document (core concepts, features, configuration, links); created `docs/skills-and-mcp.md` for Agent Skills and Toolhive MCP documentation; reorganized README.md Key Features with headings (Session, Feature, Spawning, Usage); added Documentation Structure section to CLAUDE.md
 - **2026-01-31:** Made inbox/ and outbox/ private by default (added to .gitignore); merged gym-management-discovery and gym-management-first-build articles into single comprehensive walkthrough; moved to `docs/build_walkthrough/gym_manager/`; replaced "Claude Code" references with "your code agent" for generalization
 - **2026-01-30:** Spawned gym-management project with Hono + React + Cloudflare Workers architecture — discovery conversation covered launch strategy, payments (Stripe), QR check-ins, class bookings, member portal, auth (Better Auth), role-based permissions, and deployment (Cloudflare Workers + PlanetScale Postgres); learned PlanetScale now offers Postgres with branching
 - **2026-01-28:** Dashboard Canvas Panel Navigation redesign — replaced sidebar + routed pages with horizontal scrolling panels; simplified to single-project focus (reads from CWD's `.project/`); entity types: sessions-list, session, session-detail, stats, timeline, settings; sidebar navigation replaces view, panel drill-down adds panels; removed React Router dependency; deleted old pages (Overview, Projects, ProjectDetail, Settings, Timeline) and layout components

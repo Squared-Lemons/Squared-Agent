@@ -25,15 +25,27 @@ Think franchise model: headquarters has the playbook, each location adapts to lo
 
 ## Key Features
 
-**Session Workflow** — `/start-session` gets you oriented, `/end-session` wraps everything up. No more "where was I?"
+### Session
 
-**Safe Branching** — `/new-feature` creates isolated branches or worktrees. Protected branch detection stops accidental commits to main.
+**Start Session** — `/start-session` loads context, checks for handovers, and gets you oriented.
+
+**End Session** — `/end-session` logs a work summary, captures lessons learned, tracks token usage, and creates a handover for the next session.
+
+### Feature
+
+**New Feature** — `/new-feature` creates isolated branches or worktrees. Protected branch detection stops accidental commits to main.
+
+**Complete Feature** — `/complete-feature` merges or opens a PR when you're done.
+
+### Spawning
 
 **Project Spawning** — `/spawn-project` creates new projects via guided discovery or template selection. Outputs a ready-to-go package with commands, knowledge, and setup instructions.
 
-**Cost Visibility** — Token usage logged per session. Dashboard aggregates spend across all projects.
-
 **Pass-Through Inheritance** — Spawned projects inherit your commands and can spawn their own children with their own additions.
+
+### Usage
+
+**Cost Visibility** — Token usage logged per session. Dashboard aggregates spend across all projects.
 
 <p>
   <img src="docs/images/dashboard-session-details.png" alt="Dashboard showing session details with token usage, changes made, and key insights" width="700">
@@ -95,7 +107,7 @@ outbox/              # Generated project packages (gitignored)
 
 ## Learn More
 
-**[Full Documentation →](docs/README-detailed.md)** — Complete command reference, technical decisions, architecture details, and lessons learned.
+**[Full Documentation →](docs/README-detailed.md)** — Core concepts, feature details, configuration, and links to detailed guides.
 
 ## Feedback
 
