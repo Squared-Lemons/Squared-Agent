@@ -8,6 +8,8 @@ Squared Agent is a master agent system that captures your development practices,
 
 **For:** Solo devs, small agencies, freelancers managing multiple projects.
 
+**[Build Walkthrough: Gym Manager →](docs/build_walkthrough/gym_manager/article.md)** — See how a 15-minute discovery conversation turned a feature list into a complete technical design, then watch the agent build it in 45 minutes. Includes the spawned project: [SQLM-Gym-Manager](https://github.com/Squared-Lemons/SQLM-Gym-Manager).
+
 ## How It Works
 
 ```mermaid
@@ -87,8 +89,6 @@ outbox/              # Generated project packages
 ## Learn More
 
 **[Full Documentation →](docs/README-detailed.md)** — Complete command reference, technical decisions, architecture details, and lessons learned.
-
-**[Build Walkthrough: Gym Manager →](docs/build_walkthrough/gym_manager/article.md)** — See how a 15-minute discovery conversation turned a feature list into a complete technical design, then watch the agent build it in 45 minutes. Includes the spawned project: [SQLM-Gym-Manager](https://github.com/Squared-Lemons/SQLM-Gym-Manager).
 
 ## Feedback
 
