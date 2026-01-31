@@ -35,6 +35,10 @@ Think franchise model: headquarters has the playbook, each location adapts to lo
 
 **Pass-Through Inheritance** — Spawned projects inherit your commands and can spawn their own children with their own additions.
 
+![Dashboard showing session details with token usage, changes made, and key insights](docs/images/dashboard-session-details.png)
+
+*The dashboard tracks every session: token usage, costs, changes made, and insights learned — across all your projects.*
+
 ### Session Flow
 
 ```mermaid
