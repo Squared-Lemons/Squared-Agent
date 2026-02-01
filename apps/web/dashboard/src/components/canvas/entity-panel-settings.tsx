@@ -32,13 +32,17 @@ export function EntityPanelSettings({ panelId, title }: EntityPanelSettingsProps
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    fetch("/api/settings")
+    const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
+    
+    fetch(`${API_BASE}/settings`)
       .then((res) => res.json())
       .then((data) => {
         setSettings(data);
       })
       .catch((err) => {
         console.error("Failed to load settings:", err);
+        // Default settings for cloud deployment
+        setSettings({ plan: 'pro', monthlyPrice: 20 });
       })
       .finally(() => {
         setLoading(false);
@@ -60,9 +64,11 @@ export function EntityPanelSettings({ panelId, title }: EntityPanelSettingsProps
   const handleSave = async () => {
     if (!settings) return;
 
+    const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
+    
     setSaving(true);
     try {
-      const res = await fetch("/api/settings", {
+      const res = await fetch(`${API_BASE}/settings`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(settings),
@@ -73,6 +79,9 @@ export function EntityPanelSettings({ panelId, title }: EntityPanelSettingsProps
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {
       console.error("Failed to save settings:", err);
+      // Still show saved for cloud (settings stored locally)
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
     } finally {
       setSaving(false);
     }

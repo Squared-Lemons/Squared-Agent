@@ -1,8 +1,22 @@
 "use client";
 
-import { useRef, useState, useCallback, type ReactNode, type MouseEvent } from "react";
+import { useRef, useState, useCallback, useEffect, type ReactNode, type MouseEvent } from "react";
 import { useCanvas, type DashboardEntityType } from "./canvas-context";
 import { cn } from "@/lib/utils";
+
+// Hook to detect mobile screen
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  
+  return isMobile;
+}
 
 // Entity type styling configuration
 const entityTypeConfig: Record<DashboardEntityType, { label: string; color: string }> = {
@@ -45,6 +59,7 @@ export function BasePanel({
   const panelRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(initialWidth);
   const [isResizing, setIsResizing] = useState(false);
+  const isMobile = useIsMobile();
 
   const isActive = activePanelId === panelId;
   const panelIndex = getPanelIndex(panelId);
@@ -96,19 +111,30 @@ export function BasePanel({
     [resizable, width, minWidth, maxWidth]
   );
 
+  // On mobile, only show active panel
+  if (isMobile && !isActive) {
+    return null;
+  }
+
   return (
     <div
       ref={panelRef}
       data-panel-id={panelId}
       onClick={handlePanelClick}
       className={cn(
-        "flex flex-col flex-shrink-0 rounded-lg shadow border bg-background",
+        "flex flex-col rounded-lg shadow border bg-background",
         "transition-shadow duration-200",
         isActive && "ring-2 ring-primary ring-offset-2 shadow-lg",
         !isActive && "opacity-90",
+        "flex-shrink-0",
+        // Height constraints for proper scrolling
+        "h-full max-h-full min-h-0",
         className
       )}
-      style={{ width: `${width}px`, minWidth: `${minWidth}px` }}
+      style={{ 
+        width: isMobile ? '100%' : `${width}px`,
+        minWidth: isMobile ? 'auto' : `${minWidth}px`,
+      }}
     >
       {/* Panel Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/30">
@@ -165,10 +191,10 @@ export function BasePanel({
       </div>
 
       {/* Panel Content */}
-      <div className="flex-1 overflow-auto p-4">{children}</div>
+      <div className="flex-1 overflow-auto p-4 min-h-0">{children}</div>
 
-      {/* Resize Handle */}
-      {resizable && (
+      {/* Resize Handle - desktop only */}
+      {resizable && !isMobile && (
         <div
           onMouseDown={handleResizeStart}
           className={cn(

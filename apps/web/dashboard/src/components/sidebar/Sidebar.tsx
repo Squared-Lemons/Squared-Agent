@@ -119,49 +119,80 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="w-16 bg-background border-r flex flex-col items-center py-4 gap-1">
-      {/* Logo/Brand */}
-      <div className="mb-4 p-2">
-        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-          <span className="text-primary-foreground font-bold text-sm">S</span>
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex w-16 bg-background border-r flex-col items-center py-4 gap-1">
+        {/* Logo/Brand */}
+        <div className="mb-4 p-2">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-sm">S</span>
+          </div>
         </div>
-      </div>
 
-      {/* Navigation Items */}
-      <nav className="flex flex-col gap-1 flex-1">
-        {navItems.map((item) => {
-          // Sessions is active when it's the only panel (home view)
-          // Other items are active when they're the main view
-          const isActive = item.entityType === "sessions-list"
-            ? panels.length === 1 && activeView === "sessions-list"
-            : activeView === item.entityType;
+        {/* Navigation Items */}
+        <nav className="flex flex-col gap-1 flex-1">
+          {navItems.map((item) => {
+            // Sessions is active when it's the only panel (home view)
+            // Other items are active when they're the main view
+            const isActive = item.entityType === "sessions-list"
+              ? panels.length === 1 && activeView === "sessions-list"
+              : activeView === item.entityType;
 
-          return (
-            <button
-              key={item.id}
-              onClick={() => handleNavClick(item)}
-              className={cn(
-                "w-12 h-12 rounded-lg flex flex-col items-center justify-center gap-0.5",
-                "transition-colors",
-                isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-              title={item.label}
-            >
-              {item.icon}
-              <span className="text-[10px] font-medium">{item.label}</span>
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item)}
+                className={cn(
+                  "w-12 h-12 rounded-lg flex flex-col items-center justify-center gap-0.5",
+                  "transition-colors",
+                  isActive
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}
+                title={item.label}
+              >
+                {item.icon}
+                <span className="text-[10px] font-medium">{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Bottom section - could add user menu, etc */}
+        <div className="mt-auto">
+          <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+            <span className="text-xs text-muted-foreground">?</span>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t z-50 safe-area-pb">
+        <div className="flex justify-around items-center h-16">
+          {navItems.map((item) => {
+            const isActive = item.entityType === "sessions-list"
+              ? panels.length === 1 && activeView === "sessions-list"
+              : activeView === item.entityType;
+
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item)}
+                className={cn(
+                  "flex-1 h-full flex flex-col items-center justify-center gap-1",
+                  "transition-colors",
+                  isActive
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                )}
+              >
+                {item.icon}
+                <span className="text-[10px] font-medium">{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
       </nav>
-
-      {/* Bottom section - could add user menu, etc */}
-      <div className="mt-auto">
-        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-          <span className="text-xs text-muted-foreground">?</span>
-        </div>
-      </div>
-    </aside>
+    </>
   );
 }

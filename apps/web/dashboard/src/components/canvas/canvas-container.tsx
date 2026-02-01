@@ -71,9 +71,13 @@ export function CanvasContainer({ children, className }: CanvasContainerProps) {
       ref={containerRef}
       tabIndex={0}
       className={cn(
-        "flex h-screen overflow-x-auto overflow-y-hidden",
-        "bg-muted/30 p-4 gap-4",
+        // Desktop: horizontal scroll, fixed height
+        "md:flex md:flex-row md:h-full md:overflow-x-auto md:overflow-y-hidden",
+        // Mobile: vertical stack, single panel visible
+        "flex flex-col h-full overflow-y-auto overflow-x-hidden",
+        "bg-muted/30 p-2 md:p-4 gap-2 md:gap-4",
         "focus:outline-none",
+        "pb-20 md:pb-4", // Space for mobile bottom nav
         className
       )}
     >

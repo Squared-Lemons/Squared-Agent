@@ -5,17 +5,7 @@ import { BasePanel } from "./base-panel";
 import { useCanvas } from "./canvas-context";
 import { Text, Badge } from "@tremor/react";
 import { cn } from "@/lib/utils";
-
-interface Session {
-  date: string;
-  type: "subscription" | "api";
-  input: number;
-  output: number;
-  cacheRead: number;
-  cacheCreate: number;
-  turns: number;
-  cost: number;
-}
+import { fetchSessions, type Session } from "@/lib/api";
 
 interface SessionsByDay {
   date: string;
@@ -36,10 +26,9 @@ export function EntityPanelSessionsList({ panelId }: EntityPanelSessionsListProp
 
   // Fetch sessions
   useEffect(() => {
-    fetch("/api/sessions")
-      .then((res) => res.json())
+    fetchSessions()
       .then((data) => {
-        setSessions(data.sessions || []);
+        setSessions(data);
         setLoading(false);
       })
       .catch((err) => {

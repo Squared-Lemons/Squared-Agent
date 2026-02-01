@@ -15,6 +15,7 @@ interface TokenSession {
   cacheCreate: number;
   turns: number;
   cost: number;
+  summary?: string;
 }
 
 interface SessionLogEntry {
@@ -43,15 +44,30 @@ export function EntityPanelSession({ panelId, date, title }: EntityPanelSessionP
 
   useEffect(() => {
     setLoading(true);
+    const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
 
-    // Fetch both token sessions and logs for this date
-    Promise.all([
-      fetch(`/api/sessions?date=${date}`).then((res) => res.json()),
-      fetch(`/api/stats/logs?date=${date}`).then((res) => res.json()),
-    ])
-      .then(([sessionsData, logsData]) => {
-        setSessions(sessionsData.sessions || []);
-        setLogs(logsData.logs || []);
+    // Fetch sessions for this date
+    fetch(`${API_BASE}/sessions?date=${date}`)
+      .then((res) => res.json())
+      .then((sessionsData) => {
+        // Transform and filter sessions for this date
+        const allSessions = sessionsData.sessions || [];
+        const daySessions = allSessions.filter((s: any) => {
+          const sessionDate = (s.ended_at || s.date || '').split('T')[0];
+          return sessionDate === date;
+        }).map((s: any) => ({
+          date: s.ended_at || s.date,
+          type: 'subscription' as const,
+          input: s.tokens_in || 0,
+          output: s.tokens_out || 0,
+          cacheRead: 0,
+          cacheCreate: 0,
+          turns: s.turns || 0,
+          cost: s.cost_usd || 0,
+          summary: s.summary || '',
+        }));
+        setSessions(daySessions);
+        setLogs([]); // Logs not available in cloud API yet
       })
       .catch((err) => {
         console.error("Failed to load session details:", err);
@@ -80,7 +96,10 @@ export function EntityPanelSession({ panelId, date, title }: EntityPanelSessionP
   // Match sessions to log entries by time
   const mergedEntries = allLogEntries.map((entry) => {
     const matchingSession = sessions.find((s) => {
-      const sessionTime = s.date.split(" ")[1];
+      // Handle both "YYYY-MM-DD HH:MM" and "YYYY-MM-DDTHH:MM:SSZ" formats
+      const sessionTime = s.date.includes('T')
+        ? s.date.split('T')[1]?.substring(0, 2)
+        : s.date.split(" ")[1];
       return sessionTime?.startsWith(entry.time.substring(0, 2));
     });
     return { ...entry, tokenData: matchingSession };
@@ -89,8 +108,11 @@ export function EntityPanelSession({ panelId, date, title }: EntityPanelSessionP
   // Find sessions without log entries
   const coveredTimes = new Set(allLogEntries.map((e) => e.time.substring(0, 2)));
   const orphanSessions = sessions.filter((s) => {
-    const hour = s.date.split(" ")[1]?.substring(0, 2);
-    return !coveredTimes.has(hour || "");
+    // Handle both "YYYY-MM-DD HH:MM" and "YYYY-MM-DDTHH:MM:SSZ" formats
+    const timePart = s.date.includes('T') 
+      ? s.date.split('T')[1]?.substring(0, 2)
+      : s.date.split(" ")[1]?.substring(0, 2);
+    return !coveredTimes.has(timePart || "");
   });
 
   // Handle clicking a session to open detail panel
@@ -192,7 +214,11 @@ export function EntityPanelSession({ panelId, date, title }: EntityPanelSessionP
 
             {/* Orphan sessions (token data without log entries) */}
             {orphanSessions.map((session, idx) => {
-              const time = session.date.split(" ")[1] || "00:00";
+              const time = session.date.split(" ")[1] || session.date.split("T")[1]?.substring(0,5) || "00:00";
+              // Extract first sentence or first 100 chars of summary
+              const shortSummary = session.summary 
+                ? session.summary.split(' | ')[0].substring(0, 150) + (session.summary.length > 150 ? '...' : '')
+                : '';
 
               return (
                 <button
@@ -201,24 +227,28 @@ export function EntityPanelSession({ panelId, date, title }: EntityPanelSessionP
                   className={cn(
                     "w-full text-left px-4 py-3 rounded-lg border",
                     "hover:bg-muted/50 hover:border-primary/30",
-                    "transition-colors flex items-center justify-between"
+                    "transition-colors"
                   )}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="font-medium">{time}</span>
-                    <Badge
-                      color={session.type === "subscription" ? "blue" : "amber"}
-                      size="xs"
-                    >
-                      {session.type}
-                    </Badge>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-3">
+                      <span className="font-medium">{time}</span>
+                      <Badge
+                        color={session.type === "subscription" ? "blue" : "amber"}
+                        size="xs"
+                      >
+                        {session.type}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                      <span>{session.turns} turns</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <span>{session.turns} turns</span>
-                    <Badge color="gray" size="xs">
-                      tokens only
-                    </Badge>
-                  </div>
+                  {shortSummary && (
+                    <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                      {shortSummary}
+                    </p>
+                  )}
                 </button>
               );
             })}

@@ -14,6 +14,7 @@ interface TokenData {
   cacheCreate: number;
   turns: number;
   cost: number;
+  summary?: string;
 }
 
 interface LogEntry {
@@ -138,8 +139,38 @@ export function EntityPanelSessionDetail({
             </div>
           )}
 
+          {/* Summary */}
+          {tokenData?.summary && (
+            <Card className="p-4 bg-muted/30">
+              <Text className="font-semibold mb-2">Summary</Text>
+              <p className="text-sm text-foreground whitespace-pre-wrap">
+                {tokenData.summary.split(' | Changes:')[0]}
+              </p>
+              {tokenData.summary.includes(' | Changes:') && (
+                <div className="mt-3 pt-3 border-t">
+                  <Text className="font-semibold mb-2 text-sm">Changes</Text>
+                  <ul className="space-y-1">
+                    {tokenData.summary.split(' | Changes:')[1]?.split(' - ').filter(c => c.trim()).map((change, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <span className="mt-0.5">•</span>
+                        <span>{change.trim()}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </Card>
+          )}
+
           {/* Token Stats */}
-          {tokenData && (
+          {tokenData && (() => {
+            // Calculate projected cost from tokens
+            // Input: $15/1M, Output: $75/1M, Cache Read: $1.50/1M, Cache Create: $18.75/1M
+            const projectedCost = (tokenData.input * 15 + tokenData.output * 75 + 
+              tokenData.cacheRead * 1.5 + tokenData.cacheCreate * 18.75) / 1_000_000;
+            const displayCost = tokenData.type === "api" ? tokenData.cost : projectedCost;
+            
+            return (
             <Card className="p-4">
               <Text className="font-semibold mb-3">Token Usage</Text>
               <div className="grid grid-cols-2 gap-4">
@@ -155,7 +186,7 @@ export function EntityPanelSessionDetail({
                     "text-xl font-semibold",
                     tokenData.type === "api" && "text-amber-600"
                   )}>
-                    ${tokenData.cost.toFixed(2)}
+                    ${displayCost.toFixed(2)}
                   </p>
                 </div>
                 <div>
@@ -176,7 +207,8 @@ export function EntityPanelSessionDetail({
                 </div>
               </div>
             </Card>
-          )}
+            );
+          })()}
 
           {/* Changes */}
           {logEntry && logEntry.changes.length > 0 && (

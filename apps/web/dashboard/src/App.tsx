@@ -20,6 +20,7 @@ interface TokenData {
   cacheCreate: number;
   turns: number;
   cost: number;
+  summary?: string;
 }
 
 interface LogEntry {
@@ -98,9 +99,9 @@ function DashboardCanvas() {
 
 function DashboardLayout() {
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex flex-col md:flex-row h-screen bg-background overflow-hidden">
       <Sidebar />
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-hidden pb-16 md:pb-0 min-h-0">
         <DashboardCanvas />
       </main>
     </div>
