@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { BasePanel } from "./base-panel";
 import { useCanvas } from "./canvas-context";
-import { Card, Metric, Text, AreaChart, Title, Badge, ProgressBar } from "@tremor/react";
+import { Card, Metric, Text, AreaChart, Title, Badge } from "@tremor/react";
 import { formatNumber, cn } from "@/lib/utils";
 
 interface SubscriptionSettings {
@@ -44,12 +44,55 @@ export function EntityPanelStats({ panelId, title }: EntityPanelStatsProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
+    
     Promise.all([
-      fetch("/api/stats").then((res) => res.json()),
-      fetch("/api/settings").then((res) => res.json()),
+      fetch(`${API_BASE}/stats`).then((res) => res.json()),
+      fetch(`${API_BASE}/settings`).then((res) => res.json()).catch(() => ({ plan: 'pro', monthlyPrice: 20 })),
     ])
       .then(([statsData, settingsData]) => {
-        setStats(statsData);
+        // Calculate projected cost from tokens using Claude API pricing
+        // Input: $15/1M, Output: $75/1M, Cache Read: $1.50/1M, Cache Create: $18.75/1M
+        const calcProjectedCost = (input: number, output: number, cacheRead = 0, cacheCreate = 0) => {
+          return (input * 15 + output * 75 + cacheRead * 1.5 + cacheCreate * 18.75) / 1_000_000;
+        };
+        
+        // Transform cloud API response to expected format
+        const totalTokensIn = statsData.stats?.total_tokens_in || 0;
+        const totalTokensOut = statsData.stats?.total_tokens_out || 0;
+        const totalCacheRead = statsData.stats?.total_cache_read || 0;
+        const totalCacheCreate = statsData.stats?.total_cache_create || 0;
+        const projectedTotalCost = calcProjectedCost(totalTokensIn, totalTokensOut, totalCacheRead, totalCacheCreate);
+        
+        const transformedStats = statsData.stats ? {
+          totalSessions: statsData.stats.total_sessions || 0,
+          totalCost: projectedTotalCost,
+          // All imported sessions are subscription sessions (cost_usd=0 means subscription)
+          subscriptionCost: projectedTotalCost,
+          subscriptionSessions: statsData.stats.total_sessions || 0,
+          apiCost: 0,
+          apiSessions: 0,
+          totalTokens: {
+            input: totalTokensIn,
+            output: totalTokensOut,
+            cacheRead: totalCacheRead,
+            cacheCreate: totalCacheCreate,
+          },
+          byDay: (statsData.recent || []).reduce((acc: any[], s: any) => {
+            const date = (s.ended_at || s.date || '').split('T')[0];
+            const sessionCost = calcProjectedCost(s.tokens_in || 0, s.tokens_out || 0);
+            const existing = acc.find((d: any) => d.date === date);
+            if (existing) {
+              existing.sessions++;
+              existing.cost += sessionCost;
+            } else {
+              acc.push({ date, sessions: 1, cost: sessionCost });
+            }
+            return acc;
+          }, []).sort((a: any, b: any) => a.date.localeCompare(b.date)),
+        } : statsData;
+        
+        setStats(transformedStats);
         setSettings(settingsData);
       })
       .catch((err) => {
@@ -159,12 +202,6 @@ export function EntityPanelStats({ panelId, title }: EntityPanelStatsProps) {
                     (stats.subscriptionCost || 0) - settings.monthlyPrice
                   ).toFixed(2)}
                 </p>
-                <Text className="text-xs text-muted-foreground">
-                  {(((stats.subscriptionCost || 0) / settings.monthlyPrice) * 100).toFixed(
-                    0
-                  )}
-                  % utilization
-                </Text>
               </div>
 
               <div>
@@ -183,30 +220,6 @@ export function EntityPanelStats({ panelId, title }: EntityPanelStatsProps) {
               </div>
             </div>
 
-            {/* Utilization Bar */}
-            <div className="mt-4">
-              <div className="flex justify-between text-sm mb-1">
-                <Text>Subscription Utilization</Text>
-                <Text>
-                  {(((stats.subscriptionCost || 0) / settings.monthlyPrice) * 100).toFixed(
-                    0
-                  )}
-                  %
-                </Text>
-              </div>
-              <ProgressBar
-                value={Math.min(
-                  100,
-                  ((stats.subscriptionCost || 0) / settings.monthlyPrice) * 100
-                )}
-                color="emerald"
-              />
-              <Text className="text-xs text-muted-foreground mt-1">
-                {(stats.subscriptionCost || 0) >= settings.monthlyPrice
-                  ? "You've gotten full value from your subscription!"
-                  : `$${(settings.monthlyPrice - (stats.subscriptionCost || 0)).toFixed(2)} more value available`}
-              </Text>
-            </div>
           </Card>
         )}
 
